@@ -1,0 +1,23 @@
+
+* done
+** reviewed MR api
+*** stream - 
+*** meta
+**** basic: count(s) and activity
+**** advanced: I don't believe we need any.
+
+* CMS UI
+** 'status' page
+*** data management
+**** MR
+***** form to allow addition of:
+****** account
+****** stream, within account
+***** what streams we have (broken out by product)
+****** show "count" (meta) info
+***** links for each to MR page for managing
+*** API
+**** endpoints available for fetching info, including options
+*** message publishing
+**** list of previous messages
+**** form for entering message
