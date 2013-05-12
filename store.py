@@ -30,3 +30,5 @@ def put(collection, tweets):
         except pymongo.errors.DuplicateKeyError:
             None
         
+def get_all(collection):
+    return get_db()[collection].find()

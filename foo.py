@@ -81,4 +81,6 @@ stream_name = 'nfs_leaderboard'
 # resp_data = fetch.meta(ACCOUNT, stream_name)
 # resp_data = fetch.stream(ACCOUNT, stream_name)
 
-fetch_and_store_all_tweets(ACCOUNT, 'ea_activity')
+# fetch_and_store_all_tweets(ACCOUNT, 'ea_activity')
+# fetch_and_store_all_tweets(ACCOUNT, 'pvz')
+fetch_and_store_all_tweets(ACCOUNT, 'respawn')
