@@ -1,3 +1,9 @@
+#
+# Minimalist lib for accessing entities from Mass Relevance.
+# Requests response as gzipped JSON and returns as simple
+# Py data structures (dict, list, etc.).
+#
+
 import requests
 import json
 
@@ -13,28 +19,36 @@ account_url = lambda acct: '%s/%s.json' % (ROOT_URL, acct)
 
 DEF_HEADERS = {'Accept-Encoding': 'gzip'}
 def get_data(url, payload):
-    """ String, Dict -> Response data """
+    """
+    :: String, Dict -> Response data
+    Make a request to MR.
+    Assume it succeeds.
+    Return the result data.
+    """
     resp = requests.get(url, params = payload, headers = DEF_HEADERS)
     return json.loads(resp.text)
 
 #------------------
 
 def account(account_name):
-    """ String -> Response data
-    Provides meta info for all streams in a single request. """
+    """
+    :: String -> Response data
+    Provides meta info for all streams in a single request.
+    """
     url = account_url(account_name)
     payload = {}
     return get_data(url, payload)
 
 def meta(account_name, stream_name):
-    """ String, String -> Response data
+    """
+    :: String, String -> Response data
     activity:
-      num_minutes : how many 'minute'
-      num_days : how many 'daily'
+      num_minutes: how many 'minute'
+      num_days: how many 'daily'
     advanced:
-      num_trends : "trends" - number of top and total trends
-      num_hashtags : "hashtag tracking" - number of developing hashtags
-      num_contributors : "contributor tracking" - number of top contributor handles
+      num_trends: "trends" - number of top and total trends
+      num_hashtags: "hashtag tracking" - number of developing hashtags
+      num_contributors: "contributor tracking" - number of top contributor handles
     """
     url = meta_url(account_name, stream_name)
     payload = {
@@ -45,7 +59,6 @@ def meta(account_name, stream_name):
     return get_data(url, payload)
 
 #------------------
-
 #
 # Usage of `since_id` and `start_id` is mutually exclusive;
 # only one of these parameters may be used in a single request.
@@ -66,8 +79,8 @@ def stream(account_name, stream_name, start_id=None):
     payload = {
         'start_id': start_id,
         'reverse': False,
-        'replies': True,       # If a reply, include replied-to Tweet in 'in_reply_to'?
-        'limit': 200           # Default: 50.  Max: 200.
+        'replies': True,  # If reply, include orig Tweet in 'in_reply_to'?
+        'limit': 200      # Default: 50.  Max: 200.
     }
     return get_data(url, payload)
 
