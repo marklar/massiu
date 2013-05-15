@@ -66,10 +66,3 @@ def get_oldest_id(tweets):
 # ...and the newest tweet is at the *end* of the list.
 def get_newest_id(tweets):
     return tweets[-1]['id_str']
-
-# def gone_back_enough(prev_newest_id, tweets):
-#     """ Deprecated. """
-#     return (prev_newest_id is not None   # So we can short-circuit.
-#             and
-#             prev_newest_id in (t['id_str'] for t in tweets))
-    
