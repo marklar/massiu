@@ -5,7 +5,7 @@ import hashtags as ht
 def tweets():
     return [
         {
-            'id': 1,
+            'id_str': '1',
             'text': " Doesn't matter what the text is. ",
             'entities': {
                 'hashtags': [
@@ -15,14 +15,14 @@ def tweets():
             }
         },
         {
-            'id': 2,
+            'id_str': '2',
             'text': "Some other text.",
             'entities': {
                 'hashtags': []
             }
         },
         {
-            'id': 3,
+            'id_str': '3',
             'text': "More text.",
             'entities': {
                 'hashtags': [
@@ -42,13 +42,13 @@ def test_has_hashtag(tweets):
     assert ht.has_hashtag(tweet, 'foo') == True
 
 def get_ids(tweets):
-    return [t['id'] for t in tweets]
+    return [t['id_str'] for t in tweets]
 
 def test_filter_by_hashtag(tweets):
     ts = ht.filter_by_hashtag(tweets, 'foo')
-    assert get_ids(ts) == [1, 3]
+    assert get_ids(ts) == ['1', '3']
     ts = ht.filter_by_hashtag(tweets, 'blurfl')
-    assert get_ids(ts) == [3]
+    assert get_ids(ts) == ['3']
     ts = ht.filter_by_hashtag(tweets, 'quux')
     assert get_ids(ts) == []
 

@@ -3,13 +3,13 @@ import store
 
 def get_oldest_id(tweets):
     # Or is this 0?
-    return tweets[-1]['id']
+    return tweets[-1]['id_str']
 
 def get_newest_id(tweets):
-    return tweets[0]['id']
+    return tweets[0]['id_str']
 
 def gone_back_enough(prev_newest_id, tweets):
-    return prev_newest_id in (t['id'] for t in tweets)
+    return prev_newest_id in (t['id_str'] for t in tweets)
     
 def gather_tweets(account_name, stream_name):
     """ String, String, Int, Int -> None

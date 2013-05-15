@@ -29,7 +29,7 @@ def get_db():
 def with_db_ids(tweets):
     """ Mutates arg. """
     for t in tweets:
-        t['_id'] = t['id']
+        t['_id'] = t['id_str']
     return tweets
 
 #-- tweet counts --

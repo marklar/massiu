@@ -39,9 +39,9 @@ def ea_activity():
 # resp_data = fetch.meta(ACCOUNT, stream_name)
 # resp_data = fetch.stream(ACCOUNT, stream_name)
 
-# for src in ['ea_activity', 'pvz', 'respawn']:
-#     print "src:", src
-#     gather_tweets(ACCOUNT, src)
+for src in ['ea_activity', 'pvz', 'respawn']:
+    print "--SRC-- :", src
+    gather_tweets(ACCOUNT, src)
 
 def make_re(hashtag):
     return re.compile("^%s$" % hashtag, re.IGNORECASE)

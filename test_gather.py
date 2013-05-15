@@ -5,7 +5,7 @@ import gather
 def tweets():
     return [
         {
-            'id': 1,
+            'id_str': '1',
             'text': " Doesn't matter what the text is. ",
             'entities': {
                 'hashtags': [
@@ -15,14 +15,14 @@ def tweets():
             }
         },
         {
-            'id': 2,
+            'id_str': '2',
             'text': "Some other text.",
             'entities': {
                 'hashtags': []
             }
         },
         {
-            'id': 3,
+            'id_str': '3',
             'text': "More text.",
             'entities': {
                 'hashtags': [
@@ -33,8 +33,8 @@ def tweets():
         }
     ]
 
-# def test_get_low_id(tweets):
-#     assert gather.get_low_id(tweets) == 1
-#     assert gather.get_low_id(tweets[1:]) == 2
-#     with pytest.raises(ValueError):
-#         gather.get_low_id([])
+def test_get_oldest_id(tweets):
+    assert gather.get_oldest_id(tweets) == '3'
+    assert gather.get_oldest_id(tweets[:2]) == '2'
+    with pytest.raises(ValueError):
+        gather.get_oldest_id([])
