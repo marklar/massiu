@@ -46,32 +46,48 @@ def put(collection_name, tweets):
     If any are repeats, just ignore and continue.
     """
     coll = get_db()[collection_name]
-    for t in with_db_ids(tweets):
-        try:
-            coll.insert(t)
-        except pymongo.errors.DuplicateKeyError:
-            None
+    if False:
+        coll.insert(t)
+    else:
+        for t in with_db_ids(tweets):
+            try:
+                coll.insert(t)
+            except pymongo.errors.DuplicateKeyError:
+                None
+        
 
 def get_all(collection_name):
     """ Return cursor over collection. """
     coll = get_db()[collection_name]
     return coll.find()
 
-#-- newest id --
+#-- oldest/newest id --
 
-def set_newest_id(collection_name, newest_id):
+def set_x_id(collection_name, name, val):
     coll = get_db()[collection_name]
     doc = {
-        '_id': 'newest_id',
-        'val': newest_id
+        '_id': name,
+        'val': val
     }
     coll.save(doc)
 
-def get_newest_id(collection_name):
+def set_oldest_id(collection_name, oldest_id):
+    set_x_id(collection_name, 'oldest_id', oldest_id)
+
+def set_newest_id(collection_name, newest_id):
+    set_x_id(collection_name, 'newest_id', newest_id)
+
+def get_x_id(collection_name, name):
     coll = get_db()[collection_name]
-    query = {'_id': 'newest_id'}
+    query = {'_id': name}
     doc = coll.find_one(query)
     if doc is not None:
         return doc['val']
     else:
         return None
+
+def get_oldest_id(collection_name):
+    get_x_id(collection_name, 'oldest_id')
+
+def get_newest_id(collection_name):
+    get_x_id(collection_name, 'newest_id')

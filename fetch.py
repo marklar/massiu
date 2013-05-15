@@ -78,9 +78,9 @@ def stream(account_name, stream_name, start_id=None):
     url = stream_url(account_name, stream_name)
     payload = {
         'start_id': start_id,
-        'reverse': False,
-        'replies': True,  # If reply, include orig Tweet in 'in_reply_to'?
-        'limit': 200      # Default: 50.  Max: 200.
+        'reverse': False,  # False: oldest come first.
+        'replies': True,   # If reply, include orig Tweet in 'in_reply_to'?
+        'limit': 100       # Default: 50.  Max: 200.
     }
     return get_data(url, payload)
 

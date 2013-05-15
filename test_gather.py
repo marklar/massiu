@@ -4,37 +4,19 @@ import gather
 @pytest.fixture
 def tweets():
     return [
-        {
-            'id_str': '1',
-            'text': " Doesn't matter what the text is. ",
-            'entities': {
-                'hashtags': [
-                    {'text': 'fOO'},
-                    {'text': 'Bar'}
-                ]
-            }
-        },
-        {
-            'id_str': '2',
-            'text': "Some other text.",
-            'entities': {
-                'hashtags': []
-            }
-        },
-        {
-            'id_str': '3',
-            'text': "More text.",
-            'entities': {
-                'hashtags': [
-                    {'text': 'foo'},
-                    {'text': 'blurfl'}
-                ]
-            }
-        }
+        { 'id_str': '1' },  # oldest (comes first)
+        { 'id_str': '2' },
+        { 'id_str': '3' }   # newest
     ]
 
 def test_get_oldest_id(tweets):
-    assert gather.get_oldest_id(tweets) == '3'
-    assert gather.get_oldest_id(tweets[:2]) == '2'
-    with pytest.raises(ValueError):
+    assert gather.get_oldest_id(tweets) == '1'
+    assert gather.get_oldest_id(tweets[1:]) == '2'
+    with pytest.raises(IndexError):
         gather.get_oldest_id([])
+
+def test_get_newest_id(tweets):
+    assert gather.get_newest_id(tweets) == '3'
+    assert gather.get_newest_id(tweets[:-1]) == '2'
+    with pytest.raises(IndexError):
+        gather.get_newest_id([])
