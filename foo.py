@@ -1,5 +1,5 @@
 import re
-from gather import gather_tweets
+import gather
 import hashtags
 import store
 
@@ -39,10 +39,16 @@ def ea_activity():
 # resp_data = fetch.meta(ACCOUNT, stream_name)
 # resp_data = fetch.stream(ACCOUNT, stream_name)
 
-# for src in ['pvz', 'respawn']:
-for src in ['ea_activity', 'pvz', 'respawn']:
+print "--SRC-- :", 'ea_activity'
+# '332652528527364096'
+# '332286750451957760'
+# gather.only_older_tweets(ACCOUNT, 'ea_activity', '332285899461234691')
+gather.only_new_tweets(ACCOUNT, 'ea_activity')
+
+# for src in ['ea_activity', 'pvz', 'respawn']:
+for src in ['pvz', 'respawn']:
     print "--SRC-- :", src
-    gather_tweets(ACCOUNT, src)
+    gather.all_tweets(ACCOUNT, src)
 
 def make_re(hashtag):
     return re.compile("^%s$" % hashtag, re.IGNORECASE)
