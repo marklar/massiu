@@ -11,14 +11,16 @@ def only_new_tweets(account, stream_name):
     """ :: String, String -> None
     Gather (fetch & store) all tweets since the last time.
     """
-    prev_newest_id = store.get_newest_id(stream_name)
+    prev_newest_id = store.get_max_id_str(stream_name)
     gather_tweets(account, stream_name, prev_newest_id=prev_newest_id)
 
-def only_older_tweets(account, stream_name, prev_oldest_id):
+def only_older_tweets(account, stream_name):
     """ :: String, String, String -> None
     Gather (fetch & store) all tweets older than prev_oldest_id.
     """
+    prev_oldest_id = store.get_min_id_str(stream_name)
     gather_tweets(account, stream_name, prev_oldest_id=prev_oldest_id)
+
 
 #-- helpers --
 
@@ -37,11 +39,6 @@ def gather_tweets(account, stream_name, prev_oldest_id=None, prev_newest_id=None
         tweets = fetch.stream(account, stream_name, start_id=old_id)
         if not tweets:
             break
-
-        # If no old_id, then we've just grabbed the newest tweets,
-        # so record the newest_id from this group.
-        if old_id is None:
-            store.set_newest_id(stream_name, get_newest_id(tweets))
 
         # If we got any tweets, store them.
         print ''

@@ -26,11 +26,19 @@ def get_db():
         db = get_client()[DB_NAME]
     return db
 
-def with_db_ids(tweets):
-    """ Mutates arg. """
-    for t in tweets:
-        t['_id'] = t['id_str']
-    return tweets
+#-- collection meta-information --
+
+def get_min_id_str(collection_name):
+    """ :: String -> String
+    Given a collection, find the lowest (min) id_str value.
+    """
+    return get_extreme_id_str(collection_name, '$min')
+
+def get_max_id_str(collection_name):
+    """ :: String -> String
+    Given a collection, find the highest (max) id_str value.
+    """
+    return get_extreme_id_str(collection_name, '$max')
 
 #-- tweet counts --
 
@@ -58,40 +66,25 @@ def get_all(collection_name):
     return coll.find()
 
 
-#-- collection meta-information --
-
-#-- oldest --
-#  (no longer used?)
-
-def set_oldest_id(collection_name, oldest_id):
-    set_x_id(collection_name, 'oldest_id', oldest_id)
-
-def get_oldest_id(collection_name):
-    get_x_id(collection_name, 'oldest_id')
-
-#-- newest --
-
-def set_newest_id(collection_name, newest_id):
-    set_x_id(collection_name, 'newest_id', newest_id)
-
-def get_newest_id(collection_name):
-    get_x_id(collection_name, 'newest_id')
-
 #-- helpers --
 
-def set_x_id(collection_name, name, val):
+def get_extreme_id_str(collection_name, operator):
+    """ :: String -> String
+    Given a collection, find the min/max id_str value.
+    """
     coll = get_db()[collection_name]
-    doc = {
-        '_id': name,
-        'val': val
-    }
-    coll.save(doc)
-
-def get_x_id(collection_name, name):
-    coll = get_db()[collection_name]
-    query = {'_id': name}
-    doc = coll.find_one(query)
-    if doc is not None:
-        return doc['val']
+    # Perform an aggregation to find the min/max id_str.
+    # http://docs.mongodb.org/manual/reference/aggregation/min/
+    agg_result = coll.aggregate([
+        { '$group': { '_id': 0, 'extreme_id': { operator: "$id_str"} } }
+    ])
+    if agg_result['ok'] == 1:
+        return agg_result['result'][0]['extreme_id']
     else:
         return None
+
+def with_db_ids(tweets):
+    """ Mutates arg. """
+    for t in tweets:
+        t['_id'] = t['id_str']
+    return tweets
