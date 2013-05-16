@@ -10,6 +10,8 @@
 import re
 import store
 
+STREAM_NAME = 'nfs_leaderboard'
+
 regex = re.compile(
     r"""^\s*
         ([^:]+)        # name - no colons
@@ -44,5 +46,6 @@ def select_top_times(num, tweets):
     return ordered
 
 def fetch_top_times(num):
-    tweets = store.get_all('pvz')
+    #?? gather.only_new_tweets(STREAM_NAME)
+    tweets = store.get_all(STREAM_NAME)
     return select_top_times(num, tweets)

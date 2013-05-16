@@ -1,10 +1,12 @@
 import re
 import store
 
+ACTIVITY_STREAM_NAME = 'ea_activity'
+# For 'ea_activity' stream.
+# 'nfs'
 EA_HASHTAGS = ['pvz2e3', 'bf4', 'fifa', 'madden',
-               'ufc', 'nba', 'respawn', 'nfs']
+               'ufc', 'nba', 'respawn', 'needforspeed']
 EA_HASHTAGS_W_HASH = ['#' + s for s in EA_HASHTAGS]
-
 
 def make_re(hashtag):
     return re.compile("^%s$" % hashtag, re.IGNORECASE)
@@ -26,6 +28,12 @@ def ea_counts():
     """
     counts = {}
     for name, rex in EA_REGEXES.iteritems():
-        counts[name] = store.count_hashtags('ea_activity', rex)
+        counts[name] = store.count_hashtags(ACTIVITY_STREAM_NAME, rex)
     return counts
 
+#------------------
+# Featured tweets
+
+# More may be added later.
+# Use fetch.meta() to get keywords for stream meta-info.
+EA_FEATURED_HASHTAGS = ['eae3']

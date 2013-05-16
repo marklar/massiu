@@ -1,6 +1,13 @@
 import gather
 
-STREAMS = ['bf4', 'ea_activity', 'nfs_leaderboard', 'pvz', 'respawn']
+STREAMS = [
+    'bf4',
+    'ea_activity',
+    'ea_featured',
+    'nfs_leaderboard',
+    'pvz',
+    'respawn'
+]
 
 def one_time_setup():
     for src in STREAMS:

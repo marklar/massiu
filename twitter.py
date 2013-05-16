@@ -2,6 +2,9 @@ import json
 import os
 import tweetpony as tp
 
+# global
+global_api = None
+
 def get_auth_data():
     path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                         ".auth_data.json")
@@ -12,7 +15,7 @@ def get_auth_data():
         auth_data = json.loads(f.read())
     return auth_data
 
-def get_api():
+def create_api():
     auth_data = get_auth_data()
     if not auth_data:
         return False
@@ -26,21 +29,27 @@ def get_api():
         print "Auth failed.  Twitter error #%i: %s" % (err.code, err.description)
         return False
 
-def show_user(api):
+def get_api():
+    global global_api
+    if global_api is None:
+        global_api = get_create_api()
+    return global_api
+
+def show_user():
+    api = get_api()
     user = api.user
     print "Hello, @%s!" % user.screen_name
 
-def get_num_followers(api, username):
+def get_num_followers(screen_name):
+    api = get_api()
     try:
         user = api.get_user(
-            screen_name = username,
+            screen_name = screen_name,
             include_entities = False
         )
     except tweetpony.APIError as err:
         print "Loading profile Error #%i: %s" % (err.code, err.description)
     else:
-        # print "Screen name:", user.screen_name
-        # print "Num followers:", user.followers_count
         return user.followers_count
 
 # def tweet(api):
@@ -52,6 +61,5 @@ def get_num_followers(api, username):
 #     else:
 #         print "Yay! Your tweet has been sent!"
 
-api = get_api()
 # show_user(api)
-get_num_followers(api, 'battlefield')
+# get_num_followers('battlefield')
