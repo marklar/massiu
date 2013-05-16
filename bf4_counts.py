@@ -8,7 +8,6 @@ from dateutil import tz
 
 import gather
 import store
-# import twitter
 
 COUNTS_COLL_NAME = 'bf4_counts'
 
@@ -20,7 +19,7 @@ LA_TIME_ZONE = tz.gettz('America/Los_Angeles')
 
 
 def num_tweets():
-    """ :: None -> {'this_hour': Int, ...}
+    """ :: None -> {}
     Num #bf4 tweets in time period (this hour, today, this week).
     """
     ##
@@ -39,11 +38,14 @@ def num_tweets():
 #----------------------
 
 def make_la_date(date_str):
-    """ e.g. 'Wed May 15 23:33:42 +0000 2013' """
+    """ :: String -> datetime.datetime
+    e.g. 'Wed May 15 23:33:42 +0000 2013'
+    """
     time_struct = time.strptime(date_str, "%a %b %d %H:%M:%S +0000 %Y")
     return datetime.fromtimestamp(time.mktime(time_struct), LA_TIME_ZONE)
 
 def count_in_delta(dates, delta):
+    """ :: [datetime.datetime], datetime.timedelta -> Int """
     now = datetime.now(LA_TIME_ZONE)
     cnt = 0
     for d in dates:

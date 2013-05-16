@@ -22,10 +22,22 @@ import bf4_counts    # num_tweets
 TWITTER_SCREEN_NAME = 'battlefield'
 
 def franchise_highlights():
+    """ :: None -> Dictionary """
     return {
-        'fb-likes': bf4_facebook.num_likes(),
-        'followers': twitter.get_num_followers(TWITTER_SCREEN_NAME),
-        'num-tweets': bf4_counts.num_tweets()
+        'fb-likes': {
+            'user': 'OfficialBattlefield4',
+            'count': bf4_facebook.num_likes()
+        },
+
+        'followers': {
+            'user': TWITTER_SCREEN_NAME,
+            'count': twitter.get_num_followers(TWITTER_SCREEN_NAME)
+        },
+
+        'tweets': {
+            'hashtag': 'bf4_counts',
+            'counts': bf4_counts.num_tweets()
+        }
     }
 
 # print franchise_highlights()
