@@ -25,7 +25,7 @@ def franchise_highlights():
     """ :: None -> Dictionary """
     return {
         'fb-likes': {
-            'user': 'OfficialBattlefield4',
+            'user': bf4_facebook.USERNAME,
             'count': bf4_facebook.num_likes()
         },
 
@@ -40,4 +40,4 @@ def franchise_highlights():
         }
     }
 
-# print franchise_highlights()
+print franchise_highlights()
