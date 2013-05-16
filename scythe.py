@@ -1,12 +1,13 @@
 import gather
 
+# 'respawn' - out
+
 STREAMS = [
-    'bf4',
+    'bf4_usp',
     'ea_activity',
     'ea_featured',
     'nfs_leaderboard',
-    'pvz',
-    'respawn'
+    'pvz_featured'
 ]
 
 def one_time_setup():

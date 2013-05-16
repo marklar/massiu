@@ -1,11 +1,21 @@
+#
+# Hashtags have changed.
+# '#bf4' is the only one remaining.
+# Blow away old version of this collection and start anew.
+#
+
 import re
 import store
 
+#-----------
+# Activity  
+
 ACTIVITY_STREAM_NAME = 'ea_activity'
-# For 'ea_activity' stream.
-# 'nfs'
-EA_HASHTAGS = ['pvz2e3', 'bf4', 'fifa', 'madden',
-               'ufc', 'nba', 'respawn', 'needforspeed']
+
+OLD_EA_HASHTAGS = ['pvz2e3', 'bf4', 'fifa', 'madden',
+               'ufc', 'nba', 'respawn', 'nfs']
+
+EA_HASHTAGS = ['bf4', 'eae3', 'needforspeed', 'pvzgw']
 EA_HASHTAGS_W_HASH = ['#' + s for s in EA_HASHTAGS]
 
 def make_re(hashtag):

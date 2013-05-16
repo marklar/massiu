@@ -1,5 +1,5 @@
 import pytest
-import leaderboard as lb
+import nfs_leaderboard as lb
 
 @pytest.fixture
 def tweets():

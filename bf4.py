@@ -17,7 +17,7 @@ import store
 import twitter
 
 TWITTER_SCREEN_NAME = 'battlefield'
-COLL_NAME = 'bf4'
+COLL_NAME = 'bf4_usp'
 
 def get_followers():
     twitter.get_num_followers(TWITTER_SCREEN_NAME)
