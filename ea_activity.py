@@ -1,14 +1,11 @@
 #
-# Hashtags have changed.
-# '#bf4' is the only one remaining.
-# Blow away old version of this collection and start anew.
+# Uses a single MR stream ('ea_activity')
+# to gather tweets for multiple hashtags,
+# then counts them.
 #
 
 import re
 import store
-
-#-----------
-# Activity  
 
 ACTIVITY_STREAM_NAME = 'ea_activity'
 
@@ -41,9 +38,3 @@ def ea_counts():
         counts[name] = store.count_hashtags(ACTIVITY_STREAM_NAME, rex)
     return counts
 
-#------------------
-# Featured tweets
-
-# More may be added later.
-# Use fetch.meta() to get keywords for stream meta-info.
-EA_FEATURED_HASHTAGS = ['eae3']
