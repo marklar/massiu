@@ -40,4 +40,10 @@ def franchise_highlights():
         }
     }
 
-print franchise_highlights()
+def usp():
+    """
+    Reply with:
+      + USP quote
+      + related MR things: tweets / FB posts
+    """
+    print 'ToDo'
