@@ -24,7 +24,7 @@ TWITTER_SCREEN_NAME = 'battlefield'
 def franchise_highlights():
     """ :: None -> Dictionary """
     return {
-        'fb-likes': {
+        'fb_likes': {
             'user': bf4_facebook.USERNAME,
             'count': bf4_facebook.num_likes()
         },
@@ -46,4 +46,28 @@ def usp():
       + USP quote
       + related MR things: tweets / FB posts
     """
-    print 'ToDo'
+    return {
+        'brand_logo': None,
+        'usp': 'online multiplayer!',
+        'quotes': [
+            {
+                'profile_image': None,
+                'name': 'Bob Smith',
+                'quote': "In the realm of online combat, Battlefield 4 provides thrills that few games can match."
+            },
+
+            {
+                'profile_image': None,
+                'name': 'Chris Waters',
+                'quote': "Battlefield 4 is a thrilling action game that immerses you in the chaos of combat like never before."
+            },
+
+            {
+                'profile_image': None,
+                'name': 'Jim Jones',
+                'quote': "Battlefield 4 boasts a fast-paced and thrilling campaign, as well as some of the most immersive and exciting multiplayer action ever seen on consoles."
+}
+        ]
+    }
+
+# print usp()

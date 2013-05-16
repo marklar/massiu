@@ -1,2 +1,5 @@
-Client lib for fetching stream data from MR.
+
+scythe.py
+  + fetch content from Mass Relevance
+
 
