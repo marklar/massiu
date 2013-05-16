@@ -79,7 +79,10 @@ def get_extreme_id_str(collection_name, operator):
         { '$group': { '_id': 0, 'extreme_id': { operator: "$id_str"} } }
     ])
     if agg_result['ok'] == 1:
-        return agg_result['result'][0]['extreme_id']
+        try:
+            return agg_result['result'][0]['extreme_id']
+        except IndexError:
+            return None
     else:
         return None
 

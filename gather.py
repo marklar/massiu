@@ -1,21 +1,24 @@
 import fetch
 import store
 
-def all_tweets(account, stream_name):
+ACCOUNT = 'MR_breel'
+# API_KEY = 'abf59546eabec151a5565a81d8285ebf'  # stream mgnt API
+
+def all_tweets(stream_name, account=ACCOUNT):
     """ :: String, String -> None
     Gather (fetch & store) all tweets ever.
     """
     gather_tweets(account, stream_name)
 
-def only_new_tweets(account, stream_name):
+def only_new_tweets(stream_name, account=ACCOUNT):
     """ :: String, String -> None
     Gather (fetch & store) all tweets since the last time.
     """
     prev_newest_id = store.get_max_id_str(stream_name)
     gather_tweets(account, stream_name, prev_newest_id=prev_newest_id)
 
-def only_older_tweets(account, stream_name):
-    """ :: String, String, String -> None
+def only_older_tweets(stream_name, account=ACCOUNT):
+    """ :: String, String -> None
     Gather (fetch & store) all tweets older than prev_oldest_id.
     """
     prev_oldest_id = store.get_min_id_str(stream_name)
