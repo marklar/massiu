@@ -4,3 +4,5 @@
 # Twitter account: @Bolthouse2400
 #
 
+def photos():
+    return None

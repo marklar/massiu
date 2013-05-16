@@ -3,26 +3,30 @@
 # to gather tweets for multiple hashtags,
 # then counts them.
 #
+# --- ToDo? ---
+# Use separate streams for each:
+# ['bf4_counts', 'eae3_counts', 'nfs_counts', 'pvz_counts']
+#
 
 import re
 import store
 
-ACTIVITY_STREAM_NAME = 'ea_activity'
+STREAM_NAME = 'ea_activity'
 
-OLD_EA_HASHTAGS = ['pvz2e3', 'bf4', 'fifa', 'madden',
-               'ufc', 'nba', 'respawn', 'nfs']
+# deprecated
+OLD_HASHTAGS = ['pvz2e3', 'bf4', 'fifa', 'madden',
+                'ufc', 'nba', 'respawn', 'nfs']
 
-EA_HASHTAGS = ['bf4', 'eae3', 'needforspeed', 'pvzgw']
-EA_HASHTAGS_W_HASH = ['#' + s for s in EA_HASHTAGS]
+HASHTAGS = ['bf4', 'eae3', 'needforspeed', 'pvzgw']
 
 def make_re(hashtag):
     return re.compile("^%s$" % hashtag, re.IGNORECASE)
 
-EA_REGEXES = {}
-for h in EA_HASHTAGS:
-    EA_REGEXES[h] = make_re(h)
+REGEXES = {}
+for h in HASHTAGS:
+    REGEXES[h] = make_re(h)
 
-def ea_counts():
+def counts():
     """ () -> {tag: count}
     Number of Tweets for each title's hashtag.
 
@@ -34,7 +38,7 @@ def ea_counts():
     we'll need to collect the Tweets and perform our own counts.
     """
     counts = {}
-    for name, rex in EA_REGEXES.iteritems():
-        counts[name] = store.count_hashtags(ACTIVITY_STREAM_NAME, rex)
+    for name, rex in REGEXES.iteritems():
+        counts[name] = store.count_hashtags(STREAM_NAME, rex)
     return counts
 

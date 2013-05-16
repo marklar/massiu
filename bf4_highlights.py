@@ -16,7 +16,7 @@ import bf4_counts    # num_tweets
 
 TWITTER_SCREEN_NAME = 'battlefield'
 
-def franchise_highlights():
+def highlights():
     """ :: None -> Dictionary """
     return {
         'fb_likes': {
