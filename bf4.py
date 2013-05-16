@@ -16,41 +16,16 @@ import gather
 import store
 import twitter
 
-#----------------------
-
-FACEBOOK_PAGE = 'https://www.facebook.com/OfficialBattlefield4'
+import bf4_facebook  # num_likes
+import bf4_counts    # num_tweets
 
 TWITTER_SCREEN_NAME = 'battlefield'
 
-def get_followers():
-    twitter.get_num_followers(TWITTER_SCREEN_NAME)
+def franchise_highlights():
+    return {
+        'fb-likes': bf4_facebook.num_likes(),
+        'followers': twitter.get_num_followers(TWITTER_SCREEN_NAME),
+        'num-tweets': bf4_counts.num_tweets()
+    }
 
-#----------------------
-
-COUNTS_COLL_NAME = 'bf4_counts'
-
-def bf4_counts():
-    """ :: None -> {'this_hour': Int, ...}
-    Num #bf4 tweets in time period (this hour, today, this week).
-    """
-    ##
-    ## ToDo: Use Twitter API to search for tweets, too.
-    ##
-    gather.only_new_tweets(COLL_NAME)
-    tweets = store.get_all(COLL_NAME)
-    dates = (t['created_at'] for t in tweets)
-    for d in dates:
-        print d
-
-#----------------------
-
-# sample_date_str = 'Wed May 15 23:33:42 +0000 2013'
-#
-# For each date, determine whether it's this hour, today, this week.
-# Convert 'now' to seconds-since-epoch (SSE).
-# Convert each date_str to SSE.
-# ...
-#
-
-
-# bf4_counts()
+# print franchise_highlights()

@@ -44,17 +44,17 @@ def gather_tweets(account, stream_name, prev_oldest_id=None, prev_newest_id=None
             break
 
         # If we got any tweets, store them.
-        print ''
-        print 'Num tweets:', len(tweets)
+        # print ''
+        # print 'Num tweets:', len(tweets)
         store.put(stream_name, tweets)
 
         # Determine where to start next batch.
         old_id = get_oldest_id(tweets)
-        print 'Oldest ID fetched: %s' % old_id
+        # print 'Oldest ID fetched: %s' % old_id
 
         # If have an ID older (smaller) than prev_newest_id, we're done.
         if prev_newest_id is not None and old_id <= prev_newest_id:
-            print 'Reached prev_newest_id:', prev_newest_id
+            # print 'Reached prev_newest_id:', prev_newest_id
             break
 
 # When {'reverse': False} ...

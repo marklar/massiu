@@ -32,7 +32,7 @@ def create_api():
 def get_api():
     global global_api
     if global_api is None:
-        global_api = get_create_api()
+        global_api = create_api()
     return global_api
 
 def show_user():
