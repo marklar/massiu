@@ -16,11 +16,18 @@ import gather
 import store
 import twitter
 
+#----------------------
+
+FACEBOOK_PAGE = 'https://www.facebook.com/OfficialBattlefield4'
+
 TWITTER_SCREEN_NAME = 'battlefield'
-COLL_NAME = 'bf4_usp'
 
 def get_followers():
     twitter.get_num_followers(TWITTER_SCREEN_NAME)
+
+#----------------------
+
+COUNTS_COLL_NAME = 'bf4_counts'
 
 def bf4_counts():
     """ :: None -> {'this_hour': Int, ...}
@@ -35,10 +42,9 @@ def bf4_counts():
     for d in dates:
         print d
 
-#-------------
+#----------------------
 
-sample_date_str = 'Wed May 15 23:33:42 +0000 2013'
-
+# sample_date_str = 'Wed May 15 23:33:42 +0000 2013'
 #
 # For each date, determine whether it's this hour, today, this week.
 # Convert 'now' to seconds-since-epoch (SSE).

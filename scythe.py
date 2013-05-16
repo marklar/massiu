@@ -3,10 +3,14 @@ import gather
 # 'respawn' - out
 
 STREAMS = [
+    'bf4_counts',
     'bf4_usp',
     'ea_activity',
     'ea_featured',
+    'eae3_counts',
+    'nfs_counts',
     'nfs_leaderboard',
+    'pvz_counts',
     'pvz_featured'
 ]
 
