@@ -33,23 +33,23 @@ def usp():
         Store pics and be able to serve the raw bits.
     """
     return {
-        'brand_logo': None,
+        'brand_logo': 'http://example.com/bf4.png',
         'usp': 'online multiplayer!',
         'quotes': [
             {
-                'profile_image': None,
+                'profile_image': 'http://example.com/bob.jpg',
                 'name': 'Bob Smith',
                 'quote': "In the realm of online combat, Battlefield 4 provides thrills that few games can match."
             },
 
             {
-                'profile_image': None,
+                'profile_image': 'http://example.com/chris.jpg',
                 'name': 'Chris Waters',
                 'quote': "Battlefield 4 is a thrilling action game that immerses you in the chaos of combat like never before."
             },
 
             {
-                'profile_image': None,
+                'profile_image': 'http://example.com/jim.jpg',
                 'name': 'Jim Jones',
                 'quote': "Battlefield 4 boasts a fast-paced and thrilling campaign, as well as some of the most immersive and exciting multiplayer action ever seen on consoles."
 }

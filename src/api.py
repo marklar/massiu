@@ -6,9 +6,11 @@ import bf4.usp
 import ea.activity
 import ea.featured
 import nfs.leaderboard
+import nfs.featured
 import pvz.photos
 import pvz.featured
-import nfs.featured
+import sports.usp
+import sports.featured
 
 render = web.template.render('templates/')
 
@@ -22,8 +24,12 @@ URLS = (
     '/ea/featured',         'EaFeatured',
     '/ea/fb_likes',         'EaFbLikes',
 
-    '/ea_sports/usp',       'EaSportsUsp',
-    '/ea_sports/featured',  'EaSportsFeatured',
+    '/sports/usp',          'SportsUsp',
+    '/sports/featured',     'SportsFeatured',
+
+    # Do we want a separate endpoint for each hashtag?
+    # Or just a single endpoint returning all of them?
+    # '/sports/featured/feel_the_fight', 
 
     '/nfs/leaderboard',     'NfsLeaderboard',
     '/nfs/featured',        'NfsFeatured',
@@ -62,15 +68,15 @@ class EaFbLikes:
         """ TODO """
         return j(None)
 
-class EaSportsUsp:
+class SportsUsp:
     def GET(self):
         """ TODO """
-        return j(None)
+        return j(sports.usp.all_usps())
 
-class EaSportsFeatured:
+class SportsFeatured:
     def GET(self):
         """ TODO """
-        return j(None)
+        return j(sports.featured.get_all())
 
 class NfsLeaderboard:
     def GET(self):

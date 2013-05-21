@@ -4,19 +4,27 @@
 
 from util.featured import featured
 
+# could simplify this by changing the name of the 'ignite' stream
+HASHTAGS = [
+    'FeelTheFight',
+    'FIFA14',
+    'EASportsIgnite',
+    'MaddenNext25',
+    'WeAreLive'
+]
+
+def foo(hashtag):
+    return lambda: featured('sports_' + hashtag.lower(), '#' + hashtag)
+
 # stream_name, hashtag
+feel_the_fight = foo('FeelTheFight')
+fifa_14        = foo('FIFA14')
+ignite         = foo('EASportsIgnite')
+madden_next_25 = foo('MaddenNext25')
+we_are_alive   = foo('WeAreLive')
 
-def feel_the_fight():
-    return featured('sports_feelthefight', '#FEELTHEFIGHT')
+FNS = [feel_the_fight, fifa_14, ignite, madden_next_25, we_are_alive]
 
-def fifa_14():
-    return featured('sports_fifa14', '#FIFA14')
-    
-def ignite():
-    return featured('sports_ignite', '#EASPORTSIGNITE')
+def get_all():
+    return [f() for f in FNS]
 
-def madden_next_25():
-    return featured('sports_maddennext25', '#MaddenNext25')
-
-def we_are_live():
-    return featured('sports_wearelive', '#WEARELIVE')
