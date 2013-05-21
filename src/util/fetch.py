@@ -7,28 +7,28 @@
 import requests
 import json
 
-
-ROOT_URL = 'http://tweetriver.com/'
-API_KEY = 'abf59546eabec151a5565a81d8285ebf'  # stream mgnt API
-
-stream_url = lambda acct, strm: '%s/%s/%s.json' % (ROOT_URL, acct, strm)
-meta_url = lambda acct, strm: '%s/%s/%s/meta.json' % (ROOT_URL, acct, strm)
-account_url = lambda acct: '%s/%s.json' % (ROOT_URL, acct)
-
-#------------------
-
-DEF_HEADERS = {'Accept-Encoding': 'gzip'}
-def get_data(url, payload):
-    """
-    :: String, Dict -> Response data
-    Make a request to MR.
-    Assume it succeeds.
-    Return the result data.
-    """
-    resp = requests.get(url, params = payload, headers = DEF_HEADERS)
-    return json.loads(resp.text)
-
-#------------------
+# Usage of `since_id` and `start_id` is mutually exclusive;
+# only one of these parameters may be used in a single request.
+#
+# since_id :: string
+# Tweet ID (e.g.: 255682528302747648)
+# Fetch only Tweets approved AFTER this one, getting newer ones first.
+#
+# start_id :: string
+# Tweet ID: (e.g.: 255682528302747648)
+# Fetch Tweets approved BEFORE this one.  (i.e. "more", going back in time)
+# Supply the 'id' of the last viewed entity to request
+# the set of entities that came before it in the stream.
+#
+def stream(account_name, stream_name, start_id=None):
+    url = stream_url(account_name, stream_name)
+    payload = {
+        'start_id': start_id,
+        'reverse': False,  # False: oldest come first.
+        'replies': True,   # If reply, include orig Tweet in 'in_reply_to'?
+        'limit': 200       # Default: 50.  Max: 200.
+    }
+    return get_data(url, payload)
 
 def account(account_name):
     """
@@ -58,29 +58,23 @@ def meta(account_name, stream_name):
     }
     return get_data(url, payload)
 
+
 #------------------
-#
-# Usage of `since_id` and `start_id` is mutually exclusive;
-# only one of these parameters may be used in a single request.
-#
-# since_id :: string
-# Tweet ID (e.g.: 255682528302747648)
-# Fetch only Tweets approved AFTER this one, getting newer ones first.
-#
-# start_id :: string
-# Tweet ID: (e.g.: 255682528302747648)
-# Fetch Tweets approved BEFORE this one.  (i.e. "more", going back in time)
-# Supply the 'id' of the last viewed entity to request
-# the set of entities that came before it in the stream.
-#
 
-def stream(account_name, stream_name, start_id=None):
-    url = stream_url(account_name, stream_name)
-    payload = {
-        'start_id': start_id,
-        'reverse': False,  # False: oldest come first.
-        'replies': True,   # If reply, include orig Tweet in 'in_reply_to'?
-        'limit': 200       # Default: 50.  Max: 200.
-    }
-    return get_data(url, payload)
+API_KEY = 'abf59546eabec151a5565a81d8285ebf'  # stream mgnt API
 
+ROOT_URL = 'http://tweetriver.com/'
+stream_url = lambda acct, strm: '%s/%s/%s.json' % (ROOT_URL, acct, strm)
+meta_url = lambda acct, strm: '%s/%s/%s/meta.json' % (ROOT_URL, acct, strm)
+account_url = lambda acct: '%s/%s.json' % (ROOT_URL, acct)
+
+DEF_HEADERS = {'Accept-Encoding': 'gzip'}
+def get_data(url, payload):
+    """
+    :: String, Dict -> Response data
+    Make a request to MR.
+    Assume it succeeds.
+    Return the result data.
+    """
+    resp = requests.get(url, params = payload, headers = DEF_HEADERS)
+    return json.loads(resp.text)

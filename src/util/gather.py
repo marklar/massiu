@@ -2,7 +2,6 @@ import fetch
 import store
 
 ACCOUNT = 'MR_breel'
-# API_KEY = 'abf59546eabec151a5565a81d8285ebf'  # stream mgnt API
 
 def all_tweets(stream_name, account=ACCOUNT):
     """ :: String, String -> None

@@ -3,21 +3,18 @@
 # to gather tweets for multiple hashtags,
 # then counts them.
 #
-# --- ToDo? ---
-# Use separate streams for each:
-# ['bf4_counts', 'eae3_counts', 'nfs_counts', 'pvz_counts']
-#
 
 import re
 from util import store
 
 STREAM_NAME = 'ea_activity'
 
-# deprecated
-OLD_HASHTAGS = ['pvz2e3', 'bf4', 'fifa', 'madden',
-                'ufc', 'nba', 'respawn', 'nfs']
-
-HASHTAGS = ['bf4', 'eae3', 'needforspeed', 'pvzgw']
+HASHTAGS = [
+    'bf4', 'eae3', 'needforspeed', 'pvzgw',
+    'respawn', 'fifa14', 'MaddenNext25',
+    'WeAreLive', 'FeelTheFight',
+    'EASportsIgnite', 'CommandAndConquer'
+]
 
 def make_re(hashtag):
     return re.compile("^%s$" % hashtag, re.IGNORECASE)

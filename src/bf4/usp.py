@@ -4,6 +4,25 @@
 #       - quote
 #       - related tweets / FB-posts  (moderated)
 #    MISSING: EA has to provide criteria for the stream.
+#
+# Needed from EA:
+#   - quote
+#   - criteria for stream.
+#
+# They want 5 USPs:
+#   1. "Frostbite 3"
+#   2. "Commander Mode"
+#   3. "Amphibious Assault"
+#   4. "Levolution"
+#   5. "All-Out War"
+#
+# For each, the ability to:
+#   - assign Tweets to a USP Ribbon element,
+#   - enter in quotes (and attributions) manually.
+#
+# Wish to have influencer quotes (e.g. celebrity tweets)
+# appear more prominently than users-at-large.
+#
 
 from util import store
 
