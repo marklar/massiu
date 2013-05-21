@@ -1,18 +1,18 @@
 import web
 import json
 
-import bf4_highlights
-import bf4_usp
-import ea_activity
-import ea_featured
-import nfs_leaderboard
-import pvz_photos
-import pvz_featured
-import nfs_featured
+import bf4.highlights
+import bf4.usp
+import ea.activity
+import ea.featured
+import nfs.leaderboard
+import pvz.photos
+import pvz.featured
+import nfs.featured
 
 render = web.template.render('templates/')
 
-urls = (
+URLS = (
     '/', 'Index',
 
     '/bf4/highlights',      'Bf4Highlights',
@@ -32,23 +32,7 @@ urls = (
     '/pvz/featured',        'PvzFeatured'
 )
 
-ENDPOINTS = [
-    '/bf4/highlights',
-    '/bf4/usp',
-
-    '/ea/activity',
-    '/ea/featured',
-    '/ea/fb_likes',
-
-    '/ea_sports/usp',
-    '/ea_sports/featured',
-
-    '/nfs/leaderboard',
-    '/nfs/featured',
-
-    '/pvz/photos',
-    '/pvz/featured'
-]
+ENDPOINTS = [URLS[i] for i in range(2, len(URLS)-1, 2)]
 
 class Index:
     def GET(self):
@@ -58,20 +42,20 @@ j = lambda x: json.dumps(x)
 
 class Bf4Highlights:
     def GET(self):
-        return j(bf4_highlights.highlights())
+        return j(bf4.highlights.highlights())
 
 class Bf4Usp:
     def GET(self):
-        return j(bf4_usp.usp())
+        return j(bf4.usp.usp())
 
 class EaActivity:
     def GET(self):
-        return j(ea_activity.counts())
+        return j(ea.activity.counts())
 
 class EaFeatured:
     def GET(self):
         """ TODO """
-        return j(ea_featured.featured())
+        return j(ea.featured.featured())
 
 class EaFbLikes:
     def GET(self):
@@ -90,26 +74,26 @@ class EaSportsFeatured:
 
 class NfsLeaderboard:
     def GET(self):
-        return j(nfs_leaderboard.top_times())
+        return j(nfs.leaderboard.top_times(5))
 
 class NfsFeatured:
     def GET(self):
         """ TODO """
-        return j(nfs_featured.featured())
+        return j(nfs.featured.featured())
 
 class PvzPhotos:
     def GET(self):
         """ TODO """
-        return j(pvz_photos.photos())
+        return j(pvz.photos.photos())
 
 class PvzFeatured:
     def GET(self):
         """ TODO """
-        return j(pvz_featured.featured())
+        return j(pvz.featured.featured())
 
 
 if __name__ == "__main__": 
-    app = web.application(urls, globals())
+    app = web.application(URLS, globals())
     app.run()  
 
     
