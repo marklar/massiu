@@ -12,6 +12,9 @@ DB_NAME = 'b_reel'
 client = None
 db = None
 
+def drop_coll(collection_name):
+    get_db()[collection_name].drop()
+
 def get_client():
     """ Cache MongoClient. """
     global client
@@ -42,9 +45,12 @@ def get_max_id_str(collection_name):
 
 #-- tweet counts --
 
-def count_hashtags(collection_name, hashtag_re):
+def count_hashtag(collection_name, hashtag_re):
+    return with_hashtag(collection_name, hashtag_re).count()
+
+def with_hashtag(collection_name, hashtag_re):
     query = { 'entities.hashtags.text': hashtag_re }
-    return get_db()[collection_name].find(query).count()
+    return get_db()[collection_name].find(query)
 
 #-- tweets --
 

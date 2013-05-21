@@ -12,8 +12,6 @@
 #   - single aggregate count?
 #
 
-from util import gather
-from util import store
 from util import twitter
 
 import bf4.facebook  # num_likes
@@ -35,7 +33,7 @@ def highlights():
         },
 
         'tweets': {
-            'hashtag': 'bf4_counts',
+            'hashtag': bf4.counts.HASHTAG,
             'counts': bf4.counts.num_tweets()
         }
     }

@@ -4,24 +4,19 @@
 # then counts them.
 #
 
-import re
 from util import store
+from util import hashtags
 
 STREAM_NAME = 'ea_activity'
 
 HASHTAGS = [
-    'bf4', 'eae3', 'needforspeed', 'pvzgw',
+    'bf4', 'eae3', 'NeedForSpeed', 'pvzgw',
     'respawn', 'fifa14', 'MaddenNext25',
     'WeAreLive', 'FeelTheFight',
     'EASportsIgnite', 'CommandAndConquer'
 ]
 
-def make_re(hashtag):
-    return re.compile("^%s$" % hashtag, re.IGNORECASE)
-
-REGEXES = {}
-for h in HASHTAGS:
-    REGEXES[h] = make_re(h)
+TAG_W_REGEX = [(h, hashtags.make_re(h)) for h in HASHTAGS]
 
 def counts():
     """ () -> {tag: count}
@@ -34,8 +29,7 @@ def counts():
     Since we have all these hashtags in a single stream,
     we'll need to collect the Tweets and perform our own counts.
     """
-    counts = {}
-    for name, rex in REGEXES.iteritems():
-        counts[name] = store.count_hashtags(STREAM_NAME, rex)
-    return counts
-
+    return dict(
+        [('#' + name, store.count_hashtag(STREAM_NAME, rex))
+         for name, rex in TAG_W_REGEX]
+    )

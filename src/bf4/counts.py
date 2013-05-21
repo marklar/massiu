@@ -8,8 +8,10 @@ from dateutil import tz
 
 from util import gather
 from util import store
+from util import hashtags
 
-COUNTS_COLL_NAME = 'bf4_counts'
+HASHTAG_RE = hashtags.make_re('bf4')
+COUNTS_COLL_NAME = 'ea_activity'
 
 DELTA_1_HOUR = timedelta(hours = 1)
 DELTA_1_DAY  = timedelta(days  = 1)
@@ -26,7 +28,7 @@ def num_tweets():
     ## ToDo: Use Twitter API to search for tweets, too?
     ##
     gather.only_new_tweets(COUNTS_COLL_NAME)
-    tweets = store.get_all(COUNTS_COLL_NAME)
+    tweets = store.with_hashtag(COUNTS_COLL_NAME, HASHTAG_RE)
     dates = [make_la_date(t['created_at']) for t in tweets]
     return {
         'hour': count_in_delta(dates, DELTA_1_HOUR),

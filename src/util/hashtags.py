@@ -2,6 +2,11 @@
 # Functions related to tweets' hashtags.
 #
 
+import re
+
+def make_re(hashtag):
+    return re.compile("^%s$" % hashtag, re.IGNORECASE)
+
 def get_hashtags(tweet):
     return [tag['text'].lower()
             for tag in tweet['entities']['hashtags']]
