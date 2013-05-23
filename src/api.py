@@ -24,11 +24,11 @@ URLS = (
     '/api/bf4/highlights.json',         'Bf4Highlights',
     # bf4 - usp
     '/api/bf4/usp/all.json',                  'Bf4UspAll',
-    '/api/bf4/ups/frostbite3.json',           'Bf4UspFrostbite3',
-    '/api/bf4/ups/commander_mode.json',       'Bf4UspCommanderMode',
-    '/api/bf4/ups/amphibious_assault.json',   'Bf4UspAmphibiousAssault',
-    '/api/bf4/ups/levolution.json',           'Bf4UspLevolution',
-    '/api/bf4/ups/all_out_war.json',          'Bf4UspAllOutWar',
+    '/api/bf4/usp/frostbite3.json',           'Bf4UspFrostbite3',
+    '/api/bf4/usp/commander_mode.json',       'Bf4UspCommanderMode',
+    '/api/bf4/usp/amphibious_assault.json',   'Bf4UspAmphibiousAssault',
+    '/api/bf4/usp/levolution.json',           'Bf4UspLevolution',
+    '/api/bf4/usp/all_out_war.json',          'Bf4UspAllOutWar',
 
     # EA
     '/api/ea/fb_likes.json',         'EaFbLikes',
