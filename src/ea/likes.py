@@ -30,5 +30,5 @@ USERNAMES = [
     'plantsversuszombies'
 ]
 
-def get_likes():
+def get():
     return [facebook.get_likes(n) for n in USERNAMES]

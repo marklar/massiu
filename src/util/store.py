@@ -5,6 +5,7 @@
 # 
 
 import pymongo
+from util import hashtags
 
 DB_NAME = 'b_reel'
 
@@ -43,12 +44,18 @@ def get_max_id_str(collection_name):
     """
     return get_extreme_id_str(collection_name, '$max')
 
-#-- tweet counts --
+#-- tweets w/ hashtag --
 
-def count_hashtag(collection_name, hashtag_re):
-    return with_hashtag(collection_name, hashtag_re).count()
+def count_hashtag(collection_name, hashtag):
+    """ hashtag: no '#'! """
+    return with_hashtag(collection_name, hashtag).count()
 
-def with_hashtag(collection_name, hashtag_re):
+def with_hashtag(collection_name, hashtag):
+    """
+    hashtag: no '#'!
+    -> cursor
+    """
+    hashtag_re = hashtags.make_re(hashtag)
     query = { 'entities.hashtags.text': hashtag_re }
     return get_db()[collection_name].find(query)
 

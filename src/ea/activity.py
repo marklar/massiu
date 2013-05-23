@@ -16,8 +16,6 @@ HASHTAGS = [
     'EASportsIgnite', 'CommandAndConquer'
 ]
 
-TAG_W_REGEX = [(h, hashtags.make_re(h)) for h in HASHTAGS]
-
 def counts():
     """ () -> {tag: count}
     Number of Tweets for each title's hashtag.
@@ -29,6 +27,8 @@ def counts():
     Since we have all these hashtags in a single stream,
     we'll need to collect the Tweets and perform our own counts.
     """
-    tag_2_count = [('#' + name, store.count_hashtag(STREAM_NAME, rex))
-                   for name, rex in TAG_W_REGEX]
+    tag_2_count = [
+        ('#' + h, store.count_hashtag(STREAM_NAME, h))
+        for h in HASHTAGS
+    ]
     return dict(tag_2_count)

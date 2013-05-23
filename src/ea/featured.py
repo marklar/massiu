@@ -13,5 +13,5 @@ from util.featured import get_all_featured
 
 STREAM_ROOT = 'ea'
 
-def get_ea():
+def get():
     return get_all_featured(STREAM_ROOT)

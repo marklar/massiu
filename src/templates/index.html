@@ -1,13 +1,23 @@
-$def with (endpoints)
+$def with (endpoints, title_2_ends)
 
 <html>
 <body>
 
-Endpoints:
+<!--
+API Endpoints:
 <ul>
 $for e in endpoints:
     <li><a href="$e">$e</a></li>
 </ul>
+-->
+
+<h1>API Endpoints</h1>
+$for title in dict.keys(title_2_ends):
+    <h3>$title</h3>
+    <ul>
+      $for end in title_2_ends[title]:
+          <li><a href="/api/$title/$end">$end</a></li>
+    </ul>
 
 </body>
 </html>

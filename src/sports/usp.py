@@ -5,11 +5,11 @@
 #
 
 def all_usps():
-    return [fifa_usp(), madden_usp(), nba_usp(), ufc_usp()]
+    return [fifa(), madden(), nba(), ufc()]
 
 #---------------------
 
-def fifa_usp():
+def fifa():
     return {
         'brand': {
             'name': 'FIFA',
@@ -34,7 +34,7 @@ def fifa_usp():
         ]
     }
 
-def madden_usp():
+def madden():
     return {
         'brand': {
             'name': 'Madden',
@@ -52,7 +52,7 @@ def madden_usp():
         ]
     }
 
-def nba_usp():
+def nba():
     return {
         'brand': {
             'name': 'NBA',
@@ -84,7 +84,7 @@ def nba_usp():
         ]
     }
 
-def ufc_usp():
+def ufc():
     return {
         'brand': {
             'name': 'UFC',

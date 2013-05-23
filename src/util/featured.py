@@ -1,11 +1,12 @@
-#
-# TODO: Limit the number of 'starred' to the 5 most recent.
-#
 
 import string
 
 from util import store
 from util import fetch
+from util import gather
+
+FEATURED_SUFFIX = '_featured'
+STARRED_SUFFIX = '_starred'
 
 def get_all_featured(stream_root):
     hashtags = get_hashtags(stream_root)
@@ -29,18 +30,19 @@ def get_featured(stream_name_root, hashtag):
     Return both starred and featured.
     Remove any from featured that already appear in starred.
     """
-    starred = get(stream_name_root + '_starred', hashtag)
-    featured = get(stream_name_root + '_featured', hashtag)
+    starred = get_w_tag(stream_name_root + STARRED_SUFFIX, hashtag)
+    featured = get_w_tag(stream_name_root + FEATURED_SUFFIX, hashtag)
 
     # TODO: Limit the number of starred to 5?
     novel_featured = [f for f in featured if f not in starred]
 
     return {
-        'hashtag': hashtag,
+        'hashtag': '#' + hashtag,
         'starred_tweets': starred,
         'other_tweets': novel_featured
     }
 
-def get(str_name, tag):
-    return list(store.with_hashtag(str_name, tag))
+def get_w_tag(stream_name, hashtag):
+    gather.only_new_tweets(stream_name)
+    return list(store.with_hashtag(stream_name, hashtag))
     
