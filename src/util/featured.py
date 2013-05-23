@@ -1,3 +1,6 @@
+#
+# TODO: Limit the number of 'starred' to the 5 most recent.
+#
 
 from util import fetch
 
@@ -11,14 +14,12 @@ def featured(stream_name_root, hashtag):
     novel_featured = [f for f in featured if f not in starred]
     return {
         'hashtag': hashtag,
-        'starred': starred,
-        'featured': novel_featured
+        'starred_tweets': starred,
+        'other_tweets': novel_featured
     }
 
 #-------------------------
 
-ACCOUNT_NAME = 'MR_breel'
-
 def get(stream_name_root, suffix):
     stream_name = stream_name_root + suffix
-    return fetch.stream(ACCOUNT_NAME, stream_name)
+    return fetch.stream(stream_name)

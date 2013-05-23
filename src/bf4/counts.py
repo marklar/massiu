@@ -10,7 +10,9 @@ from util import gather
 from util import store
 from util import hashtags
 
-HASHTAG_RE = hashtags.make_re('bf4')
+HASHTAG = 'bf4'
+HASHTAG_RE = hashtags.make_re(HASHTAG)
+
 COUNTS_COLL_NAME = 'ea_activity'
 
 DELTA_1_HOUR = timedelta(hours = 1)

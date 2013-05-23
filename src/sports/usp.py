@@ -11,71 +11,93 @@ def all_usps():
 
 def fifa_usp():
     return {
-        'name': 'fifa',
-        'brand_logo': 'http://example.com/fifa.png',
+        'brand': {
+            'name': 'FIFA',
+            'logo': 'http://cms.com/img/fifa.png'
+        },
         'usp': 'Some selling point text.',
         'quotes': [
             {
-                'profile_image': 'http://example.com/some-dude.jpg',
-                'name': 'Some Dude',
-                'quote': "It's great."
+                'text': "It's great.",
+                'person': {
+                    'name': 'Some Dude',
+                    'image': 'http://cms.com/img/some-dude.jpg'
+                },
             },
             {
-                'profile_image': 'http://example.com/other-dude.jpg',
-                'name': 'Other Dude',
-                'quote': "It's freakin' great."
+                'text': "It's freakin' great.",
+                'person': {
+                    'name': 'Other Dude',
+                    'image': 'http://cms.com/img/other-dude.jpg'
+                }
             }
         ]
     }
 
 def madden_usp():
     return {
-        'name': 'madden',
-        'brand_logo': 'http://example.com/madden.png',
+        'brand': {
+            'name': 'Madden',
+            'logo': 'http://cms.com/img/madden.png'
+        },
         'usp': 'Some selling point text.',
         'quotes': [
             {
-                'profile_image': 'http://example.com/nobody-dude.jpg',
-                'name': 'Nobody Dude',
-                'quote': "It's rad.."
+                'text': "It's rad.",
+                'person': {
+                    'name': 'Nobody Dude',
+                    'image': 'http://cms.com/img/nobody-dude.jpg'
+                }
             }
         ]
     }
 
 def nba_usp():
     return {
-        'name': 'nba',
-        'brand_logo': 'http://example.com/nba.png',
+        'brand': {
+            'name': 'NBA',
+            'logo': 'http://cms.com/img/nba.png'
+        },
         'usp': 'Some selling point text.',
         'quotes': [
             {
-                'profile_image': 'http://example.com/mireia.jpg',
-                'name': 'Mireia Aixala',
-                'quote': "Que maco!"
+                'text': "Que maco!",
+                'person': {
+                    'name': 'Mireia Aixala',
+                    'image': 'http://cms.com/img/mireia.jpg'
+                }
             },
             {
-                'profile_image': 'http://example.com/pedro.jpg',
-                'name': 'Pedro Almodovar',
-                'quote': "Que guay!"
+                'text': "Que guay!",
+                'person': {
+                    'name': 'Pedro Almodovar',
+                    'image': 'http://cms.com/img/pedro.jpg'
+                }
             },
             {
-                'profile_image': 'http://example.com/leonor.jpg',
-                'name': 'Leonor Watling',
-                'quote': "Excellent!"
+                'text': "Excellent!",
+                'person': {
+                    'name': 'Leonor Watling',
+                    'image': 'http://cms.com/img/leonor.jpg'
+                }
             }
         ]
     }
 
 def ufc_usp():
     return {
-        'name': 'ufc',
-        'brand_logo': 'http://example.com/ufc.png',
+        'brand': {
+            'name': 'UFC',
+            'logo': 'http://cms.com/img/ufc.png'
+        },
         'usp': 'Some selling point text.',
         'quotes': [
             {
-                'profile_image': 'http://example.com/obama.jpg',
-                'name': 'Barack Obama',
-                'quote': "I dig it."
+                'text': "I dig it.",
+                'person': {
+                    'name': 'Barack Obama',
+                    'profile': 'http://cms.com/img/obama.jpg'
+                }
             }
         ]
     }

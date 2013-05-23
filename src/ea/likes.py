@@ -14,3 +14,21 @@
 #   facebook.com/plantsversuszombies
 #
 
+from util import facebook
+
+USERNAMES = [
+    # 'respawn',               # None - placeholder
+    # 'battlefield',           # None
+    'OfficialBattlefield4',
+    'commandandconquer',
+    'needforspeed',
+    'ea',
+    'EASportsMaddenNFL',
+    'easportsfifa',
+    'EASPORTSUFC',
+    'EASPORTSNBA',
+    'plantsversuszombies'
+]
+
+def get_likes():
+    return [facebook.get_likes(n) for n in USERNAMES]

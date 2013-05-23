@@ -3,7 +3,6 @@
 #      num FB likes
 #      num @battlefield followers
 #      num #bf4 tweets in time period (this hour, today, this week)
-#    MISSING: FB likes.
 #
 # TODO:
 # YouTube channel: username?
@@ -13,18 +12,31 @@
 #
 
 from util import twitter
+from util import youtube
+from util import facebook
 
-import bf4.facebook  # num_likes
-import bf4.counts    # num_tweets
+import bf4.counts
 
 TWITTER_SCREEN_NAME = 'battlefield'
 
+# TODO: Which is the right FB username?
+FB_USERNAME = 'OfficialBattlefield4'
+
+YOUTUBE_USERNAME = 'Battlefield'
+
 def highlights():
     """ :: None -> Dictionary """
+    (yt_views, yt_subs) = youtube.get_analytics(YOUTUBE_USERNAME)
     return {
+        'youtube': {
+            'user': YOUTUBE_USERNAME,
+            'views': yt_views,
+            'subs': yt_subs
+        },
+
         'fb_likes': {
-            'user': bf4.facebook.USERNAME,
-            'count': bf4.facebook.num_likes()
+            'user': FB_USERNAME,
+            'count': facebook.get_likes(FB_USERNAME)
         },
 
         'followers': {
@@ -33,8 +45,10 @@ def highlights():
         },
 
         'tweets': {
-            'hashtag': bf4.counts.HASHTAG,
+            'hashtag': '#' + bf4.counts.HASHTAG,
             'counts': bf4.counts.num_tweets()
         }
     }
 
+if __name__ == '__main__':
+    print highlights()

@@ -54,7 +54,7 @@ def with_hashtag(collection_name, hashtag_re):
 
 #-- tweets --
 
-def put(collection_name, tweets):
+def put_tweets(collection_name, tweets):
     """ :: String, [Tweet] -> None
     Insert all tweets into collection.
     If any are repeats, just ignore and continue.
@@ -71,6 +71,19 @@ def get_all(collection_name):
     coll = get_db()[collection_name]
     return coll.find()
 
+#--------------
+
+ORIGIN_COLLECTION = 'origin'
+
+def get_origin_data():
+    """ Get the most-recently inserted. """
+    coll = get_db()[ORIGIN_COLLECTION]
+    return coll.find().sort({'_id': -1})[0]
+
+def put_origin_data(dico):
+    coll = get_db()[ORIGIN_COLLECTION]
+    coll.insert(dico)
+    
 
 #-- helpers --
 

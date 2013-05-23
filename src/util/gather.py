@@ -1,32 +1,37 @@
+#
+# Fetch data (tweets) from Mass Relevance.
+# Store data in MongoDB.
+#
+
 import fetch
 import store
 
-ACCOUNT = 'MR_breel'
-
-def all_tweets(stream_name, account=ACCOUNT):
+def all_tweets(stream_name, account=fetch.ACCOUNT_NAME):
     """ :: String, String -> None
     Gather (fetch & store) all tweets ever.
     """
-    gather_tweets(account, stream_name)
+    gather_tweets(stream_name, account)
 
-def only_new_tweets(stream_name, account=ACCOUNT):
+def only_new_tweets(stream_name, account=fetch.ACCOUNT_NAME):
     """ :: String, String -> None
     Gather (fetch & store) all tweets since the last time.
     """
     prev_newest_id = store.get_max_id_str(stream_name)
-    gather_tweets(account, stream_name, prev_newest_id=prev_newest_id)
+    gather_tweets(stream_name, account, prev_newest_id=prev_newest_id)
 
-def only_older_tweets(stream_name, account=ACCOUNT):
+def only_older_tweets(stream_name, account=fetch.ACCOUNT_NAME):
     """ :: String, String -> None
     Gather (fetch & store) all tweets older than prev_oldest_id.
     """
     prev_oldest_id = store.get_min_id_str(stream_name)
-    gather_tweets(account, stream_name, prev_oldest_id=prev_oldest_id)
+    gather_tweets(stream_name, account, prev_oldest_id=prev_oldest_id)
 
 
 #-- helpers --
 
-def gather_tweets(account, stream_name, prev_oldest_id=None, prev_newest_id=None):
+def gather_tweets(stream_name, account,
+                  prev_oldest_id=None,
+                  prev_newest_id=None):
     """ :: String, String, String, String -> None
     Gather (fetch & store) all tweets.
     For prev_oldest_id or prev_newest_id, use at most 1.
@@ -38,14 +43,16 @@ def gather_tweets(account, stream_name, prev_oldest_id=None, prev_newest_id=None
     old_id = prev_oldest_id
     while True:
         # Get newest tweets <= old_id.
-        tweets = fetch.stream(account, stream_name, start_id=old_id)
+        tweets = fetch.stream(stream_name,
+                              account_name=account,
+                              start_id=old_id)
         if not tweets:
             break
 
         # If we got any tweets, store them.
         # print ''
         # print 'Num tweets:', len(tweets)
-        store.put(stream_name, tweets)
+        store.put_tweets(stream_name, tweets)
 
         # Determine where to start next batch.
         old_id = get_oldest_id(tweets)

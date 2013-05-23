@@ -5,6 +5,7 @@ import bf4.highlights
 import bf4.usp
 import ea.activity
 import ea.featured
+import ea.likes
 import nfs.leaderboard
 import nfs.featured
 import pvz.photos
@@ -65,8 +66,7 @@ class EaFeatured:
 
 class EaFbLikes:
     def GET(self):
-        """ TODO """
-        return j(None)
+        return j(ea.likes.get_likes())
 
 class SportsUsp:
     def GET(self):
