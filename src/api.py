@@ -21,42 +21,42 @@ URLS = (
     '/', 'Index',
 
     # BF4
-    '/api/bf4/highlights',         'Bf4Highlights',
+    '/api/bf4/highlights.json',         'Bf4Highlights',
     # bf4 - usp
-    '/api/bf4/usp/all',                  'Bf4UspAll',
-    '/api/bf4/ups/frostbite3',           'Bf4UspFrostbite3',
-    '/api/bf4/ups/commander_mode',       'Bf4UspCommanderMode',
-    '/api/bf4/ups/amphibious_assault',   'Bf4UspAmphibiousAssault',
-    '/api/bf4/ups/levolution',           'Bf4UspLevolution',
-    '/api/bf4/ups/all_out_war',          'Bf4UspAllOutWar',    
+    '/api/bf4/usp/all.json',                  'Bf4UspAll',
+    '/api/bf4/ups/frostbite3.json',           'Bf4UspFrostbite3',
+    '/api/bf4/ups/commander_mode.json',       'Bf4UspCommanderMode',
+    '/api/bf4/ups/amphibious_assault.json',   'Bf4UspAmphibiousAssault',
+    '/api/bf4/ups/levolution.json',           'Bf4UspLevolution',
+    '/api/bf4/ups/all_out_war.json',          'Bf4UspAllOutWar',
 
     # EA
-    '/api/ea/fb_likes',         'EaFbLikes',
-    '/api/ea/featured',         'EaFeatured',
-    '/api/ea/activity',         'EaActivity',
-    '/api/ea/message',          'EaMessage',
+    '/api/ea/fb_likes.json',         'EaFbLikes',
+    '/api/ea/featured.json',         'EaFeatured',
+    '/api/ea/activity.json',         'EaActivity',
+    '/api/ea/message.json',          'EaMessage',
 
     # Sports - usp
-    '/api/sports/usp/all',             'SportsUspAll',
-    '/api/sports/usp/fifa',            'SportsUspFIFA',
-    '/api/sports/usp/madden',          'SportsUspMadden',
-    '/api/sports/usp/nba',             'SportsUspNBA',
-    '/api/sports/usp/ufc',             'SportsUspUFC',
+    '/api/sports/usp/all.json',             'SportsUspAll',
+    '/api/sports/usp/fifa.json',            'SportsUspFIFA',
+    '/api/sports/usp/madden.json',          'SportsUspMadden',
+    '/api/sports/usp/nba.json',             'SportsUspNBA',
+    '/api/sports/usp/ufc.json',             'SportsUspUFC',
     # Sports - featured
-    '/api/sports/featured/all',        'SportsFeaturedAll',
-    '/api/sports/featured/ufc',        'SportsFeaturedUFC',
-    '/api/sports/featured/fifa',       'SportsFeaturedFIFA',
-    '/api/sports/featured/ea_sports',  'SportsFeaturedEASports',
-    '/api/sports/featured/madden',     'SportsFeaturedMadden',
-    '/api/sports/featured/nba',        'SportsFeaturedNBA',
+    '/api/sports/featured/all.json',        'SportsFeaturedAll',
+    '/api/sports/featured/ufc.json',        'SportsFeaturedUFC',
+    '/api/sports/featured/fifa.json',       'SportsFeaturedFIFA',
+    '/api/sports/featured/ea_sports.json',  'SportsFeaturedEASports',
+    '/api/sports/featured/madden.json',     'SportsFeaturedMadden',
+    '/api/sports/featured/nba.json',        'SportsFeaturedNBA',
 
     # NFS
     # '/api/nfs/leaderboard',     'NfsLeaderboard',
-    '/api/nfs/featured',        'NfsFeatured',
+    '/api/nfs/featured.json',        'NfsFeatured',
 
     # PVZ
-    '/api/pvz/photos',          'PvzPhotos',
-    '/api/pvz/featured',        'PvzFeatured',
+    '/api/pvz/photos.json',          'PvzPhotos',
+    '/api/pvz/featured.json',        'PvzFeatured',
 
     # Origin
     # '/origin/',     'Origin',
@@ -65,22 +65,23 @@ URLS = (
 
 ENDPOINTS = [URLS[i] for i in range(2, len(URLS)-1, 2)]
 
-rex = re.compile("^/api/([^/]*)/(.*)$")
-TITLE_2_ENDS = {}
+rex = re.compile("^/api/([^/]*)/(.*)\.json$")
+TITLE_2_LINK_N_HREF = {}
 for e in ENDPOINTS:
     m = rex.search(e)
     title = m.group(1)
     rest = m.group(2)
-    if title not in TITLE_2_ENDS:
-        TITLE_2_ENDS[title] = []
-    TITLE_2_ENDS[title].append(rest)
+    if title not in TITLE_2_LINK_N_HREF:
+        TITLE_2_LINK_N_HREF[title] = []
+    parts = ['api', title, rest + '.json']
+    TITLE_2_LINK_N_HREF[title].append((rest, '/'.join(parts)))
 
 
 j = lambda x: json.dumps(x)
 
 class Index:
     def GET(self):
-        return render.index(ENDPOINTS, TITLE_2_ENDS)
+        return render.index(ENDPOINTS, TITLE_2_LINK_N_HREF)
 
 #-- BF4 --
 

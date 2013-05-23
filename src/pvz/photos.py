@@ -4,5 +4,7 @@
 # Twitter account: @Bolthouse2400
 #
 
+from util import store
+
 def photos():
-    return None
+    return list(store.get_all('pvz_photos'))

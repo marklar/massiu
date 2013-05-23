@@ -1,6 +1,14 @@
-$def with (endpoints, title_2_ends)
+$def with (endpoints, title_2_link_n_href)
 
 <html>
+<style type="text/css">
+  body {
+    font-family: Arial;
+    margin: 30px;
+  }
+  h1 {color: blue;}
+  h3 {color: blue;}
+</style>
 <body>
 
 <!--
@@ -12,11 +20,16 @@ $for e in endpoints:
 -->
 
 <h1>API Endpoints</h1>
-$for title in dict.keys(title_2_ends):
+
+<p>
+  All endpoints are GETs and return JSON.
+</p>
+
+$for title in dict.keys(title_2_link_n_href):
     <h3>$title</h3>
     <ul>
-      $for end in title_2_ends[title]:
-          <li><a href="/api/$title/$end">$end</a></li>
+      $for (end, href) in title_2_link_n_href[title]:
+          <li><a href="$href">$end</a></li>
     </ul>
 
 </body>

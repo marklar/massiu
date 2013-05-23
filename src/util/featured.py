@@ -1,5 +1,5 @@
 
-import string
+import string  # lstrip
 
 from util import store
 from util import fetch
@@ -43,6 +43,6 @@ def get_featured(stream_name_root, hashtag):
     }
 
 def get_w_tag(stream_name, hashtag):
-    gather.only_new_tweets(stream_name)
+    # gather.only_new_tweets(stream_name)
     return list(store.with_hashtag(stream_name, hashtag))
     
