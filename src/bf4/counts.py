@@ -21,27 +21,26 @@ DELTA_1_WEEK = timedelta(weeks = 1)
 
 LA_TIME_ZONE = tz.gettz('America/Los_Angeles')
 
-
+#
+# FIXME: Seems to be a problem with collecting new-enough tweets.
+# None of them are ever from within the last 1 hour.
+#
 def num_tweets():
     """ :: None -> {}
     Num #bf4 tweets in time period (this hour, today, this week).
     """
-    ##
-    ## ToDo: Use Twitter API to search for tweets, too?
-    ##
     gather.only_new_tweets(COUNTS_COLL_NAME)
     tweets = store.with_hashtag(COUNTS_COLL_NAME, HASHTAG_RE)
-    dates = [make_la_date(t['created_at']) for t in tweets]
+    datetimes = [make_datetime(t['created_at']) for t in tweets]
     return {
-        'hour': count_in_delta(dates, DELTA_1_HOUR),
-        'day':  count_in_delta(dates, DELTA_1_DAY),
-        'week': count_in_delta(dates, DELTA_1_WEEK)
+        'hour': count_in_delta(datetimes, DELTA_1_HOUR),
+        'day':  count_in_delta(datetimes, DELTA_1_DAY),
+        'week': count_in_delta(datetimes, DELTA_1_WEEK)
     }
-
 
 #----------------------
 
-def make_la_date(date_str):
+def make_datetime(date_str):
     """ :: String -> datetime.datetime
     e.g. 'Wed May 15 23:33:42 +0000 2013'
     """

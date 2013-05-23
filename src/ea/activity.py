@@ -1,7 +1,7 @@
 #
 # Uses a single MR stream ('ea_activity')
 # to gather tweets for multiple hashtags,
-# then counts them.
+# then counts the tweets per hashtag.
 #
 
 from util import store

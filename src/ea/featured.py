@@ -9,7 +9,9 @@
 #   - ea_starred  -- take precedence
 #
 
-EA_FEATURED_HASHTAGS = ['eae3']
+from util.featured import get_all_featured
 
-def featured():
-    return None
+STREAM_ROOT = 'ea'
+
+def get_ea():
+    return get_all_featured(STREAM_ROOT)

@@ -28,12 +28,14 @@ def highlights():
     """ :: None -> Dictionary """
     (yt_views, yt_subs) = youtube.get_analytics(YOUTUBE_USERNAME)
     return {
+        # TODO: This part is canned.
         'youtube': {
             'user': YOUTUBE_USERNAME,
             'views': yt_views,
             'subs': yt_subs
         },
 
+        # TODO: This part might be using the wrong username.
         'fb_likes': {
             'user': FB_USERNAME,
             'count': facebook.get_likes(FB_USERNAME)

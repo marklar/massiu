@@ -41,19 +41,23 @@ URLS = (
 
 ENDPOINTS = [URLS[i] for i in range(2, len(URLS)-1, 2)]
 
+j = lambda x: json.dumps(x)
+
 class Index:
     def GET(self):
         return render.index(ENDPOINTS)
-
-j = lambda x: json.dumps(x)
 
 class Bf4Highlights:
     def GET(self):
         return j(bf4.highlights.highlights())
 
 class Bf4Usp:
+    """
+    Canned data for now.
+    Add more endpoints, one per USP?
+    """
     def GET(self):
-        return j(bf4.usp.usp())
+        return j(bf4.usp.get_all())
 
 class EaActivity:
     def GET(self):
@@ -61,8 +65,7 @@ class EaActivity:
 
 class EaFeatured:
     def GET(self):
-        """ TODO """
-        return j(ea.featured.featured())
+        return j(ea.featured.get_ea())
 
 class EaFbLikes:
     def GET(self):

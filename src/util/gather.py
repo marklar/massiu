@@ -42,6 +42,7 @@ def gather_tweets(stream_name, account,
     assert (prev_oldest_id is None or prev_newest_id is None)
     old_id = prev_oldest_id
     while True:
+
         # Get newest tweets <= old_id.
         tweets = fetch.stream(stream_name,
                               account_name=account,
