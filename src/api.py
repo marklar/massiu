@@ -17,9 +17,12 @@ import sports.featured
 
 render = web.template.render('templates/')
 
-URLS = (
+UI_URLS = (
     '/', 'Index',
+    '/api.html', 'API'
+)
 
+API_URLS = (
     # BF4
     '/api/bf4/highlights.json',         'Bf4Highlights',
     # bf4 - usp
@@ -60,10 +63,12 @@ URLS = (
 
     # Origin
     # '/origin/',     'Origin',
-
 )
 
-ENDPOINTS = [URLS[i] for i in range(2, len(URLS)-1, 2)]
+URLS = UI_URLS + API_URLS
+
+ODD_INDICES = range(0, len(API_URLS)-1, 2)
+ENDPOINTS = [API_URLS[i] for i in ODD_INDICES]
 
 rex = re.compile("^/api/([^/]*)/(.*)\.json$")
 TITLE_2_LINK_N_HREF = {}
@@ -77,11 +82,15 @@ for e in ENDPOINTS:
     TITLE_2_LINK_N_HREF[title].append((rest, '/'.join(parts)))
 
 
-j = lambda x: json.dumps(x)
-
 class Index:
     def GET(self):
-        return render.index(ENDPOINTS, TITLE_2_LINK_N_HREF)
+        return render.index()
+
+class API:
+    def GET(self):
+        return render.api(ENDPOINTS, TITLE_2_LINK_N_HREF)
+
+j = lambda x: json.dumps(x)
 
 #-- BF4 --
 

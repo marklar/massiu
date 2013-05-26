@@ -1,36 +1,39 @@
-$def with (endpoints, title_2_link_n_href)
+$def with ()
 
 <html>
-<style type="text/css">
-  body {
-    font-family: Arial;
-    margin: 30px;
-  }
-  h1 {color: blue;}
-  h3 {color: blue;}
-</style>
-<body>
+  <head>
+    <link href="/static/main.css" rel="stylesheet" type="text/css" />
+    <title>CMS :: Home</title>
+  </head>
 
-<!--
-API Endpoints:
-<ul>
-$for e in endpoints:
-    <li><a href="$e">$e</a></li>
-</ul>
--->
+  <body>
 
-<h1>API Endpoints</h1>
+    <div class="header">
+      <img src="/static/ea.png" />
+      <h1>Home</h1>
+    </div>
 
-<p>
-  All endpoints are GETs and return JSON.
-</p>
+    <a href="/api.html">API</a>
 
-$for title in dict.keys(title_2_link_n_href):
-    <h3>$title</h3>
+    <h3>USP quotes</h3>
     <ul>
-      $for (end, href) in title_2_link_n_href[title]:
-          <li><a href="$href">$end</a></li>
+      <li><a href="/BF4">BF4</a></li>
+      <li><a href="/FIFA">FIFA</a></li>
+      <li><a href="/Madden">Madden</a></li>
+      <li><a href="/UFC">UFC</a></li>
     </ul>
 
-</body>
+    <h3>Show Messages</h3>
+    <ul>
+      <li><a href="/EA">EA</a></li>
+      <li><a href="/PvZ">PvZ</a></li>
+    </ul>
+
+    <h3>Statistics</h3>
+    <ul>
+      <li><a href="/NFS">NFS stats</a></li>
+      <li><a href="/Origin">Origin highlights</a></li>
+    </ul>
+
+  </body>
 </html>

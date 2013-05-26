@@ -1,0 +1,23 @@
+body {
+    font-family: Arial;
+    margin: 30px;
+}
+
+.header {
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.header img {
+    width: 180px;
+    float: left;
+}
+
+.header h1 {
+    margin-left: 30px;
+}
+
+h1 { color: blue; }
+h2 { color: blue; }
+h3 { color: blue; }
