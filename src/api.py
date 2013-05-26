@@ -1,4 +1,5 @@
 import web
+from web import form
 import json
 import re
 
@@ -14,6 +15,8 @@ import pvz.photos
 import pvz.featured
 import sports.usp
 import sports.featured
+from util import store_usp
+
 
 render = web.template.render('templates/')
 
@@ -21,17 +24,89 @@ UI_URLS = (
     '/', 'Index',
     '/api', 'API',
 
-    '/ui/usp_quotes/bf4',      'UiUspQuotesBf4',
-    '/ui/usp_quotes/fifa',     'UiUspQuotesFIFA',
-    '/ui/usp_quotes/madden',   'UiUspQuotesMadden',
-    '/ui/usp_quotes/ufc',      'UiUspQuotesUFC',
+    '/ui/usp_quotes/([^/]*)/(.*)',     'UiUspQuotes',
+    '/ui/usp_quotes/([^/]*)',          'UiUspQuotesIndex',
 
-    '/ui/messages/ea',         'UiMessagesEA',
-    '/ui/messages/pvz',        'UiMessagesPVZ',
-
+    '/ui/messages/([^/]*)',       'UiMessages',
     '/ui/stats/nfs',           'UiStatsNFS',
     '/ui/stats/origin',        'UiStatsOrigin',
 )
+
+# Read this info from the DB?
+BRAND_2_USPS = {
+    'BF4': [
+        'Frostbite 3',
+        'Commander Mode',
+        'Amphibious Assault',
+        'Levolution',
+        'All-Out War'
+    ],
+    'Sports': [
+        'FIFA',
+        'Madden',
+        'NBA',
+        'UFC'
+    ]
+}
+
+class UiUspQuotes:
+    quote_form = form.Form(
+        form.Textbox('name',
+                     form.notnull,
+                     size="100",
+                     description='Name'
+                 ),
+        form.Textbox('image',
+                     form.notnull,
+                     form.regexp('^http://', "Must start with 'http://'."),
+                     size="100",
+                     description='Profile Image URL'
+                 ),
+        form.Textarea('quote',
+                      form.notnull,
+                      maxlength="140",
+                      description='Quote (<= 140 chars)'
+                  )
+    )
+
+    def GET(self, brand, usp):
+        form = self.quote_form()
+        quotes = list(store_usp.get_quotes(brand, usp))
+        return render.usp_quotes(brand, usp, quotes, form)
+
+    def POST(self, brand, usp):
+        get_url = '/'.join(['/ui/usp_quotes', brand, usp])
+
+        # DELETE?
+        try:
+            delete_id = web.input().delete_id
+        except AttributeError:
+            delete_id = None
+        if delete_id is not None:
+            store_usp.delete_quote(delete_id)
+            raise web.seeother(get_url)
+
+        # POST
+        form = self.quote_form()
+        if not form.validates():
+            # FAILURE
+            quotes = list(store_usp.get_quotes(brand, usp))
+            return render.usp_quotes(brand, usp, quotes, form)
+        else:
+            # SUCCESS
+            store_usp.insert_quote(
+                brand, usp,
+                form.d.quote, form.d.name, form.d.image
+            )
+            raise web.seeother(get_url)
+
+class UiUspQuotesIndex:
+    def GET(self, brand):
+        return render.usp_quotes_index(brand, BRAND_2_USPS)
+
+class UiMessages:
+    def GET(self, brand):
+        return render.messages(brand)
 
 class UiStatsNFS:
     def GET(self):
@@ -41,29 +116,6 @@ class UiStatsOrigin:
     def GET(self):
         return render.origin_highlights()
 
-class UiUspQuotesBf4:
-    def GET(self):
-        return render.usp_quotes('BF4')
-
-class UiUspQuotesFIFA:
-    def GET(self):
-        return render.usp_quotes('FIFA')
-
-class UiUspQuotesMadden:
-    def GET(self):
-        return render.usp_quotes('Madden')
-
-class UiUspQuotesUFC:
-    def GET(self):
-        return render.usp_quotes('UFC')
-
-class UiMessagesEA:
-    def GET(self):
-        return render.messages('EA')
-
-class UiMessagesPVZ:
-    def GET(self):
-        return render.messages('PVZ')
 
 API_URLS = (
     # BF4

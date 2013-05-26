@@ -1,8 +1,6 @@
 #
 # FIFA, Madden, NBA, UFC
 #
-# VH: "info coming from EA this week"
-#
 
 def all_usps():
     return [fifa(), madden(), nba(), ufc()]
@@ -15,7 +13,7 @@ def fifa():
             'name': 'FIFA',
             'logo': 'http://cms.com/img/fifa.png'
         },
-        'usp': 'Some selling point text.',
+        'usp': 'Some unique selling proposition text.',
         'quotes': [
             {
                 'text': "It's great.",
@@ -40,7 +38,7 @@ def madden():
             'name': 'Madden',
             'logo': 'http://cms.com/img/madden.png'
         },
-        'usp': 'Some selling point text.',
+        'usp': 'Some unique selling proposition text.',
         'quotes': [
             {
                 'text': "It's rad.",
@@ -58,7 +56,7 @@ def nba():
             'name': 'NBA',
             'logo': 'http://cms.com/img/nba.png'
         },
-        'usp': 'Some selling point text.',
+        'usp': 'Some unique selling proposition text.',
         'quotes': [
             {
                 'text': "Que maco!",
@@ -90,7 +88,7 @@ def ufc():
             'name': 'UFC',
             'logo': 'http://cms.com/img/ufc.png'
         },
-        'usp': 'Some selling point text.',
+        'usp': 'Some unique selling proposition text.',
         'quotes': [
             {
                 'text': "I dig it.",

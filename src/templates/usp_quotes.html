@@ -1,17 +1,48 @@
-$def with (brand)
+$def with (brand, usp, quotes, form)
 
 <html>
   <head>
     <link href="/static/main.css" rel="stylesheet" type="text/css" />
-    <title>USP Quotes :: $brand</title>
+    <title>USP Quotes :: $brand :: $usp</title>
   </head>
 
   <body>
 
     <div class="header">
       <a href="/"><img src="/static/ea.png" /></a>
-      <h1>USP Quotes :: $brand</h1>
+      <h1>USP Quotes :: $brand :: $usp</h1>
     </div>
+
+    <h3>Add a Quote</h3>
+
+    <form name="main" method="post">
+      $if not form.valid:
+        <p>Oops!  Please fix your input and retry.</p>
+      $:form.render()
+        <input type="submit" />
+    </form>
+
+
+    <h3>Current Quotes</h3>
+
+    $if not quotes:
+      <span>You have none.</span>
+    $else:
+      <form name="other" method="post">
+	<input type="hidden" name="delete_id" id="xx" value=""/>
+
+	$for q in quotes:
+          <div class="quote">
+	    <input type="submit" name="delete"
+		   onclick="document.getElementById('xx').value = '$q['_id']'"
+		   class="delete" value="Delete"
+		   />
+	    <img class="profile_pic" src="$q['image']" />
+	    <span class="profile_name">$q['name']</span>
+	    <div class="quote_text">"$q['text']"</div>
+	    <br style="clear: left;" />
+	  </div>
+    </form>
 
   </body>
 </html>

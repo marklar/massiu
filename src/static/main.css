@@ -21,3 +21,49 @@ body {
 h1 { color: blue; }
 h2 { color: blue; }
 h3 { color: blue; }
+
+/*----*/
+
+.wrong {
+    color: red;
+    margin-left: 5px;
+}
+
+/* this doesn't work */
+th {
+    align: right;
+}
+
+textarea {
+    width: 500px;
+    height: 70px;
+}
+
+/*----*/
+
+div.quote {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+input.delete {
+    float: left;
+    width: 60px;
+    margin-right: 20px;
+}
+
+img.profile_pic {
+    float: left;
+    width: 60px;
+    margin-right: 20px;
+}
+
+span.profile_name {
+    float: left;
+    width: 150px;
+    margin-right: 20px;
+}
+
+div.quote_text {
+    float: left;
+}
