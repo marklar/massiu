@@ -19,8 +19,51 @@ render = web.template.render('templates/')
 
 UI_URLS = (
     '/', 'Index',
-    '/api.html', 'API'
+    '/api', 'API',
+
+    '/ui/usp_quotes/bf4',      'UiUspQuotesBf4',
+    '/ui/usp_quotes/fifa',     'UiUspQuotesFIFA',
+    '/ui/usp_quotes/madden',   'UiUspQuotesMadden',
+    '/ui/usp_quotes/ufc',      'UiUspQuotesUFC',
+
+    '/ui/messages/ea',         'UiMessagesEA',
+    '/ui/messages/pvz',        'UiMessagesPVZ',
+
+    '/ui/stats/nfs',           'UiStatsNFS',
+    '/ui/stats/origin',        'UiStatsOrigin',
 )
+
+class UiStatsNFS:
+    def GET(self):
+        return render.nfs_stats()
+
+class UiStatsOrigin:
+    def GET(self):
+        return render.origin_highlights()
+
+class UiUspQuotesBf4:
+    def GET(self):
+        return render.usp_quotes('BF4')
+
+class UiUspQuotesFIFA:
+    def GET(self):
+        return render.usp_quotes('FIFA')
+
+class UiUspQuotesMadden:
+    def GET(self):
+        return render.usp_quotes('Madden')
+
+class UiUspQuotesUFC:
+    def GET(self):
+        return render.usp_quotes('UFC')
+
+class UiMessagesEA:
+    def GET(self):
+        return render.messages('EA')
+
+class UiMessagesPVZ:
+    def GET(self):
+        return render.messages('PVZ')
 
 API_URLS = (
     # BF4
