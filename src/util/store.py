@@ -31,7 +31,8 @@ def get_db():
     """ Cache DB reference. """
     global db
     if db is None:
-        mongo_url = os.getenv('MONGOLAB_URI', DEF_MONGO_URI)
+        # MONGOLAB_URL
+        mongo_url = os.getenv('MONGOHQ_URL', DEF_MONGO_URI)
         uri = urlsplit(mongo_url)
 
         # Get your DB
