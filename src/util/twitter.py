@@ -2,6 +2,7 @@ import json
 import os
 import tweetpony as tp
 
+
 # global
 global_api = None
 
