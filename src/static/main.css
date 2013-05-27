@@ -39,6 +39,10 @@ textarea {
     height: 70px;
 }
 
+.vert_spacer {
+    height: 10px;
+}
+
 /*----*/
 
 div.quote {
