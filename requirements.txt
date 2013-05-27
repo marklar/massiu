@@ -3,4 +3,4 @@ pymongo
 requests
 tweetpony
 beautifulsoup4
-
+python-dateutil
