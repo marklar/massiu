@@ -5,9 +5,13 @@
 # 
 
 import pymongo
+# from pymongo import Connection
+import os
+from urlparse import urlsplit
+
 from util import hashtags
 
-DB_NAME = 'b_reel'
+DEF_MONGO_URI = 'mongodb://localhost:27017/b_reel'
 
 # globals (mutating)
 client = None
@@ -16,18 +20,27 @@ db = None
 def drop_coll(collection_name):
     get_db()[collection_name].drop()
 
-def get_client():
+def get_client(host, port):
     """ Cache MongoClient. """
     global client
     if client is None:
-        client = pymongo.MongoClient()
+        client = pymongo.MongoClient(host, port)
     return client
 
 def get_db():
     """ Cache DB reference. """
     global db
     if db is None:
-        db = get_client()[DB_NAME]
+        mongo_url = os.getenv('MONGOLAB_URI', DEF_MONGO_URI)
+        uri = urlsplit(mongo_url)
+
+        # Get your DB
+        client = get_client(uri.netloc, uri.port)
+        db = client[uri.path[1:]]
+        # authenticate
+        if '@' in mongo_url:
+            user_pass = uri.netloc.split('@')[0].split(':')
+            db.authenticate(user_pass[0], user_pass[1])
     return db
 
 #-- collection meta-information --
