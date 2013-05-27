@@ -3,6 +3,12 @@ from web import form
 import json
 import re
 
+# Add src to py path.
+import sys
+import os
+this_dir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(this_dir)
+
 import bf4.highlights
 import bf4.usp
 import ea.activity
