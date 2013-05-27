@@ -15,7 +15,7 @@ import pvz.photos
 import pvz.featured
 import sports.usp
 import sports.featured
-from util import store_usp
+import util.usp
 
 
 render = web.template.render('templates/')
@@ -28,26 +28,11 @@ UI_URLS = (
     '/ui/usp_quotes/([^/]*)',          'UiUspQuotesIndex',
 
     '/ui/messages/([^/]*)',       'UiMessages',
+
     '/ui/stats/nfs',           'UiStatsNFS',
     '/ui/stats/origin',        'UiStatsOrigin',
 )
 
-# Read this info from the DB?
-BRAND_2_USPS = {
-    'BF4': [
-        'Frostbite 3',
-        'Commander Mode',
-        'Amphibious Assault',
-        'Levolution',
-        'All-Out War'
-    ],
-    'Sports': [
-        'FIFA',
-        'Madden',
-        'NBA',
-        'UFC'
-    ]
-}
 
 class UiUspQuotes:
     quote_form = form.Form(
@@ -71,7 +56,7 @@ class UiUspQuotes:
 
     def GET(self, brand, usp):
         form = self.quote_form()
-        quotes = list(store_usp.get_quotes(brand, usp))
+        quotes = util.usp.get_quotes(brand, usp)['quotes']
         return render.usp_quotes(brand, usp, quotes, form)
 
     def POST(self, brand, usp):
@@ -83,26 +68,41 @@ class UiUspQuotes:
         except AttributeError:
             delete_id = None
         if delete_id is not None:
-            store_usp.delete_quote(delete_id)
+            util.usp.delete_quote(delete_id)
             raise web.seeother(get_url)
 
         # POST
         form = self.quote_form()
         if not form.validates():
             # FAILURE
-            quotes = list(store_usp.get_quotes(brand, usp))
+            quotes = util.usp.get_quotes(brand, usp)['quotes']
             return render.usp_quotes(brand, usp, quotes, form)
         else:
             # SUCCESS
-            store_usp.insert_quote(
+            util.usp.insert_quote(
                 brand, usp,
                 form.d.quote, form.d.name, form.d.image
             )
             raise web.seeother(get_url)
 
 class UiUspQuotesIndex:
+    BRAND_2_USPS = {
+        'BF4': [
+            'Frostbite 3',
+            'Commander Mode',
+            'Amphibious Assault',
+            'Levolution',
+            'All-Out War'
+        ],
+        'Sports': [
+            'FIFA',
+            'Madden',
+            'NBA',
+            'UFC'
+        ]
+    }
     def GET(self, brand):
-        return render.usp_quotes_index(brand, BRAND_2_USPS)
+        return render.usp_quotes_index(brand, self.BRAND_2_USPS)
 
 class UiMessages:
     def GET(self, brand):

@@ -66,4 +66,5 @@ span.profile_name {
 
 div.quote_text {
     float: left;
+    width: 450px;
 }
