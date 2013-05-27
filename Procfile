@@ -1,2 +1,2 @@
-web: python src/api.py $PORT
+web: python src/server.py ${PORT}
 
