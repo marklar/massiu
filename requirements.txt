@@ -1,1 +1,6 @@
 web.py
+pymongo
+requests
+tweetpony
+beautifulsoup4
+
