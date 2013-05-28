@@ -146,13 +146,10 @@ class UiStatsOrigin:
             return render.origin_highlights(stats_list, form)
         else:
             # SUCCESS
-            util.store.put_origin_data({
-                'logins': form.d.logins,
-                'gamers': form.d.gamers,
-                'games_today': form.d.games_today
-            })
-            get_url = '/ui/stats/origin'
-            raise web.seeother(get_url)
+            KEYS = ['logins', 'gamers', 'games_today']
+            util.store.put_origin_data(dict([(k, int(form[k].value))
+                                             for k in KEYS]))
+            raise web.seeother('/ui/stats/origin')
 
 API_URLS = (
     # BF4
