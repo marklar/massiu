@@ -1,16 +1,15 @@
 
-* Facebook Likes
-** need name to put on screen - DONE
+* Facebook Likes - DONE
+** need name to put on screen
 
-* featured tweets
+* featured tweets - DONE
 ** data desired: same as USP
 ** username, user's name, thumbnail (profile_image), text of tweet -- nothing else
-** 
+** bigger images for Twitter profiles?
 ** hashtag
 
 * USP
-** add the username (in addition to real-world name)
+** add the username (in addition to real-world name) - DONE
 ** add "type" (i.e. "tweet" or "not-tweet")
 
-* How do we get bigger images for Twitter profiles?
 

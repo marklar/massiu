@@ -1,16 +1,20 @@
-import store
+import string
 import pymongo
 from bson.objectid import ObjectId
+
+import store
 
 COLL_NAME = 'usp_quotes'
 
 def insert_quote(brand, usp, text, name, image_url):
+    """ For quotes entered through the UI. """
     doc = {
+        'is_tweet': False,
         'brand': brand,
         'usp': usp,
         'text': text,
         'name': name,
-        'image': image_url
+        'image': image_url.replace('_normal.', '.')
     }
     return get_coll().insert(doc)
 
