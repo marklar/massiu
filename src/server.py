@@ -12,16 +12,15 @@ sys.path.append(this_dir)
 import bf4.highlights
 import bf4.usp
 import ea.activity
-import ea.featured
 import ea.likes
 import ea.message
 import nfs.leaderboard
-import nfs.featured
 import pvz.photos
 import pvz.featured
 import sports.usp
 import sports.featured
 import util.usp
+import util.featured
 
 
 render = web.template.render('templates/')
@@ -122,7 +121,6 @@ class UiStatsOrigin:
     def GET(self):
         return render.origin_highlights()
 
-
 API_URLS = (
     # BF4
     '/api/bf4/highlights.json',         'Bf4Highlights',
@@ -148,11 +146,11 @@ API_URLS = (
     '/api/sports/usp/ufc.json',             'SportsUspUFC',
     # Sports - featured
     '/api/sports/featured/all.json',        'SportsFeaturedAll',
-    '/api/sports/featured/ufc.json',        'SportsFeaturedUFC',
-    '/api/sports/featured/fifa.json',       'SportsFeaturedFIFA',
     '/api/sports/featured/ea_sports.json',  'SportsFeaturedEASports',
+    '/api/sports/featured/fifa.json',       'SportsFeaturedFIFA',
     '/api/sports/featured/madden.json',     'SportsFeaturedMadden',
     '/api/sports/featured/nba.json',        'SportsFeaturedNBA',
+    '/api/sports/featured/ufc.json',        'SportsFeaturedUFC',
 
     # NFS
     # '/api/nfs/leaderboard',     'NfsLeaderboard',
@@ -237,7 +235,7 @@ class EaMessage:
 
 class EaFeatured:
     def GET(self):
-        return j(ea.featured.get())
+        return j(util.featured.get_all_featured('ea'))
 
 class EaFbLikes:
     def GET(self):
@@ -267,7 +265,16 @@ class SportsUspUFC:
 
 class SportsFeaturedAll:
     def GET(self):
-        return j(sports.featured.get_all())
+        return j(util.featured.get_all_featured('ea'))
+
+# ---
+# It may seem silly to have all these doing the same thing,
+# but we want an explicit list of URLs in order to display endpoints.
+# ---
+
+class SportsFeatured:
+    def GET(self, brand):
+        return j(sports.featured.get(brand))
 
 class SportsFeaturedUFC:
     def GET(self):
@@ -297,7 +304,7 @@ class NfsLeaderboard:
 
 class NfsFeatured:
     def GET(self):
-        return j(nfs.featured.get())
+        return j(util.featured.get_all_featured('nfs'))
 
 #-- PVZ --
 

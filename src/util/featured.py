@@ -44,5 +44,14 @@ def get_featured(stream_name_root, hashtag):
 
 def get_w_tag(stream_name, hashtag):
     gather.only_new_tweets(stream_name)
-    return list(store.with_hashtag(stream_name, hashtag))
+    return [slim(t) for t in store.with_hashtag(stream_name, hashtag)]
     
+def slim(tweet):
+    """ Extract from tweet only the info we care about. """
+    u = tweet['user']
+    return {
+        'text': tweet['text'],
+        'name': u['name'],
+        'image': u['profile_image_url'],
+        'screen_name': u['profile_image_url']
+    }
