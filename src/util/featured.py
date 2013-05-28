@@ -1,5 +1,5 @@
 
-import string  # lstrip
+import string  # lstrip, replace
 
 from util import store
 from util import fetch
@@ -50,8 +50,8 @@ def slim(tweet):
     """ Extract from tweet only the info we care about. """
     u = tweet['user']
     return {
-        'text': tweet['text'],
-        'name': u['name'],
-        'image': u['profile_image_url'],
-        'screen_name': u['profile_image_url']
+        'text':        tweet['text'],
+        'name':        u['name'],
+        'image':       u['profile_image_url'].replace('_normal.', '.'),
+        'screen_name': u['screen_name']
     }
