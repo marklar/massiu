@@ -37,17 +37,13 @@ def highlights():
         },
 
         # TODO: This part might be using the wrong username.
-        'fb_likes': {
-            'user': FB_USERNAME,
-            'count': facebook.get_likes(FB_USERNAME)
-        },
+        'fb_likes': facebook.get_likes(FB_USERNAME),
 
         'bf4_followers': {
             'user': TWITTER_SCREEN_NAME,
             'count': twitter.get_num_followers(TWITTER_SCREEN_NAME)
         },
 
-        # TODO TODO TODO
         'ea_followers': {
             'user': EA_SCREEN_NAME,
             'count': twitter.get_num_followers(EA_SCREEN_NAME)

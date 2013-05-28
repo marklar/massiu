@@ -10,6 +10,7 @@ def get_likes(username):
     url = 'http://graph.facebook.com/' + username
     resp = reqs.get_data(url, {})
     return {
+        'name':     get_or_none(resp, 'name'),
         'username': get_or_none(resp, 'username'),
         'likes':    get_or_none(resp, 'likes')
     }
