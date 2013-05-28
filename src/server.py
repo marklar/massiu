@@ -194,8 +194,9 @@ API_URLS = (
     '/api/pvz/featured.json',        'PvzFeatured',
 
     # Origin
-    # '/origin/',     'Origin',
+    '/api/origin/highlights.json',     'Origin'
 )
+
 
 URLS = UI_URLS + API_URLS
 
@@ -352,6 +353,11 @@ class PvzFeatured:
 
 #-- ORIGIN --
 
+class Origin:
+    def GET(self):
+        st = util.store.get_origin_data()[0]
+        del st['_id']
+        return j(st)
 
 
 if __name__ == "__main__": 
