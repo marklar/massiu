@@ -18,6 +18,7 @@ from util import facebook
 import bf4.counts
 
 TWITTER_SCREEN_NAME = 'battlefield'
+EA_SCREEN_NAME = 'ea'
 
 # TODO: Which is the right FB username?
 FB_USERNAME = 'OfficialBattlefield4'
@@ -41,9 +42,15 @@ def highlights():
             'count': facebook.get_likes(FB_USERNAME)
         },
 
-        'followers': {
+        'bf4_followers': {
             'user': TWITTER_SCREEN_NAME,
             'count': twitter.get_num_followers(TWITTER_SCREEN_NAME)
+        },
+
+        # TODO TODO TODO
+        'ea_followers': {
+            'user': EA_SCREEN_NAME,
+            'count': twitter.get_num_followers(EA_SCREEN_NAME)
         },
 
         'tweets': {

@@ -1,0 +1,19 @@
+
+* Facebook Likes
+** need name to put on screen
+** Madden
+** NFS
+** Battlefield etc
+
+* featured tweets
+** data desired: same as USP
+** username, user's name, thumbnail (profile_image), text of tweet -- nothing else
+** 
+** hashtag
+
+* USP
+** add the username (in addition to real-world name)
+** add "type" (i.e. "tweet" or "not-tweet")
+
+* How do we get bigger images for Twitter profiles?
+
