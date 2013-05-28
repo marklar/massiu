@@ -1,4 +1,4 @@
-$def with ()
+$def with (stats_list, form)
 
 <html>
   <head>
@@ -12,6 +12,41 @@ $def with ()
       <a href="/"><img src="/static/ea.png" /></a>
       <h1>Origin Highlights</h1>
     </div>
+
+    <!-- form for adding new stats -->
+
+    <h3>Add New Data</h3>
+
+    <form name="main" method="post">
+      $if not form.valid:
+        <p>Oops!  Please fix your input and retry.</p>
+      $:form.render()
+        <input type="submit" />
+    </form>
+
+    <div class="vert_spacer"></div>
+
+    <!-- list of previous stats (not strictly necessary) -->
+
+    <h3>Previous Data</h3>
+
+    $if not stats_list:
+      <span>There are none.</span>
+    $else:
+      <div class="row">
+	<div class="stats">logins</div>
+	<div class="stats">gamers</div>
+	<div class="stats games">games today</div>
+	<br style="clear: left;" />
+      </div>
+      
+      $for st in stats_list:
+        <div class="row">
+	  <div class="stats">$st['logins']</div>
+	  <div class="stats">$st['gamers']</div>
+	  <div class="stats games_today">$st['games_today']</div>
+	  <br style="clear: left;" />
+	</div>
 
   </body>
 </html>

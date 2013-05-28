@@ -33,7 +33,7 @@ $def with (brand, usp, quotes, form)
 	<input type="hidden" name="delete_id" id="xx" value=""/>
 
 	$for q in quotes:
-          <div class="quote">
+          <div class="row">
 	    <input type="submit" name="delete"
 		   onclick="document.getElementById('xx').value = '$q['_id']'"
 		   class="delete" value="Delete"

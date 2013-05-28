@@ -45,7 +45,7 @@ textarea {
 
 /*----*/
 
-div.quote {
+div.row {
     width: 100%;
     margin-bottom: 15px;
 }
@@ -71,4 +71,16 @@ span.profile_name {
 div.quote_text {
     float: left;
     width: 450px;
+}
+
+/*----*/
+
+div.stats {
+    float: left;
+    width: 100px;
+    margin-right: 20px;
+}
+
+div.games_today {
+    float: left;
 }

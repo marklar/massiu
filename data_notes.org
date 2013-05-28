@@ -10,6 +10,7 @@
 
 * USP
 ** add the username (in addition to real-world name) - DONE
-** add "type" (i.e. "tweet" or "not-tweet")
+** add "is_tweet": False - DONE
+
 
 

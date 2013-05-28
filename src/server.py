@@ -21,6 +21,7 @@ import sports.usp
 import sports.featured
 import util.usp
 import util.featured
+import util.store
 
 
 render = web.template.render('templates/')
@@ -117,9 +118,41 @@ class UiStatsNFS:
     def GET(self):
         return render.nfs_stats()
 
+def num_box(name, desc):
+    return form.Textbox(
+        name,
+        form.notnull,
+        form.regexp('^\s*\d+\s*$', "Digits only, please."),
+        size="10",
+        description=desc
+    )
+
 class UiStatsOrigin:
+    data_form = form.Form(
+        num_box('logins', 'Total number of logins'),
+        num_box('gamers', 'Total number of gamers'),
+        num_box('games_today', 'Number of games played today'))
+
     def GET(self):
-        return render.origin_highlights()
+        form = self.data_form()
+        stats_list = util.store.get_origin_data()
+        return render.origin_highlights(stats_list, form)
+
+    def POST(self):
+        form = self.data_form()
+        if not form.validates():
+            # FAILURE
+            stats_list = util.store.get_origin_data()
+            return render.origin_highlights(stats_list, form)
+        else:
+            # SUCCESS
+            util.store.put_origin_data({
+                'logins': form.d.logins,
+                'gamers': form.d.gamers,
+                'games_today': form.d.games_today
+            })
+            get_url = '/ui/stats/origin'
+            raise web.seeother(get_url)
 
 API_URLS = (
     # BF4

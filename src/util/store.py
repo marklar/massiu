@@ -5,7 +5,6 @@
 # 
 
 import pymongo
-# from pymongo import Connection
 import os
 from urlparse import urlsplit
 
@@ -104,9 +103,9 @@ def get_all(collection_name):
 ORIGIN_COLLECTION = 'origin'
 
 def get_origin_data():
-    """ Get the most-recently inserted. """
+    """ More-recent first. """
     coll = get_db()[ORIGIN_COLLECTION]
-    return coll.find().sort({'_id': -1})[0]
+    return coll.find().sort('_id', pymongo.DESCENDING)
 
 def put_origin_data(dico):
     coll = get_db()[ORIGIN_COLLECTION]
