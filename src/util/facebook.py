@@ -6,14 +6,13 @@
 
 import reqs
 
+URL_ROOT = 'http://graph.facebook.com/'
+KEYS = ['name', 'username', 'likes']
+
 def get_likes(username):
-    url = 'http://graph.facebook.com/' + username
-    resp = reqs.get_data(url, {})
-    return {
-        'name':     get_or_none(resp, 'name'),
-        'username': get_or_none(resp, 'username'),
-        'likes':    get_or_none(resp, 'likes')
-    }
+    resp = reqs.get_data(URL_ROOT + username, {})
+    return dict([(k, get_or_none(resp, k))
+                 for k in KEYS])
 
 #----------------
 

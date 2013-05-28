@@ -1,9 +1,6 @@
 
 * Facebook Likes
-** need name to put on screen
-** Madden
-** NFS
-** Battlefield etc
+** need name to put on screen - DONE
 
 * featured tweets
 ** data desired: same as USP
