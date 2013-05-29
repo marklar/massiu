@@ -264,9 +264,48 @@ class EaMessage:
     def GET(self):
         return j(ea.message.get_most_recent())
 
+#-----------------
+# begin
+#-----------------
+
+FEATURED_SUFFIX = '_featured'
+STARRED_SUFFIX = '_starred'
+
+def bogus_get_featured(stream_name_root, hashtag):
+    """
+    Return both starred and featured.
+    Remove any from featured that already appear in starred.
+    """
+    # TODO
+    util.store.drop_coll(stream_name_root + STARRED_SUFFIX)
+    util.store.drop_coll(stream_name_root + FEATURED_SUFFIX)
+
+    starred = bogus_get_w_tag(stream_name_root + STARRED_SUFFIX)
+    featured = bogus_get_w_tag(stream_name_root + FEATURED_SUFFIX)
+
+    # TODO: Limit the number of starred to 5?
+    novel_featured = [f for f in featured if f not in starred]
+
+    return {
+        'hashtag': '#' + hashtag,
+        'starred_tweets': starred,
+        'other_tweets': novel_featured
+    }
+
+import util.gather
+def bogus_get_w_tag(stream_name):
+    util.gather.only_new_tweets(stream_name)
+    return [util.featured.slim(t) for t in util.store.get_all(stream_name)]
+
 class EaFeatured:
     def GET(self):
-        return j(util.featured.get_all_featured('ea'))
+        # TODO - RETURN TO THIS:
+        # return j(util.featured.get_all_featured('ea'))
+        return j(bogus_get_featured('ea', 'eae3'))
+
+#-----------------
+# end
+#-----------------
 
 class EaFbLikes:
     def GET(self):
