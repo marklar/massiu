@@ -212,6 +212,7 @@ API_URLS = (
     # NFS
     # '/api/nfs/leaderboard',     'NfsLeaderboard',
     '/api/nfs/featured.json',        'NfsFeatured',
+    '/api/nfs/game_stats.json',      'NfsGameStats',
 
     # PVZ
     '/api/pvz/photos.json',          'PvzPhotos',
@@ -402,6 +403,12 @@ class NfsLeaderboard:
 class NfsFeatured:
     def GET(self):
         return j(util.featured.get_all_featured('nfs'))
+
+class NfsGameStats:
+    def GET(self):
+        stats = util.store.get_nfs_game_stats()[0]
+        del stats['_id']
+        return j(stats)
 
 #-- PVZ --
 
