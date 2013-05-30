@@ -301,7 +301,7 @@ class EaFeatured:
     def GET(self):
         # TODO - RETURN TO THIS:
         # return j(util.featured.get_all_featured('ea'))
-        return j(bogus_get_featured('ea', 'eae3'))
+        return j([bogus_get_featured('ea', 'eae3')])
 
 #-----------------
 # end
