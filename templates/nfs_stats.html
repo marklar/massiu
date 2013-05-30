@@ -1,17 +1,56 @@
-$def with ()
+$def with (stats_list, form)
 
 <html>
   <head>
     <link href="/static/main.css" rel="stylesheet" type="text/css" />
-    <title>NFS Stats</title>
+    <title>NFS Game Stats</title>
   </head>
 
   <body>
 
     <div class="header">
       <a href="/"><img src="/static/ea.jpeg" /></a>
-      <h1>NFS Stats</h1>
+      <h1>NFS Game Stats</h1>
     </div>
+
+    <!-- form for adding new stats -->
+
+    <h3>Add New Data</h3>
+
+    <form name="main" method="post">
+      $if not form.valid:
+        <p>Oops!  Please fix your input and retry.</p>
+      $:form.render()
+        <input type="submit" />
+    </form>
+
+    <div class="vert_spacer"></div>
+
+    <!-- list of previous stats (not strictly necessary) -->
+
+    <h3>Previous Data</h3>
+
+    $if not stats_list:
+      <span>There are none.</span>
+    $else:
+      <!-- header -->
+      <div class="row">
+	<div class="stats">miles</div>
+	<div class="stats">takedowns</div>
+	<div class="stats">busts</div>
+	<div class="stats">speed</div>
+	<br style="clear: left;" />
+      </div>
+      
+      <!-- body -->
+      $for st in stats_list:
+        <div class="row">
+	  <div class="stats">$st['miles']</div>
+	  <div class="stats">$st['takedowns']</div>
+	  <div class="stats">$st['busts']</div>
+	  <div class="stats">$st['speed']</div>
+	  <br style="clear: left;" />
+	</div>
 
   </body>
 </html>

@@ -110,6 +110,19 @@ def get_origin_data():
 def put_origin_data(dico):
     coll = get_db()[ORIGIN_COLLECTION]
     coll.insert(dico)
+
+#--------------
+
+NFS_GAME_STATS_COLLECTION = 'nfs_game_stats'
+
+def get_nfs_game_stats():
+    """ More-recent first. """
+    coll = get_db()[NFS_GAME_STATS_COLLECTION]
+    return coll.find().sort('_id', pymongo.DESCENDING)
+
+def put_nfs_game_stats(dico):
+    coll = get_db()[NFS_GAME_STATS_COLLECTION]
+    coll.insert(dico)
     
 
 #-- helpers --

@@ -33,6 +33,7 @@ $def with (stats_list, form)
     $if not stats_list:
       <span>There are none.</span>
     $else:
+      <!-- header -->
       <div class="row">
 	<div class="stats">logins</div>
 	<div class="stats">gamers</div>
@@ -40,6 +41,7 @@ $def with (stats_list, form)
 	<br style="clear: left;" />
       </div>
       
+      <!-- body -->
       $for st in stats_list:
         <div class="row">
 	  <div class="stats">$st['logins']</div>
