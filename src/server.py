@@ -21,6 +21,7 @@ import sports.usp
 import sports.featured
 import util.usp
 import util.featured
+from util import my_time
 import util.store
 
 
@@ -33,7 +34,7 @@ UI_URLS = (
     '/ui/usp_quotes/([^/]*)/(.*)',     'UiUspQuotes',
     '/ui/usp_quotes/([^/]*)',          'UiUspQuotesIndex',
 
-    '/ui/messages/([^/]*)',       'UiMessages',
+    '/ui/messages/([^/]*)',       'UiShowMessages',
 
     '/ui/stats/nfs',           'UiNfsGameStats',
     '/ui/stats/origin',        'UiStatsOrigin',
@@ -62,7 +63,7 @@ class UiUspQuotes:
 
     def GET(self, brand, usp):
         form = self.quote_form()
-        quotes = util.usp.get_quotes(brand, usp)['quotes']
+        quotes = list(util.usp.get_quotes(brand, usp)['quotes'])
         return render.usp_quotes(brand, usp, quotes, form)
 
     def POST(self, brand, usp):
@@ -81,7 +82,7 @@ class UiUspQuotes:
         form = self.quote_form()
         if not form.validates():
             # FAILURE
-            quotes = util.usp.get_quotes(brand, usp)['quotes']
+            quotes = list(util.usp.get_quotes(brand, usp)['quotes'])
             return render.usp_quotes(brand, usp, quotes, form)
         else:
             # SUCCESS
@@ -110,10 +111,6 @@ class UiUspQuotesIndex:
     def GET(self, brand):
         return render.usp_quotes_index(brand, self.BRAND_2_USPS)
 
-class UiMessages:
-    def GET(self, brand):
-        return render.messages(brand)
-
 
 def num_box(name, desc):
     return form.Textbox(
@@ -132,14 +129,14 @@ class UiStatsOrigin:
 
     def GET(self):
         form = self.data_form()
-        stats_list = util.store.get_origin_data()
+        stats_list = list(util.store.get_origin_data())
         return render.origin_highlights(stats_list, form)
 
     def POST(self):
         form = self.data_form()
         if not form.validates():
             # FAILURE
-            stats_list = util.store.get_origin_data()
+            stats_list = list(util.store.get_origin_data())
             return render.origin_highlights(stats_list, form)
         else:
             # SUCCESS
@@ -158,14 +155,14 @@ class UiNfsGameStats:
 
     def GET(self):
         form = self.data_form()
-        stats_list = util.store.get_nfs_game_stats()
+        stats_list = list(util.store.get_nfs_game_stats())
         return render.nfs_stats(stats_list, form)
 
     def POST(self):
         form = self.data_form()
         if not form.validates():
             # FAILURE
-            stats_list = util.store.get_nfs_game_stats()
+            stats_list = list(util.store.get_nfs_game_stats())
             return render.nfs_stats(stats_list, form)
         else:
             # SUCCESS
@@ -174,9 +171,72 @@ class UiNfsGameStats:
                                                 for k in KEYS]))
             raise web.seeother('/ui/stats/nfs')
 
+class UiMessages:
+    def GET(self, brand):
+        return render.messages(brand)
 
+# from util import utc_time
+# import pytz
+# utc = pytz.UTC
 
+def is_active(message):
+    # now = utc_time.now()
+    now = my_time.los_angeles_now()
+    # start_time = utc.localize(message['start_time'])
+    # end_time = utc.localize(message['end_time'])
+    start_time = my_time.loc(message['start_time'])
+    end_time = my_time.loc(message['end_time'])
+    assert now.__class__.__name__ == 'datetime'
+    assert start_time.__class__.__name__ == 'datetime'
+    assert end_time.__class__.__name__ == 'datetime'
+    return (start_time >= now) and (end_time < now)
 
+class UiShowMessages:
+    message_form = form.Form(
+        form.Textarea('text',
+                      form.notnull,
+                      maxlength="150",
+                      description='Message (<= 150 chars)'),
+        num_box('delay_secs',    'Delay until display (in SECONDS)'),
+        num_box('duration_secs', 'Duration (in SECONDS)'))
+
+    def GET(self, brand):
+        form = self.message_form()
+        messages = list(util.store.get_messages(brand))
+        for msg in messages:
+            msg['is_active'] = is_active(msg)
+        # return render.messages(brand, messages, form, utc_time.now())
+        return render.messages(brand, messages, form, my_time.los_angeles_now())
+
+    def POST(self, brand):
+        form = self.message_form()
+        now = my_time.los_angeles_now()
+        if not form.validates():
+            # FAILURE
+            messages = list(util.store.get_messages(brand))
+            for msg in messages:
+                msg['is_active'] = is_active(msg)
+            # return render.messages(brand, messages, form, utc_time.now())
+            return render.messages(brand, messages, form, now)
+        else:
+            # SUCCESS
+            delay_secs = int(form['delay_secs'].value)
+            duration_secs = int(form['duration_secs'].value)
+            # start_time = utc_time.make_start_time(delay_secs)
+            # end_time = utc_time.make_end_time(start_time, duration_secs)
+            start_time = my_time.make_start_time(delay_secs)
+            end_time = my_time.make_end_time(start_time, duration_secs)
+            message = {
+                'text': form['text'].value,
+                'delay_secs': delay_secs,
+                'duration_secs': duration_secs,
+                # 'created_at': utc_time.now(),
+                'created_at': now,
+                'start_time': start_time,
+                'end_time': end_time
+            }
+            util.store.put_message(brand, message)
+            raise web.seeother('/ui/messages/' + brand)
 
 API_URLS = (
     # BF4

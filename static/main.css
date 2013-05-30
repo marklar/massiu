@@ -40,7 +40,7 @@ textarea {
 }
 
 .vert_spacer {
-    height: 10px;
+    height: 25px;
 }
 
 /*----*/
@@ -81,6 +81,18 @@ div.stats {
     margin-right: 20px;
 }
 
+div.secs {
+    width: 80px;
+}
+
+div.message {
+    width: 450px;
+}
+
 div.games_today {
     float: left;
+}
+
+div.timestamp {
+    width: 150px;
 }

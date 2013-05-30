@@ -113,6 +113,17 @@ def put_origin_data(dico):
 
 #--------------
 
+def get_messages(brand):
+    """ More-recent first. """
+    coll = get_db()[brand + '_messages']
+    return coll.find().sort('_id', pymongo.DESCENDING)
+
+def put_message(brand, dico):
+    coll = get_db()[brand + '_messages']
+    coll.insert(dico)
+
+#--------------
+
 NFS_GAME_STATS_COLLECTION = 'nfs_game_stats'
 
 def get_nfs_game_stats():

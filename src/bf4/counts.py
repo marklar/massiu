@@ -29,11 +29,11 @@ def num_tweets():
 
 #----------------------
 
-def count_in_delta(dates, delta):
+def count_in_delta(datetimes, delta):
     """ :: [datetime.datetime], datetime.timedelta -> Int """
     now = my_time.los_angeles_now()
     cnt = 0
-    for d in dates:
-        if now - d <= delta:
+    for dt in datetimes:
+        if now - dt <= delta:
             cnt += 1
     return cnt
