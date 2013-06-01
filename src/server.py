@@ -91,7 +91,7 @@ API_URLS = (
 )
 
 
-URLS = ui.UI_URLS + API_URLS
+URLS = UI_URLS + API_URLS
 
 ODD_INDICES = range(0, len(API_URLS)-1, 2)
 ENDPOINTS = [API_URLS[i] for i in ODD_INDICES]
