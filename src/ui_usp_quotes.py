@@ -6,6 +6,30 @@ from ui_util import render
 APP = "http://polar-caverns-8587.herokuapp.com"
 DEF_PROFILE_IMAGE = APP + "/static/default_profile.jpeg"
 
+
+class UiUspQuotesIndex:
+    BRAND_2_USPS = {
+        'BF4': [
+            'Frostbite 3',
+            'Commander Mode',
+            'Amphibious Assault',
+            'Levolution',
+            'All-Out War'
+        ],
+        'Sports': [
+            'IGNITE: Human Intelligence',
+            'IGNITE: True Player Motion',
+            'IGNITE: Living Worlds',
+            'FIFA 14 Is Alive',
+            'Madden: See It. Feel It. Live It.',
+            'NBA',
+            'UFC: Feel the Fight'
+        ]
+    }
+    def GET(self, brand):
+        return render.usp_quotes_index(brand, self.BRAND_2_USPS)
+
+
 class UiUspQuotes:
     quote_form = form.Form(
         form.Textbox('name',
@@ -53,27 +77,4 @@ class UiUspQuotes:
                 form.d.quote, form.d.name, form.d.image
             )
             raise web.seeother(get_url)
-
-
-class UiUspQuotesIndex:
-    BRAND_2_USPS = {
-        'BF4': [
-            'Frostbite 3',
-            'Commander Mode',
-            'Amphibious Assault',
-            'Levolution',
-            'All-Out War'
-        ],
-        'Sports': [
-            'IGNITE: Human Intelligence',
-            'IGNITE: True Player Motion',
-            'IGNITE: Living Worlds',
-            'FIFA 14 Is Alive',
-            'Madden: See It. Feel It. Live It.',
-            'NBA',
-            'UFC: Feel the Fight'
-        ]
-    }
-    def GET(self, brand):
-        return render.usp_quotes_index(brand, self.BRAND_2_USPS)
 

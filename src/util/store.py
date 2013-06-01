@@ -7,6 +7,7 @@
 import pymongo
 import os
 from urlparse import urlsplit
+from datetime import datetime
 
 from util import hashtags
 
@@ -113,14 +114,31 @@ def put_origin_data(dico):
 
 #--------------
 
-def get_messages(brand):
-    """ More-recent first. """
-    coll = get_db()[brand + '_messages']
-    return coll.find().sort('_id', pymongo.DESCENDING)
-
 def put_message(brand, dico):
     coll = get_db()[brand + '_messages']
     coll.insert(dico)
+
+def get_active_messages(brand):
+    now = datetime.now()
+    return get_messages(brand, {
+        'start_time': {'$lte': now},
+        'end_time': {'$gt': now}
+    })
+
+def get_future_messages(brand):
+    return get_messages(brand, {
+        'start_time': {'$gt': datetime.now()}
+    })
+
+def get_expired_messages(brand):
+    return get_messages(brand, {
+        'end_time': {'$lte': datetime.now()}
+    })
+
+def get_messages(brand, query):
+    """ More-recent first. """
+    coll = get_db()[brand + '_messages']
+    return coll.find(query).sort('_id', pymongo.DESCENDING)
 
 #--------------
 

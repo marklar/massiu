@@ -1,5 +1,39 @@
 $def with (brand, messages, form, now_datetime)
 
+  $def just_messages(name, msgs):
+
+    <div class="vert_spacer"></div>
+
+    <h4>$name Messages</h4>
+
+    $if not msgs:
+      <span>There are none.</span>
+
+    $else:
+      <!-- header -->
+      <div class="row">
+	<div class="stats hd message">Message</div>
+	<div class="stats hd secs">Delay (in secs)</div>
+	<div class="stats hd secs">Duration (in secs)</div>
+	<div class="stats hd timestamp">created at (BCN)</div>
+	<div class="stats hd timestamp">start time (BCN)</div>
+	<div class="stats hd timestamp">end time (BCN)</div>
+	<br style="clear: left;" />
+      </div>
+      
+      <!-- body -->
+      $for msg in msgs:
+        <div class="row">
+	  <div class="stats message">$msg['text']</div>
+	  <div class="stats secs">$msg['delay_secs']</div>
+	  <div class="stats secs">$msg['duration_secs']</div>
+	  <div class="stats timestamp">$msg['created_at']</div>
+	  <div class="stats timestamp">$msg['start_time']</div>
+	  <div class="stats timestamp">$msg['end_time']</div>
+	  <br style="clear: left;" />
+	</div>
+
+
 <html>
   <head>
     <link href="/static/main.css" rel="stylesheet" type="text/css" />
@@ -29,40 +63,16 @@ $def with (brand, messages, form, now_datetime)
     <!-- list of previous stats (not strictly necessary) -->
 
     <div>
-      <span>UTC Time (as of page load): $now_datetime</span>
+      <span>BCN Time (as of page load): $now_datetime</span>
     </div>
 
     <div class="vert_spacer"></div>
 
     <h3>Previously Entered Messages</h3>
 
-    $if not messages:
-      <span>There are none.</span>
-    $else:
-      <!-- header -->
-      <div class="row">
-	<div class="stats">Is Active?</div>
-	<div class="stats message">Message</div>
-	<div class="stats secs">Delay (in secs)</div>
-	<div class="stats secs">Duration (in secs)</div>
-	<div class="stats timestamp">created at</div>
-	<div class="stats timestamp">start time</div>
-	<div class="stats timestamp">end time</div>
-	<br style="clear: left;" />
-      </div>
-      
-      <!-- body -->
-      $for msg in messages:
-        <div class="row">
-	  <div class="stats">$msg['is_active']</div>
-	  <div class="stats message">$msg['text']</div>
-	  <div class="stats secs">$msg['delay_secs']</div>
-	  <div class="stats secs">$msg['duration_secs']</div>
-	  <div class="stats timestamp">$msg['created_at']</div>
-	  <div class="stats timestamp">$msg['start_time']</div>
-	  <div class="stats timestamp">$msg['end_time']</div>
-	  <br style="clear: left;" />
-	</div>
+    $:just_messages('Active', messages['active'])
+    $:just_messages('Future', messages['future'])
+    $:just_messages('Expired', messages['expired'])
 
   </body>
 </html>

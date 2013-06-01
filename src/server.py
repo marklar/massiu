@@ -80,13 +80,13 @@ API_URLS = (
     '/api/nfs/game_stats.json',      'NfsGameStats',
 
     # PVZ
+    '/api/pvz/message.json',         'PvzMessage',
     '/api/pvz/photos.json',          'PvzPhotos',
     '/api/pvz/featured.json',        'PvzFeatured',
 
     # Origin
     '/api/origin/highlights.json',     'Origin'
 )
-
 
 URLS = UI_URLS + API_URLS
 
@@ -150,7 +150,19 @@ class EaActivity:
 
 class EaMessage:
     def GET(self):
-        return j(ea.message.get_most_recent())
+        # return j(ea.message.get_most_recent())
+        return j(msg_for('EA'))
+
+def msg_for(brand):
+    try:
+        msg = util.store.get_active_messages(brand)[0]
+        return {
+            'brand': brand,
+            'message': msg['text'],
+            'duration_secs': msg['duration_secs']
+        }
+    except IndexError:
+        return {'error': 'No active ' + brand + ' messages.'}
 
 #-----------------
 # begin BOGUS
@@ -285,6 +297,10 @@ class PvzPhotos:
 class PvzFeatured:
     def GET(self):
         return j(pvz.featured.get())
+
+class PvzMessage:
+    def GET(self):
+        return j(msg_for('PvZ'))
 
 #-- ORIGIN --
 

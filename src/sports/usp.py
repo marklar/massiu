@@ -10,18 +10,6 @@ BRAND = 'Sports'
 # def all_usps():
 #     return [fifa(), madden(), nba(), ufc()]
 
-# TODO: Fix USPs below.
-
-IGNITE_USPS = {
-    'ignite_human_intelligence': 'IGNITE: Human Intelligence',
-    'ignite_true_player_motion': 'IGNITE: True Player Motion',
-    'ignite_living_worlds':      'IGNITE: Living Worlds',
-}
-
-def ignite(phrase):
-    return usp.get_quotes(BRAND, IGNITE_USPS[phrase])
-
-
 def ignite_human_intelligence():
     return usp.get_quotes(BRAND, 'IGNITE: Human Intelligence')
 
@@ -38,6 +26,7 @@ def madden():
     return usp.get_quotes(BRAND, 'Madden: See It. Feel It. Live It.')
 
 def nba():
+    # TODO: Fix this USP.
     return usp.get_quotes(BRAND, 'NBA')
 
 def ufc():
