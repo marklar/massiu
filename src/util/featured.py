@@ -60,3 +60,4 @@ def slim(tweet):
         'image':       u['profile_image_url'].replace('_normal.', '.'),
         'screen_name': u['screen_name']
     }
+    
