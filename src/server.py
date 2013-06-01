@@ -13,7 +13,6 @@ import bf4.highlights
 import bf4.usp
 import ea.activity
 import ea.likes
-import ea.message
 import nfs.leaderboard
 import pvz.photos
 import pvz.featured
