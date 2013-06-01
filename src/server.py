@@ -59,11 +59,16 @@ API_URLS = (
     '/api/ea/message.json',          'EaMessage',
 
     # Sports - usp
-    '/api/sports/usp/all.json',             'SportsUspAll',
+    # '/api/sports/usp/all.json',             'SportsUspAll',
+    '/api/sports/usp/ignite_human_intelligence.json', 'SportsUspIgniteHI',
+    '/api/sports/usp/ignite_true_player_motion.json', 'SportsUspIgniteTPM',
+    '/api/sports/usp/ignite_living_worlds.json',      'SportsUspIgniteLW',
+
     '/api/sports/usp/fifa.json',            'SportsUspFIFA',
     '/api/sports/usp/madden.json',          'SportsUspMadden',
     '/api/sports/usp/nba.json',             'SportsUspNBA',
     '/api/sports/usp/ufc.json',             'SportsUspUFC',
+
     # Sports - featured
     '/api/sports/featured/all.json',        'SportsFeaturedAll',
     '/api/sports/featured/ea_sports.json',  'SportsFeaturedEASports',
@@ -207,6 +212,22 @@ class EaFbLikes:
 class SportsUspAll:
     def GET(self):
         return j(sports.usp.all_usps())
+
+# class SportsUspIgnite:
+#     def GET(self, phrase):
+#         return j(sports.usp.ignite(phrase))
+
+class SportsUspIgniteHI:
+    def GET(self):
+        return j(sports.usp.ignite_human_intelligence())
+
+class SportsUspIgniteTPM:
+    def GET(self):
+        return j(sports.usp.ignite_true_player_motion())
+
+class SportsUspIgniteLW:
+    def GET(self):
+        return j(sports.usp.ignite_living_worlds())
 
 class SportsUspFIFA:
     def GET(self):

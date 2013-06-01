@@ -3,7 +3,8 @@ from web import form
 import util.usp
 from ui_util import render
 
-DEF_PROFILE_IMAGE = "http://polar-caverns-8587.herokuapp.com/static/default_profile.jpeg"
+APP = "http://polar-caverns-8587.herokuapp.com"
+DEF_PROFILE_IMAGE = APP + "/static/default_profile.jpeg"
 
 class UiUspQuotes:
     quote_form = form.Form(
@@ -54,15 +55,6 @@ class UiUspQuotes:
             raise web.seeother(get_url)
 
 
-
-# IGNITE: Human Intelligence
-# IGNITE: True Player Motion
-# IGNITE: Living Worlds
-# UFC: Feel the Fight
-# FIFA: FIFA 14 Is Alive TBC
-# Madden: See It. Feel It. Live It.
-# NBA: TBD
-
 class UiUspQuotesIndex:
     BRAND_2_USPS = {
         'BF4': [
@@ -73,10 +65,13 @@ class UiUspQuotesIndex:
             'All-Out War'
         ],
         'Sports': [
-            'FIFA',
-            'Madden',
+            'IGNITE: Human Intelligence',
+            'IGNITE: True Player Motion',
+            'IGNITE: Living Worlds',
+            'FIFA 14 Is Alive',
+            'Madden: See It.  Feel It.  Live It.',
             'NBA',
-            'UFC'
+            'UFC: Feel the Fight'
         ]
     }
     def GET(self, brand):

@@ -7,19 +7,38 @@ from util import usp
 FAKE_BRAND_LOGO = 'http://example.com/sports.png'
 BRAND = 'Sports'
 
-def all_usps():
-    return [fifa(), madden(), nba(), ufc()]
+# def all_usps():
+#     return [fifa(), madden(), nba(), ufc()]
 
 # TODO: Fix USPs below.
 
+IGNITE_USPS = {
+    'ignite_human_intelligence': 'IGNITE: Human Intelligence',
+    'ignite_true_player_motion': 'IGNITE: True Player Motion',
+    'ignite_living_worlds':      'IGNITE: Living Worlds',
+}
+
+def ignite(phrase):
+    return usp.get_quotes(BRAND, IGNITE_USPS[phrase])
+
+
+def ignite_human_intelligence():
+    return usp.get_quotes(BRAND, 'IGNITE: Human Intelligence')
+
+def ignite_true_player_motion():
+    return usp.get_quotes(BRAND, 'IGNITE: True Player Motion')
+
+def ignite_living_worlds():
+    return usp.get_quotes(BRAND, 'IGNITE: Living Worlds')
+
 def fifa():
-    return usp.get_quotes(BRAND, 'FIFA')
+    return usp.get_quotes(BRAND, 'FIFA 14 Is Alive')
 
 def madden():
-    return usp.get_quotes(BRAND, 'Madden')
+    return usp.get_quotes(BRAND, 'Madden: See It. Feel It. Live It.')
 
 def nba():
     return usp.get_quotes(BRAND, 'NBA')
 
 def ufc():
-    return usp.get_quotes(BRAND, 'UFC')
+    return usp.get_quotes(BRAND, 'UFC: Feel the Fight')
