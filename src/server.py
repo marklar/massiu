@@ -45,7 +45,6 @@ API_URLS = (
     # BF4
     '/api/bf4/highlights.json',         'Bf4Highlights',
     # bf4 - usp
-    '/api/bf4/usp/all.json',                  'Bf4UspAll',
     '/api/bf4/usp/frostbite3.json',           'Bf4UspFrostbite3',
     '/api/bf4/usp/commander_mode.json',       'Bf4UspCommanderMode',
     '/api/bf4/usp/amphibious_assault.json',   'Bf4UspAmphibiousAssault',
@@ -59,7 +58,6 @@ API_URLS = (
     '/api/ea/message.json',          'EaMessage',
 
     # Sports - usp
-    # '/api/sports/usp/all.json',             'SportsUspAll',
     '/api/sports/usp/ignite_human_intelligence.json', 'SportsUspIgniteHI',
     '/api/sports/usp/ignite_true_player_motion.json', 'SportsUspIgniteTPM',
     '/api/sports/usp/ignite_living_worlds.json',      'SportsUspIgniteLW',
@@ -70,7 +68,6 @@ API_URLS = (
     '/api/sports/usp/ufc.json',             'SportsUspUFC',
 
     # Sports - featured
-    '/api/sports/featured/all.json',        'SportsFeaturedAll',
     '/api/sports/featured/ea_sports.json',  'SportsFeaturedEASports',
     '/api/sports/featured/fifa.json',       'SportsFeaturedFIFA',
     '/api/sports/featured/madden.json',     'SportsFeaturedMadden',
@@ -123,11 +120,6 @@ j = lambda x: json.dumps(x)
 class Bf4Highlights:
     def GET(self):
         return j(bf4.highlights.highlights())
-
-class Bf4UspAll:
-    """ Canned data for now. """
-    def GET(self):
-        return j(bf4.usp.get_all())
 
 class Bf4UspFrostbite3:
     def GET(self):
@@ -209,14 +201,6 @@ class EaFbLikes:
 
 #-- SPORTS --
 
-class SportsUspAll:
-    def GET(self):
-        return j(sports.usp.all_usps())
-
-# class SportsUspIgnite:
-#     def GET(self, phrase):
-#         return j(sports.usp.ignite(phrase))
-
 class SportsUspIgniteHI:
     def GET(self):
         return j(sports.usp.ignite_human_intelligence())
@@ -245,9 +229,6 @@ class SportsUspUFC:
     def GET(self):
         return j(sports.usp.ufc())
 
-class SportsFeaturedAll:
-    def GET(self):
-        return j(util.featured.get_all_featured('ea'))
 
 # ---
 # It may seem silly to have all these doing the same thing,
