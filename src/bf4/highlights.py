@@ -51,7 +51,7 @@ def highlights():
 
         'tweets': {
             'hashtag': '#' + bf4.counts.HASHTAG,
-            'counts': bf4.counts.num_tweets()
+            'counts': bf4.counts.new_num_tweets()
         }
     }
 

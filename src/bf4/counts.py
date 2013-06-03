@@ -3,9 +3,22 @@
 #
 
 from util import my_time
+from datetime import datetime
 from util import gather
 from util import store
 from util import hashtags
+
+NEW_STREAM = 'bf4_activity'
+def new_num_tweets():
+    gather.only_new_tweets(NEW_STREAM)
+    coll = store.get_db()[NEW_STREAM]
+    ct = lambda dt: coll.find({'created_at_datetime': {'$gte': dt}}).count()
+    now = datetime.utcnow()
+    return {
+        'hour': ct(now - my_time.DELTA_1_HOUR),
+        'day':  ct(now - my_time.DELTA_1_DAY),
+        'week': ct(now - my_time.DELTA_1_WEEK)
+    }
 
 HASHTAG = 'bf4'
 COUNTS_COLL_NAME = 'ea_activity'

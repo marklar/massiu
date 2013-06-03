@@ -3,6 +3,7 @@ from datetime import datetime, timedelta, date
 from dateutil import tz
 
 LA_TIME_ZONE = tz.gettz('America/Los_Angeles')
+UTC_TIME_ZONE = tz.gettz('Europe/London')
 
 DELTA_1_HOUR = timedelta(hours = 1)
 DELTA_1_DAY  = timedelta(days  = 1)
@@ -17,8 +18,8 @@ def make_datetime(date_str):
     e.g. 'Wed May 15 23:33:42 +0000 2013'
     """
     time_struct = time.strptime(date_str, FORMAT)
-    return datetime.fromtimestamp(time.mktime(time_struct), LA_TIME_ZONE)
-    # return datetime.fromtimestamp(time.mktime(time_struct))
+    # return datetime.fromtimestamp(time.mktime(time_struct), LA_TIME_ZONE)
+    return datetime.fromtimestamp(time.mktime(time_struct), UTC_TIME_ZONE)
 
 def loc(dt):
     return dt.replace(tzinfo=LA_TIME_ZONE)

@@ -81,14 +81,33 @@ def with_hashtag(collection_name, hashtag):
 
 #-- tweets --
 
+import time
+from datetime import datetime
+from dateutil import tz
+
+UTC_TIME_ZONE = tz.gettz('Europe/London')
+
+FORMAT = "%a %b %d %H:%M:%S +0000 %Y"
+def make_utc_datetime(date_str):
+    """ :: String -> datetime.datetime
+    e.g. 'Wed May 15 23:33:42 +0000 2013'
+    """
+    time_struct = time.strptime(date_str, FORMAT)
+    return datetime.fromtimestamp(time.mktime(time_struct), UTC_TIME_ZONE)
+
+def add_created_at_datetime(tweet):
+    tweet['created_at_datetime'] = make_utc_datetime(tweet['created_at'])
+    return tweet
+
 def put_tweets(collection_name, tweets):
     """ :: String, [Tweet] -> None
     Insert all tweets into collection.
     If any are repeats, just ignore and continue.
     """
     coll = get_db()[collection_name]
+    dt_tweets = [add_created_at_datetime(t) for t in tweets]
     coll.insert(
-        with_db_ids(tweets),
+        with_db_ids(dt_tweets),
         w=0,                    # disable write acknowledgement
         continue_on_error=True  # don't stop bulk insert upon dupe ID failure
     )
