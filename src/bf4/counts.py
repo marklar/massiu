@@ -7,6 +7,7 @@ from datetime import datetime
 from util import gather
 from util import store
 
+HASHTAG = 'bf4'
 NEW_STREAM = 'bf4_activity'
 def new_num_tweets():
     gather.only_new_tweets(NEW_STREAM)
