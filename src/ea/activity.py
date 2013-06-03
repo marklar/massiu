@@ -16,7 +16,6 @@ HASHTAGS = [
     'WeAreLive', 'FeelTheFight',
     'EASportsIgnite', 'CommandAndConquer'
 ]
-# LOW_HASHTAGS = [h.lower() for h in HASHTAGS]
 
 MAP_FN = """
 function() {
