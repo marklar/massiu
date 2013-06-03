@@ -115,10 +115,20 @@ class API:
 
 
 def wj(x):
-    return json.dumps({
-        'show_message': show_messages.get_jsonable_active_msg(),
-        'response': x
-    })
+    msg = show_messages.get_jsonable_active_msg()
+    if msg is not None:
+        res = {
+            'show_message': True,
+            'message': msg,
+            'response': x
+        }
+    else:
+        res = {
+            'show_message': False,
+            'response': x
+        }
+    return json.dumps(res)
+        
 # Which one?
 j = lambda x: json.dumps(x)
 j = wj
