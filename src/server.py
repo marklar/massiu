@@ -26,6 +26,7 @@ from ui_util import render, num_box
 from ui_show_messages import UiShowMessages
 from ui_usp_quotes import UiUspQuotes, UiUspQuotesIndex
 from ui_stats import UiStatsOrigin, UiNfsGameStats
+from util import show_messages
 
 UI_URLS = (
     '/', 'Index',
@@ -34,13 +35,15 @@ UI_URLS = (
     '/ui/usp_quotes/([^/]*)/(.*)',     'UiUspQuotes',
     '/ui/usp_quotes/([^/]*)',          'UiUspQuotesIndex',
 
-    '/ui/messages/([^/]*)',       'UiShowMessages',
+    '/ui/show/messages',       'UiShowMessages',
 
     '/ui/stats/nfs',           'UiNfsGameStats',
     '/ui/stats/origin',        'UiStatsOrigin',
 )
 
 API_URLS = (
+    '/api/show/message.json',          'ShowMessage',
+
     # BF4
     '/api/bf4/highlights.json',         'Bf4Highlights',
     # bf4 - usp
@@ -54,7 +57,6 @@ API_URLS = (
     '/api/ea/fb_likes.json',         'EaFbLikes',
     '/api/ea/featured.json',         'EaFeatured',
     '/api/ea/activity.json',         'EaActivity',
-    '/api/ea/message.json',          'EaMessage',
 
     # Sports - usp
     '/api/sports/usp/ignite_human_intelligence.json', 'SportsUspIgniteHI',
@@ -79,7 +81,6 @@ API_URLS = (
     '/api/nfs/game_stats.json',      'NfsGameStats',
 
     # PVZ
-    '/api/pvz/message.json',         'PvzMessage',
     '/api/pvz/photos.json',          'PvzPhotos',
     '/api/pvz/featured.json',        'PvzFeatured',
 
@@ -112,7 +113,17 @@ class API:
     def GET(self):
         return render.api(ENDPOINTS, TITLE_2_LINK_N_HREF)
 
+
+def wj(x):
+    return json.dumps({
+        'show_message': show_messages.get_active_message(),
+        'response': x
+    })
+
+# Which one?
 j = lambda x: json.dumps(x)
+j = wj
+
 
 #-- BF4 --
 
@@ -147,21 +158,9 @@ class EaActivity:
     def GET(self):
         return j(ea.activity.counts())
 
-class EaMessage:
+class ShowMessage:
     def GET(self):
-        # return j(ea.message.get_most_recent())
-        return j(msg_for('EA'))
-
-def msg_for(brand):
-    try:
-        msg = util.store.get_active_messages(brand)[0]
-        return {
-            'brand': brand,
-            'message': msg['text'],
-            'duration_secs': msg['duration_secs']
-        }
-    except IndexError:
-        return {'error': 'No active ' + brand + ' messages.'}
+        return j(show_messages.get_active_message())
 
 #-----------------
 # begin BOGUS
@@ -296,10 +295,6 @@ class PvzPhotos:
 class PvzFeatured:
     def GET(self):
         return j(pvz.featured.get())
-
-class PvzMessage:
-    def GET(self):
-        return j(msg_for('PvZ'))
 
 #-- ORIGIN --
 

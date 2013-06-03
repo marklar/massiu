@@ -2,12 +2,14 @@ import web
 from web import form
 from datetime import datetime, timedelta
 
-import util.store
+import util.show_messages as msgs
 from ui_util import render, num_box
 
 
 class UiShowMessages:
     message_form = form.Form(
+        form.Dropdown('brand',
+                      [('EA', 'EA'), ('PvZ', 'Pvz')]),
         form.Textarea('text',
                       form.notnull,
                       maxlength="150",
@@ -15,48 +17,52 @@ class UiShowMessages:
         num_box('delay_secs',    'Delay until display (in SECONDS)'),
         num_box('duration_secs', 'Duration (in SECONDS)'))
 
-    def get_messages(self, brand):
+    def get_messages(self):
+        active = msgs.get_active_message()
+        if active is None:
+            actives = []
+        else:
+            actives = [active]
         return {
-            'active':  list(util.store.get_active_messages(brand)),
-            'future':  list(util.store.get_future_messages(brand)),
-            'expired': list(util.store.get_expired_messages(brand))
+            'active':  actives,
+            'future':  list(msgs.get_future_messages()),
+            'expired': list(msgs.get_expired_messages())
         }
 
-    def make_start_time(self, delay_secs):
-        return datetime.now() + timedelta(seconds = delay_secs)
-
-    def make_end_time(self, start_time, duration_secs):
-        return start_time + timedelta(seconds = duration_secs)
-
-    def GET(self, brand):
+    def GET(self):
         return render.messages(
-            brand,
-            self.get_messages(brand),
+            self.get_messages(),
             self.message_form(),
             datetime.now())
 
-    def POST(self, brand):
+    def POST(self):
         form = self.message_form()
         now = datetime.now()
         if not form.validates():
+            # FAILURE
             return render.messages(
-                brand,
-                self.get_messages(brand),
+                self.get_messages(),
                 form,
                 now)
         else:
             # SUCCESS
             delay_secs = int(form['delay_secs'].value)
             duration_secs = int(form['duration_secs'].value)
-            start_time = self.make_start_time(delay_secs)
-            end_time = self.make_end_time(start_time, duration_secs)
-            message = {
+            desired_start_time = self.make_start_time(delay_secs)
+            msg = {
+                'brand': form['brand'].value,
                 'text': form['text'].value,
                 'delay_secs': delay_secs,
                 'duration_secs': duration_secs,
-                'created_at': now,
-                'start_time': start_time,
-                'end_time': end_time
+                'desired_start_time': desired_start_time,
+                'created_at': now
             }
-            util.store.put_message(brand, message)
-            raise web.seeother('/ui/messages/' + brand)
+            msgs.put_message(msg)
+            raise web.seeother('/ui/show/messages')
+
+
+    def make_start_time(self, delay_secs):
+        return self.add_secs(datetime.now(), delay_secs)
+
+    def add_secs(self, dt, secs):
+        return dt + timedelta(seconds = secs)
