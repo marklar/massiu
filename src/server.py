@@ -159,7 +159,8 @@ class Bf4UspAllOutWar:
 
 class EaActivity:
     def GET(self):
-        return j(ea.activity.counts())
+        # return j(ea.activity.counts())
+        return j(ea.activity.new_counts())
 
 class ShowMessage:
     def GET(self):
