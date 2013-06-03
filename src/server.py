@@ -160,7 +160,7 @@ class EaActivity:
 class ShowMessage:
     def GET(self):
         obj = show_messages.get_jsonable_active_msg()
-        return json.dumps(obj)
+        return json.dumps({'show_message': obj})
 
 #-----------------
 # begin BOGUS
