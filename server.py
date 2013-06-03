@@ -1,4 +1,5 @@
 from gevent import monkey; monkey.patch_all()
+import gevent
 from gevent.pywsgi import WSGIServer
 import time
 import web
@@ -44,7 +45,51 @@ UI_URLS = (
 
     '/ui/stats/nfs',           'UiNfsGameStats',
     '/ui/stats/origin',        'UiStatsOrigin',
+
+    '/ui/caching/start',      'StartCaching'
 )
+
+
+
+def cache():
+    # Go through the list of API_URLS.
+    # Call each in turn.
+    # Each API fn will first check to see whether there's a recent-enough cached result.
+    # If so, it simply returns that.
+    # If not, it executes the query, stores it, and then responds.
+    for ep in ENDPOINTS:
+        ep
+    pass
+
+cachelet = None
+is_caching_on = False
+counter = 0
+PERIOD_SECS = 120
+
+def turn_on_caching():
+    global counter
+    while True:
+        cache()
+        time.sleep(PERIOD_SECS)
+        counter += PERIOD_SECS
+
+class StartCaching:
+    def POST(self):
+        global is_caching_on, cachelet
+        if is_caching_on:
+            raise web.seeother('/')
+        else:
+            is_caching_on = True
+            cachelet = gevent.spawn(turn_on_caching)
+            raise web.seeother('/')
+
+class StopCaching:
+    """ Not implemented yet. """
+    def POST(self):
+        global is_caching_on, cachelet
+        if is_caching_on:
+            cachelet.kill()
+        raise web.seeother('/')
 
 class static:
   def GET(self, name):
@@ -116,7 +161,8 @@ for e in ENDPOINTS:
 
 class Index:
     def GET(self):
-        return render.index()
+        global is_caching_on, counter
+        return render.index(is_caching_on, counter)
 
 class API:
     def GET(self):
@@ -136,40 +182,9 @@ def j(x):
             'response': x
         }
     return json.dumps(res)
+
+#-- EA & PvZ --
         
-#-- BF4 --
-
-class Bf4Highlights:
-    def GET(self):
-        return j(bf4.highlights.highlights())
-
-class Bf4UspFrostbite3:
-    def GET(self):
-        return j(bf4.usp.frostbite3())
-
-class Bf4UspCommanderMode:
-    def GET(self):
-        return j(bf4.usp.commander_mode())
-
-class Bf4UspAmphibiousAssault:
-    def GET(self):
-        return j(bf4.usp.amphibious_assault())
-
-class Bf4UspLevolution:
-    def GET(self):
-        return j(bf4.usp.levolution())
-
-class Bf4UspAllOutWar:
-    def GET(self):
-        return j(bf4.usp.all_out_war())
-
-
-#-- EA --
-
-class EaActivity:
-    def GET(self):
-        return j(ea.activity.counts())
-
 class ShowMessage:
     def GET(self):
         obj = show_messages.get_jsonable_active_msg()
@@ -178,6 +193,56 @@ class ShowMessage:
         else:
             res = {'show_message': True, 'message': obj}
         return json.dumps(res)
+
+#-- BF4 --
+
+def w_cache(obj, f):
+    cached = util.store.get_cached(obj)
+    if cached is not None:
+        print 'Cached!'
+        return j(cached)
+    else:
+        print 'NOT cached.'
+        res = f()
+        util.store.put_cached(obj, res)
+        return j(res)
+
+class Bf4Highlights:
+    def GET(self):
+        return w_cache(self, bf4.highlights.highlights)
+        # return j(bf4.highlights.highlights())
+
+class Bf4UspFrostbite3:
+    def GET(self):
+        return w_cache(self, bf4.usp.frostbite3)
+        # return j(bf4.usp.frostbite3())
+
+class Bf4UspCommanderMode:
+    def GET(self):
+        return w_cache(self, bf4.usp.commander_mode)
+        # return j(bf4.usp.commander_mode())
+
+class Bf4UspAmphibiousAssault:
+    def GET(self):
+        return w_cache(self, bf4.usp.amphibious_assault)
+        # return j(bf4.usp.amphibious_assault())
+
+class Bf4UspLevolution:
+    def GET(self):
+        return w_cache(self, bf4.usp.levolution)
+        # return j(bf4.usp.levolution())
+
+class Bf4UspAllOutWar:
+    def GET(self):
+        return w_cache(self, bf4.usp.all_out_war)
+        # return j(bf4.usp.all_out_war())
+
+#-- EA --
+
+class EaActivity:
+    def GET(self):
+        return w_cache(self, ea.activity.counts)
+        # return j(ea.activity.counts())
 
 #-----------------
 # begin BOGUS
@@ -224,50 +289,54 @@ class EaFeatured:
 
 class EaFbLikes:
     def GET(self):
-        return j(ea.likes.get())
+        return w_cache(self, ea.likes.get)
+        # return j(ea.likes.get())
 
 #-- SPORTS --
 
 class SportsUspIgniteHI:
     def GET(self):
-        return j(sports.usp.ignite_human_intelligence())
+        return w_cache(self, sports.usp.ignite_human_intelligence)
+        # return j(sports.usp.ignite_human_intelligence())
 
 class SportsUspIgniteTPM:
     def GET(self):
-        return j(sports.usp.ignite_true_player_motion())
+        return w_cache(self, sports.usp.ignite_true_player_motion)
+        # return j(sports.usp.ignite_true_player_motion())
 
 class SportsUspIgniteLW:
     def GET(self):
-        return j(sports.usp.ignite_living_worlds())
+        return w_cache(self, sports.usp.ignite_living_worlds)
+        # return j(sports.usp.ignite_living_worlds())
 
 class SportsUspFIFA:
     def GET(self):
-        return j(sports.usp.fifa())
+        return w_cache(self, sports.usp.fifa)
+        # return j(sports.usp.fifa())
 
 class SportsUspMadden:
     def GET(self):
-        return j(sports.usp.madden())
+        return w_cache(self, sports.usp.madden)
+        # return j(sports.usp.madden())
 
 class SportsUspNBA:
     def GET(self):
-        return j(sports.usp.nba())
+        return w_cache(self, sports.usp.nba)
+        # return j(sports.usp.nba())
 
 class SportsUspUFC:
     def GET(self):
-        return j(sports.usp.ufc())
-
+        return w_cache(self, sports.usp.ufc)
+        # return j(sports.usp.ufc())
 
 # ---
 # It may seem silly to have all these doing the same thing,
 # but we want an explicit list of URLs in order to display endpoints.
 # ---
 
-class SportsFeatured:
-    def GET(self, brand):
-        return j(sports.featured.get(brand))
-
 class SportsFeaturedUFC:
     def GET(self):
+        # return w_cache(self, sports.featured.get, 'ufc')
         return j(sports.featured.get('ufc'))
 
 class SportsFeaturedFIFA:
@@ -294,13 +363,13 @@ class NfsLeaderboard:
 
 class NfsFeatured:
     def GET(self):
+        # return w_cache(self, util.featured.get_all_featured, 'nfs')
         return j(util.featured.get_all_featured('nfs'))
 
 class NfsGameStats:
     def GET(self):
-        stats = util.store.get_nfs_game_stats()[0]
-        del stats['_id']
-        return j(stats)
+        return w_cache(self, util.store.get_most_recent_nfs_game_stats)
+        # return j(util.store.get_most_recent_nfs_game_stats())
 
 #-- PVZ --
 
@@ -325,8 +394,6 @@ class Origin:
 if __name__ == '__main__':
     # app = web.application(URLS, globals())
     # app.run()
-    # print globals().__class__
-
     app = web.application(URLS, globals()).wsgifunc()
     print 'Serving on 5000...'
     WSGIServer(('', 5000), app).serve_forever()

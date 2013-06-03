@@ -7,6 +7,9 @@
 import pymongo
 import os
 from urlparse import urlsplit
+import time
+from datetime import datetime, timedelta
+from dateutil import tz
 
 from util import hashtags
 
@@ -20,14 +23,14 @@ def drop_coll(collection_name):
     get_db()[collection_name].drop()
 
 def get_client(loc):
-    """ Cache MongoClient. """
+    """ Memoize MongoClient. """
     global client
     if client is None:
         client = pymongo.MongoClient(loc)
     return client
 
 def get_db():
-    """ Cache DB reference. """
+    """ Memoize DB reference. """
     global db
     if db is None:
         # MONGOLAB_URL
@@ -49,6 +52,34 @@ def get_db():
             db = client[uri.path[1:]]
 
     return db
+
+#-- cache --
+
+TWO_MINUTES = timedelta(minutes=2)
+
+def cache_key(obj):
+    return obj.__class__.__name__
+
+def get_cache():
+    return get_db()['cache']
+
+def get_cached(obj):
+    dt = datetime.utcnow() - TWO_MINUTES
+    key = cache_key(obj)
+    q = {'_id': key, 'created_at': {'$gte': dt}}
+    doc = get_cache().find_one(q)
+    if doc is not None:
+        return doc['val']
+    else:
+        return None
+
+def put_cached(obj, val):
+    doc = {
+        '_id': cache_key(obj),
+        'val': val,
+        'created_at': datetime.utcnow()
+    }
+    return get_cache().save(doc)
 
 #-- collection meta-information --
 
@@ -80,10 +111,6 @@ def with_hashtag(collection_name, hashtag):
     return get_db()[collection_name].find(query)
 
 #-- tweets --
-
-import time
-from datetime import datetime
-from dateutil import tz
 
 UTC_TIME_ZONE = tz.gettz('Europe/London')
 
@@ -133,6 +160,11 @@ def put_origin_data(dico):
 #--------------
 
 NFS_GAME_STATS_COLLECTION = 'nfs_game_stats'
+
+def get_most_recent_nfs_game_stats():
+    stats = get_nfs_game_stats()[0]
+    del stats['_id']
+    return stats
 
 def get_nfs_game_stats():
     """ More-recent first. """
