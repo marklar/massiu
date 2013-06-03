@@ -116,10 +116,9 @@ class API:
 
 def wj(x):
     return json.dumps({
-        'show_message': show_messages.get_active_message(),
+        'show_message': show_messages.get_jsonable_active_msg(),
         'response': x
     })
-
 # Which one?
 j = lambda x: json.dumps(x)
 j = wj
@@ -160,7 +159,8 @@ class EaActivity:
 
 class ShowMessage:
     def GET(self):
-        return j(show_messages.get_active_message())
+        obj = show_messages.get_jsonable_active_msg()
+        return json.dumps(obj)
 
 #-----------------
 # begin BOGUS

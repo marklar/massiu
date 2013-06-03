@@ -6,14 +6,17 @@ from util import store
 MSG_COLL = 'messages'
 
 def put_message(dico):
-    coll = store.get_db()[MSG_COLL]
-    coll.save(dico)
+    get_coll().save(dico)
 
-def show_msg_obj(msg):
-    return dict([
-        (k, msg[k])
-        for k in ['brand', 'message', 'duration_secs']
-    ])
+def get_jsonable_active_msg():
+    msg = get_active_message()
+    if msg is not None:
+        return dict([
+            (k, msg[k])
+            for k in ['brand', 'text', 'duration_secs']
+        ])
+    else:
+        return None
 
 def get_active_message():
     msg = get_already_active_message()
