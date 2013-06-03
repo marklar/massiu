@@ -1,3 +1,6 @@
+from gevent import monkey; monkey.patch_all()
+from gevent.pywsgi import WSGIServer
+import time
 import web
 from web import form
 import json
@@ -32,6 +35,8 @@ UI_URLS = (
     '/', 'Index',
     '/api', 'API',
 
+    '/static/(.*)', 'static',
+
     '/ui/usp_quotes/([^/]*)/(.*)',     'UiUspQuotes',
     '/ui/usp_quotes/([^/]*)',          'UiUspQuotesIndex',
 
@@ -40,6 +45,10 @@ UI_URLS = (
     '/ui/stats/nfs',           'UiNfsGameStats',
     '/ui/stats/origin',        'UiStatsOrigin',
 )
+
+class static:
+  def GET(self, name):
+    return open('static/%s' % name)
 
 API_URLS = (
     '/api/show/message.json',          'ShowMessage',
@@ -159,8 +168,7 @@ class Bf4UspAllOutWar:
 
 class EaActivity:
     def GET(self):
-        # return j(ea.activity.counts())
-        return j(ea.activity.new_counts())
+        return j(ea.activity.counts())
 
 class ShowMessage:
     def GET(self):
@@ -314,8 +322,12 @@ class Origin:
         return j(st)
 
 
-if __name__ == "__main__": 
-    app = web.application(URLS, globals())
-    app.run()  
+if __name__ == '__main__':
+    # app = web.application(URLS, globals())
+    # app.run()
+    # print globals().__class__
 
-    
+    app = web.application(URLS, globals()).wsgifunc()
+    print 'Serving on 5000...'
+    WSGIServer(('', 5000), app).serve_forever()
+

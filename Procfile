@@ -1,2 +1,2 @@
-web: python src/server.py ${PORT}
+web: python server.py ${PORT}
 

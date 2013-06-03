@@ -52,7 +52,7 @@ def val_or_0(dico, key):
     except KeyError:
         return 0
 
-def new_counts():
+def counts():
     results = store.get_db()[STREAM_NAME].map_reduce(MAP_FN, REDUCE_FN, 'xyz')
     tag_2_count = [(r['_id'], int(r['value']))
                    for r in results.find()]
@@ -62,21 +62,3 @@ def new_counts():
     for t in HASHTAGS:
         new_dico['#' + t] = v(dico, t.lower())
     return new_dico
-
-
-def counts():
-    """ () -> {tag: count}
-    Number of Tweets for each title's hashtag.
-
-    With MR's "Compare API", one can do this:
-    http://dev.massrelevance.com/docs/api/v1.0/compare/
-    But only so long as each hashtag has its own stream.
-
-    Since we have all these hashtags in a single stream,
-    we'll need to collect the Tweets and perform our own counts.
-    """
-    tag_2_count = [
-        ('#' + h, store.count_hashtag(STREAM_NAME, h))
-        for h in HASHTAGS
-    ]
-    return dict(tag_2_count)
