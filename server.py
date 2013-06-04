@@ -383,7 +383,9 @@ class Origin:
 if __name__ == '__main__':
     # app = web.application(URLS, globals())
     # app.run()
+
     app = web.application(URLS, globals()).wsgifunc()
     print 'Serving on 5000...'
-    WSGIServer(('', 5000), app).serve_forever()
+    port = int(sys.argv[1])
+    WSGIServer(('', port), app).serve_forever()
 
