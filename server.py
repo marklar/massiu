@@ -1,6 +1,6 @@
-from gevent import monkey; monkey.patch_all()
-import gevent
-from gevent.pywsgi import WSGIServer
+# from gevent import monkey; monkey.patch_all()
+# import gevent
+# from gevent.pywsgi import WSGIServer
 import time
 import web
 from web import form
@@ -46,7 +46,7 @@ UI_URLS = (
     '/ui/stats/nfs',           'UiNfsGameStats',
     '/ui/stats/origin',        'UiStatsOrigin',
 
-    '/ui/caching/start',      'StartCaching'
+    '/ui/caching/start',      'StartPrefetching'
 )
 
 
@@ -86,14 +86,14 @@ def turn_on_caching():
         counter += 1
         time.sleep(PERIOD_SECS)
 
-class StartCaching:
+class StartPrefetching:
     def POST(self):
         global is_caching_on, cachelet
         if is_caching_on:
             raise web.seeother('/')
         else:
             is_caching_on = True
-            cachelet = gevent.spawn(turn_on_caching)
+            # cachelet = gevent.spawn(turn_on_caching)
             raise web.seeother('/')
 
 class StopCaching:
@@ -381,11 +381,10 @@ class Origin:
 
 
 if __name__ == '__main__':
-    # app = web.application(URLS, globals())
-    # app.run()
-
-    app = web.application(URLS, globals()).wsgifunc()
-    print 'Serving on 5000...'
-    port = int(sys.argv[1])
-    WSGIServer(('', port), app).serve_forever()
+    app = web.application(URLS, globals())
+    app.run()
+    # app = web.application(URLS, globals()).wsgifunc()
+    # print 'Serving on 5000...'
+    # port = int(sys.argv[1])
+    # WSGIServer(('', port), app).serve_forever()
 
