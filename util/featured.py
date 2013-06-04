@@ -30,7 +30,6 @@ def get_featured(stream_name_root, hashtag):
     Return both starred and featured.
     Remove any from featured that already appear in starred.
     """
-
     # TODO
     store.drop_coll(stream_name_root + STARRED_SUFFIX)
     store.drop_coll(stream_name_root + FEATURED_SUFFIX)

@@ -358,9 +358,9 @@ class NfsFeatured:
 
 def get_game_stats():
     stats = util.store.get_most_recent_nfs_game_stats()
-    # TODO: Include *real* images data.
     return {
         'stats': stats,
+        # TODO: Include *real* images data.
         'images': [
             'https://si0.twimg.com/profile_images/1129466536/fcb.png',
             'https://si0.twimg.com/profile_images/1048074687/cara_messi.jpg',
@@ -376,8 +376,8 @@ class NfsGameStats:
 
 class PvzPhotos:
     def GET(self):
-        """ TODO """
-        return j(pvz.photos.photos())
+        # return j(pvz.photos.get_photos())
+        return w_cache(self, pvz.photos.get_photos)
 
 class PvzFeatured:
     def GET(self):
