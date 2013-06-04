@@ -71,7 +71,7 @@ def cache():
         PvzPhotos, PvzFeatured
     ]
     for c in classes:
-        gevent.spawn(c().GET)
+        c().GET()
 
 cachelet = None
 is_caching_on = False
@@ -83,8 +83,8 @@ def turn_on_caching():
     global counter
     while True:
         cache()
+        counter += 1
         time.sleep(PERIOD_SECS)
-        counter += PERIOD_SECS
 
 class StartCaching:
     def POST(self):
