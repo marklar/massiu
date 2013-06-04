@@ -76,7 +76,7 @@ def cache():
 cachelet = None
 is_caching_on = False
 counter = 0
-PERIOD_SECS = 90
+PERIOD_SECS = 60
 
 def turn_on_caching():
     """ Cache slow queries every PERIOD_SECS seconds. """
