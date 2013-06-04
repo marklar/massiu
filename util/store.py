@@ -60,7 +60,7 @@ DELTA = timedelta(minutes=5)
 def cache_key(obj, *args):
     key = obj.__class__.__name__
     for a in args:
-        key += (' ' + a)
+        key += (' ' + str(a))
     return key
 
 def get_cache():

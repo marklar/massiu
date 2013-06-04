@@ -29,6 +29,13 @@ class UiStatsOrigin:
             raise web.seeother('/ui/stats/origin')
 
 
+
+
+# Total Takedowns
+# Total distance driven 
+# Total Racer Speed Points Banked
+# Total Racers busted by Cops
+
 class UiNfsGameStats:
     data_form = form.Form(
         num_box('miles',     'Total miles driven (IN THOUSANDS)'),
