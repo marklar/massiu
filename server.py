@@ -356,9 +356,21 @@ class NfsFeatured:
     def GET(self):
         return w_cache(self, util.featured.get_all_featured, 'nfs')
 
+def get_game_stats():
+    stats = util.store.get_most_recent_nfs_game_stats()
+    # TODO: Include *real* images data.
+    return {
+        'stats': stats,
+        'images': [
+            'https://si0.twimg.com/profile_images/1129466536/fcb.png',
+            'https://si0.twimg.com/profile_images/1048074687/cara_messi.jpg',
+            'https://si0.twimg.com/profile_images/3222338434/bbdc41334f3db7b1349fc9d97362b284.jpeg'
+        ]
+    }
+
 class NfsGameStats:
     def GET(self):
-        return w_cache(self, util.store.get_most_recent_nfs_game_stats)
+        return w_cache(self, get_game_stats)
 
 #-- PVZ --
 
