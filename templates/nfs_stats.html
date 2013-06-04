@@ -35,20 +35,20 @@ $def with (stats_list, form)
     $else:
       <!-- header -->
       <div class="row">
-	<div class="stats">miles</div>
 	<div class="stats">takedowns</div>
-	<div class="stats">busts</div>
+	<div class="stats">miles</div>
 	<div class="stats">speed</div>
+	<div class="stats">busts</div>
 	<br style="clear: left;" />
       </div>
       
       <!-- body -->
       $for st in stats_list:
         <div class="row">
-	  <div class="stats">$st['miles']</div>
 	  <div class="stats">$st['takedowns']</div>
-	  <div class="stats">$st['busts']</div>
+	  <div class="stats">$st['miles']</div>
 	  <div class="stats">$st['speed']</div>
+	  <div class="stats">$st['busts']</div>
 	  <br style="clear: left;" />
 	</div>
 
