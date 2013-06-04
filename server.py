@@ -356,21 +356,33 @@ class NfsFeatured:
     def GET(self):
         return w_cache(self, util.featured.get_all_featured, 'nfs')
 
-def get_game_stats():
+# NFS stats - they've requested to change the use of the photos to display the top winners from the tournaments - there will be two top cops and two top racers.  to do this, I suggested it could work like this:
+# 1) images will be tweeted from @needforspeed account with the hashtags #topcop #topracer. 
+# 2) we will setup mass relevance to pull all photos with those hashtags
+# 3) cms will push content to visualization 
+# 4) visualization will show most recent two images from each group
+
+# 'https://si0.twimg.com/profile_images/2281988491/8oz02frum9e7hm8l6eq7.jpeg',
+
+def get_nfs_game_stats():
     stats = util.store.get_most_recent_nfs_game_stats()
     return {
         'stats': stats,
         # TODO: Include *real* images data.
-        'images': [
-            'https://si0.twimg.com/profile_images/1129466536/fcb.png',
-            'https://si0.twimg.com/profile_images/1048074687/cara_messi.jpg',
-            'https://si0.twimg.com/profile_images/3222338434/bbdc41334f3db7b1349fc9d97362b284.jpeg'
-        ]
+        'images': {
+            'topcop': [
+                'https://si0.twimg.com/profile_images/1129466536/fcb.png',
+                'https://si0.twimg.com/profile_images/1048074687/cara_messi.jpg'],
+            'topracer': [
+                'https://si0.twimg.com/profile_images/3222338434/bbdc41334f3db7b1349fc9d97362b284.jpeg',
+                'https://si0.twimg.com/profile_images/1719423111/perfil_twitter2.jpg'
+            ]
+        }
     }
 
 class NfsGameStats:
     def GET(self):
-        return w_cache(self, get_game_stats)
+        return w_cache(self, get_nfs_game_stats)
 
 #-- PVZ --
 
