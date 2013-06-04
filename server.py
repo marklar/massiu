@@ -50,16 +50,28 @@ UI_URLS = (
 )
 
 
+def w_cache(obj, f, *args):
+    cached = util.store.get_cached(obj, *args)
+    if cached is not None:
+        # print 'Cached!'
+        return j(cached)
+    else:
+        # print 'NOT cached.'
+        res = f(*args)
+        util.store.put_cached(res, obj, *args)
+        return j(res)
 
 def cache():
-    # Go through the list of API_URLS.
-    # Call each in turn.
-    # Each API fn will first check to see whether there's a recent-enough cached result.
-    # If so, it simply returns that.
-    # If not, it executes the query, stores it, and then responds.
-    for ep in ENDPOINTS:
-        ep
-    pass
+    classes = [
+        Bf4Highlights, EaActivity, EaFbLikes, EaFeatured,
+        SportsFeaturedEASports, SportsFeaturedFIFA,
+        SportsFeaturedMadden, SportsFeaturedNBA,
+        SportsFeaturedUFC,
+        NfsFeatured,
+        PvzPhotos, PvzFeatured
+    ]
+    for c in classes:
+        gevent.spawn(c().GET)
 
 cachelet = None
 is_caching_on = False
@@ -67,6 +79,7 @@ counter = 0
 PERIOD_SECS = 120
 
 def turn_on_caching():
+    """ Cache slow queries every PERIOD_SECS seconds. """
     global counter
     while True:
         cache()
@@ -196,53 +209,35 @@ class ShowMessage:
 
 #-- BF4 --
 
-def w_cache(obj, f):
-    cached = util.store.get_cached(obj)
-    if cached is not None:
-        print 'Cached!'
-        return j(cached)
-    else:
-        print 'NOT cached.'
-        res = f()
-        util.store.put_cached(obj, res)
-        return j(res)
-
 class Bf4Highlights:
     def GET(self):
         return w_cache(self, bf4.highlights.highlights)
-        # return j(bf4.highlights.highlights())
 
 class Bf4UspFrostbite3:
     def GET(self):
         return w_cache(self, bf4.usp.frostbite3)
-        # return j(bf4.usp.frostbite3())
 
 class Bf4UspCommanderMode:
     def GET(self):
         return w_cache(self, bf4.usp.commander_mode)
-        # return j(bf4.usp.commander_mode())
 
 class Bf4UspAmphibiousAssault:
     def GET(self):
         return w_cache(self, bf4.usp.amphibious_assault)
-        # return j(bf4.usp.amphibious_assault())
 
 class Bf4UspLevolution:
     def GET(self):
         return w_cache(self, bf4.usp.levolution)
-        # return j(bf4.usp.levolution())
 
 class Bf4UspAllOutWar:
     def GET(self):
         return w_cache(self, bf4.usp.all_out_war)
-        # return j(bf4.usp.all_out_war())
 
 #-- EA --
 
 class EaActivity:
     def GET(self):
         return w_cache(self, ea.activity.counts)
-        # return j(ea.activity.counts())
 
 #-----------------
 # begin BOGUS
@@ -277,11 +272,16 @@ def bogus_get_w_tag(stream_name):
     util.gather.only_new_tweets(stream_name)
     return [util.featured.slim(t) for t in util.store.get_all(stream_name)]
 
+def bogus_ea_featured():
+    return [bogus_get_featured('ea', 'eae3')]
+
 class EaFeatured:
     def GET(self):
         # TODO - RETURN TO THIS:
         # return j(util.featured.get_all_featured('ea'))
-        return j([bogus_get_featured('ea', 'eae3')])
+        # TEMP:
+        # return j(bogus_ea_featured())
+        return w_cache(self, bogus_ea_featured)
 
 #-----------------
 # end BOGUS
@@ -290,44 +290,36 @@ class EaFeatured:
 class EaFbLikes:
     def GET(self):
         return w_cache(self, ea.likes.get)
-        # return j(ea.likes.get())
 
 #-- SPORTS --
 
 class SportsUspIgniteHI:
     def GET(self):
         return w_cache(self, sports.usp.ignite_human_intelligence)
-        # return j(sports.usp.ignite_human_intelligence())
 
 class SportsUspIgniteTPM:
     def GET(self):
         return w_cache(self, sports.usp.ignite_true_player_motion)
-        # return j(sports.usp.ignite_true_player_motion())
 
 class SportsUspIgniteLW:
     def GET(self):
         return w_cache(self, sports.usp.ignite_living_worlds)
-        # return j(sports.usp.ignite_living_worlds())
 
 class SportsUspFIFA:
     def GET(self):
         return w_cache(self, sports.usp.fifa)
-        # return j(sports.usp.fifa())
 
 class SportsUspMadden:
     def GET(self):
         return w_cache(self, sports.usp.madden)
-        # return j(sports.usp.madden())
 
 class SportsUspNBA:
     def GET(self):
         return w_cache(self, sports.usp.nba)
-        # return j(sports.usp.nba())
 
 class SportsUspUFC:
     def GET(self):
         return w_cache(self, sports.usp.ufc)
-        # return j(sports.usp.ufc())
 
 # ---
 # It may seem silly to have all these doing the same thing,
@@ -336,24 +328,23 @@ class SportsUspUFC:
 
 class SportsFeaturedUFC:
     def GET(self):
-        # return w_cache(self, sports.featured.get, 'ufc')
-        return j(sports.featured.get('ufc'))
+        return w_cache(self, sports.featured.get, 'ufc')
 
 class SportsFeaturedFIFA:
     def GET(self):
-        return j(sports.featured.get('fifa'))
+        return w_cache(self, sports.featured.get, 'fifa')
 
 class SportsFeaturedEASports:
     def GET(self):
-        return j(sports.featured.get('ea_sports'))
+        return w_cache(self, sports.featured.get, 'ea_sports')
     
 class SportsFeaturedMadden:
     def GET(self):
-        return j(sports.featured.get('madden'))
+        return w_cache(self, sports.featured.get, 'madden')
 
 class SportsFeaturedNBA:
     def GET(self):
-        return j(sports.featured.get('nba'))
+        return w_cache(self, sports.featured.get, 'nba')
 
 #-- NFS --
 
@@ -363,13 +354,11 @@ class NfsLeaderboard:
 
 class NfsFeatured:
     def GET(self):
-        # return w_cache(self, util.featured.get_all_featured, 'nfs')
-        return j(util.featured.get_all_featured('nfs'))
+        return w_cache(self, util.featured.get_all_featured, 'nfs')
 
 class NfsGameStats:
     def GET(self):
         return w_cache(self, util.store.get_most_recent_nfs_game_stats)
-        # return j(util.store.get_most_recent_nfs_game_stats())
 
 #-- PVZ --
 
@@ -380,7 +369,7 @@ class PvzPhotos:
 
 class PvzFeatured:
     def GET(self):
-        return j(pvz.featured.get())
+        return w_cache(self, pvz.featured.get)
 
 #-- ORIGIN --
 

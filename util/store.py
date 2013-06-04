@@ -57,15 +57,18 @@ def get_db():
 
 TWO_MINUTES = timedelta(minutes=2)
 
-def cache_key(obj):
-    return obj.__class__.__name__
+def cache_key(obj, *args):
+    key = obj.__class__.__name__
+    for a in args:
+        key += (' ' + a)
+    return key
 
 def get_cache():
     return get_db()['cache']
 
-def get_cached(obj):
+def get_cached(obj, *args):
     dt = datetime.utcnow() - TWO_MINUTES
-    key = cache_key(obj)
+    key = cache_key(obj, *args)
     q = {'_id': key, 'created_at': {'$gte': dt}}
     doc = get_cache().find_one(q)
     if doc is not None:
@@ -73,9 +76,9 @@ def get_cached(obj):
     else:
         return None
 
-def put_cached(obj, val):
+def put_cached(val, obj, *args):
     doc = {
-        '_id': cache_key(obj),
+        '_id': cache_key(obj, *args),
         'val': val,
         'created_at': datetime.utcnow()
     }

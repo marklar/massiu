@@ -51,7 +51,6 @@ def get_api():
 
 def create_api():
     auth_data = get_auth_data()
-    # print auth_data
     if not auth_data:
         return None
     try:
@@ -67,12 +66,9 @@ def create_api():
 
 def get_auth_data():
     path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                        "../src/.auth_data.json")
-    print 'path: ', path
+                        "../static/.auth_data.json")
     if not os.path.exists(path):
-        print "No auth data!"
-        # return False
-        raise Exception('foo', 'bar')
+        raise Exception('No auth data!  Path: ', path)
     with open(path, 'r') as f:
         auth_data = json.loads(f.read())
     return auth_data
