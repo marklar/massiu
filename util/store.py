@@ -55,7 +55,7 @@ def get_db():
 
 #-- cache --
 
-DELTA = timedelta(minutes=4)
+DELTA = timedelta(minutes=5)
 
 def cache_key(obj, *args):
     key = obj.__class__.__name__
