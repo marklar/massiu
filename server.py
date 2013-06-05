@@ -371,11 +371,11 @@ def get_nfs_game_stats():
         # TODO: Include *real* images data.
         'images': {
             'topcop': [
-                'https://si0.twimg.com/profile_images/1129466536/fcb.png',
-                'https://si0.twimg.com/profile_images/1048074687/cara_messi.jpg'],
+                'http://si0.twimg.com/profile_images/1129466536/fcb.png',
+                'http://si0.twimg.com/profile_images/1048074687/cara_messi.jpg'],
             'topracer': [
-                'https://si0.twimg.com/profile_images/3222338434/bbdc41334f3db7b1349fc9d97362b284.jpeg',
-                'https://si0.twimg.com/profile_images/1719423111/perfil_twitter2.jpg'
+                'http://si0.twimg.com/profile_images/3222338434/bbdc41334f3db7b1349fc9d97362b284.jpeg',
+                'http://si0.twimg.com/profile_images/1719423111/perfil_twitter2.jpg'
             ]
         }
     }
