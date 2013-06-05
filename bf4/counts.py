@@ -8,7 +8,7 @@ from util import gather
 from util import store
 
 HASHTAG = 'bf4'
-NEW_STREAM = 'bf4_activity'
+NEW_STREAM = 'bf4_highlights'
 def num_tweets():
     gather.only_new_tweets(NEW_STREAM)
     coll = store.get_db()[NEW_STREAM]
