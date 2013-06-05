@@ -365,7 +365,7 @@ class NfsFeatured:
 # 'https://si0.twimg.com/profile_images/2281988491/8oz02frum9e7hm8l6eq7.jpeg',
 
 # NEW NEW NEW
-# the visualization needs to pull in the latest two photos tweeted by the @needforspeed account with the hashtags: “#NFSRivalsTopCops” and “#NFSRivalsTopRacers”
+# the visualization needs to pull in the latest two photos tweeted by the @needforspeed account with the hashtags: #NFSRivalsTopCops and #NFSRivalsTopRacers
 
 def get_nfs_game_stats():
     stats = util.store.get_most_recent_nfs_game_stats()
