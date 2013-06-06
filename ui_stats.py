@@ -37,7 +37,7 @@ class UiStatsOrigin:
 class UiNfsGameStats:
     data_form = form.Form(
         num_box('takedowns', 'Total Takedowns'),
-        num_box('miles',     'Total Miles Driven (in K)'),
+        num_box('miles',     'Total Distance Driven (in thousands of miles)'),
         num_box('speed',     'Total Racer Speed Points Banked'),
         num_box('busts',     'Total Racers Busted by Cops'))
 

@@ -273,7 +273,8 @@ def bogus_get_w_tag(stream_name):
     return [util.featured.slim(t) for t in util.store.get_all(stream_name)]
 
 def bogus_ea_featured():
-    return [bogus_get_featured('ea', 'eae3')]
+    # return [bogus_get_featured('ea', 'eae3')]
+    return bogus_get_featured('eae3')
 
 class EaFeatured:
     def GET(self):

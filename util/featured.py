@@ -10,7 +10,8 @@ STARRED_SUFFIX = '_starred'
 
 def get_all_featured(stream_root):
     hashtags = get_hashtags(stream_root)
-    return [get_featured(stream_root, h) for h in hashtags]
+    # return [get_featured(stream_root, h) for h in hashtags]
+    return get_featured(stream_root, hashtags[0])
 
 #----------------------------------------
 
