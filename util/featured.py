@@ -36,7 +36,11 @@ def get_featured(stream_name_root, hashtag):
     store.drop_coll(stream_name_root + FEATURED_SUFFIX)
 
     # Return only ONE starred tweet.
-    starred = get_w_tag(stream_name_root + STARRED_SUFFIX, hashtag)[0]
+    starred = get_w_tag(stream_name_root + STARRED_SUFFIX, hashtag)
+    try:
+        starred = starred[0]
+    except IndexError:
+        starred = None
     featured = get_w_tag(stream_name_root + FEATURED_SUFFIX, hashtag)
 
     # Return no more than 30 other tweets.

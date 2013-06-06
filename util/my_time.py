@@ -9,7 +9,7 @@ DELTA_1_HOUR = timedelta(hours = 1)
 DELTA_1_DAY  = timedelta(days  = 1)
 DELTA_1_WEEK = timedelta(weeks = 1)
 
-FORMAT = "%a %b %d %H:%M:%S +0000 %Y"
+FORMAT = '%a %b %d %H:%M:%S +0000 %Y'
 
 # --- make times ---
 

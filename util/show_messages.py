@@ -1,8 +1,13 @@
 import pymongo
 from bson.objectid import ObjectId
 from datetime import datetime, timedelta
+from dateutil import tz
 
 from util import store
+
+LA_TIME_ZONE = tz.gettz('America/Los_Angeles')
+def la_now():
+    return datetime.now(LA_TIME_ZONE)
 
 MSG_COLL = 'messages'
 
@@ -30,7 +35,7 @@ def get_active_message():
     else:
         msg = get_next_active_message()
         if msg is not None:
-            now = datetime.now()
+            now = la_now()
             msg['displayed_at'] = now
             msg['stop_time'] = now + timedelta(seconds = msg['duration_secs'])
             put_message(msg)
@@ -46,20 +51,20 @@ def get_future_messages():
 def get_expired_messages():
     return get_messages({
         'displayed_at': {'$ne': None},
-        'stop_time': {'$lte': datetime.now()}
+        'stop_time': {'$lte': la_now()}
     })
 
 #--------------
 
 def get_already_active_message():
-    now = datetime.now()
+    now = la_now()
     return get_one_message({
         'displayed_at': {'$ne': None},
         'stop_time': {'$gt': now}
     })
     
 def get_next_active_message():
-    now = datetime.now()
+    now = la_now()
     return get_one_message({
         'displayed_at': {'$exists': False},
         'desired_start_time': {'$lte': now}
@@ -70,7 +75,14 @@ def get_one_message(query):
 
 def get_messages(query):
     """ Sort: prioritize those to be displayed first. """
-    return get_coll().find(query).sort('desired_start_time', pymongo.ASCENDING)
+    cursor = get_coll().find(query)
+    dts = list(cursor.sort('desired_start_time', pymongo.DESCENDING))
+    # convert datetime to LA_TIME_ZONE
+    for dt in dts:
+        for attr in ['desired_start_time', 'created_at']:
+            dt[attr] -= timedelta(hours = 7)
+            # pass
+    return dts
 
 def get_coll():
     return store.get_db()[MSG_COLL]

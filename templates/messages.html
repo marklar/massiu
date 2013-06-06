@@ -17,8 +17,8 @@ $def with (messages, form, now_datetime)
 	<div class="stats hd">Brand</div>
 	<div class="stats hd secs">Delay (in secs)</div>
 	<div class="stats hd secs">Duration (in secs)</div>
-	<div class="stats hd timestamp">created at (BCN)</div>
-	<div class="stats hd timestamp">desired_start time (BCN)</div>
+	<div class="stats hd timestamp">Created At</div>
+	<div class="stats hd timestamp">Desired Start Time</div>
 	<br style="clear: left;" />
       </div>
       
@@ -34,8 +34,8 @@ $def with (messages, form, now_datetime)
 	  <div class="stats">$m['brand']</div>
 	  <div class="stats secs">$m['delay_secs']</div>
 	  <div class="stats secs">$m['duration_secs']</div>
-	  <div class="stats timestamp">$m['created_at']</div>
-	  <div class="stats timestamp">$m['desired_start_time']</div>
+	  <div class="stats timestamp">$m['created_at'].strftime('%b %d %H:%M:%S')</div>
+	  <div class="stats timestamp">$m['desired_start_time'].strftime('%b %d %H:%M:%S')</div>
 	  <br style="clear: left;" />
 	</div>
 
@@ -69,7 +69,7 @@ $def with (messages, form, now_datetime)
     <!-- list of previous stats (not strictly necessary) -->
 
     <div>
-      <span>BCN Time (as of page load): $now_datetime</span>
+      <span>LA Time (as of page load): $now_datetime.strftime('%b %d %H:%M:%S')</span>
     </div>
 
     <div class="vert_spacer"></div>

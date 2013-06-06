@@ -1,10 +1,14 @@
 import web
 from web import form
 from datetime import datetime, timedelta
+from dateutil import tz
 
 import util.show_messages as msgs
 from ui_util import render, num_box
 
+LA_TIME_ZONE = tz.gettz('America/Los_Angeles')
+def la_now():
+    return datetime.now(LA_TIME_ZONE)
 
 class UiShowMessages:
     message_form = form.Form(
@@ -33,11 +37,11 @@ class UiShowMessages:
         return render.messages(
             self.get_messages(),
             self.message_form(),
-            datetime.now())
+            la_now())
 
     def POST(self):
         form = self.message_form()
-        now = datetime.now()
+        now = la_now()
         if not form.validates():
             # FAILURE
             return render.messages(
@@ -62,7 +66,7 @@ class UiShowMessages:
 
 
     def make_start_time(self, delay_secs):
-        return self.add_secs(datetime.now(), delay_secs)
+        return self.add_secs(la_now(), delay_secs)
 
     def add_secs(self, dt, secs):
         return dt + timedelta(seconds = secs)
