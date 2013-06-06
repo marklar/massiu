@@ -1,9 +1,14 @@
 import pymongo
+from bson.objectid import ObjectId
 from datetime import datetime, timedelta
 
 from util import store
 
 MSG_COLL = 'messages'
+
+def delete_message(id_str):
+    _id = ObjectId(id_str)
+    get_coll().remove(_id)
 
 def put_message(dico):
     get_coll().save(dico)

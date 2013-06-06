@@ -12,6 +12,7 @@ $def with (messages, form, now_datetime)
     $else:
       <!-- header -->
       <div class="row">
+	<div class="stats hd">&nbsp;</div>
 	<div class="stats hd message">Message</div>
 	<div class="stats hd">Brand</div>
 	<div class="stats hd secs">Delay (in secs)</div>
@@ -24,6 +25,11 @@ $def with (messages, form, now_datetime)
       <!-- body -->
       $for m in msgs:
         <div class="row">
+	  <div class="stats delete">
+	    <form method="POST" action="/ui/show/message/$m['_id']">
+	      <input type="submit" value="Delete" />
+	    </form>
+	  </div>
 	  <div class="stats message">$m['text']</div>
 	  <div class="stats">$m['brand']</div>
 	  <div class="stats secs">$m['delay_secs']</div>

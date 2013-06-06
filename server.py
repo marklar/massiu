@@ -41,7 +41,8 @@ UI_URLS = (
     '/ui/usp_quotes/([^/]*)/(.*)',     'UiUspQuotes',
     '/ui/usp_quotes/([^/]*)',          'UiUspQuotesIndex',
 
-    '/ui/show/messages',       'UiShowMessages',
+    '/ui/show/messages',           'UiShowMessages',
+    '/ui/show/message/(.*)',       'UiDeleteShowMessage',
 
     '/ui/stats/nfs',           'UiNfsGameStats',
     '/ui/stats/origin',        'UiStatsOrigin',
@@ -50,6 +51,10 @@ UI_URLS = (
     '/ui/caching/clear',      'ClearCache'
 )
 
+class UiDeleteShowMessage:
+    def POST(self, id_str):
+        show_messages.delete_message(id_str)
+        raise web.seeother('/ui/show/messages')
 
 def w_cache(obj, f, *args):
     cached = util.store.get_cached(obj, *args)
