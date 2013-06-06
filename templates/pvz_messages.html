@@ -1,0 +1,45 @@
+$def with (messages, form)
+
+<html>
+  <head>
+    <link href="/static/main.css" rel="stylesheet" type="text/css" />
+    <title>Messages :: PvZ</title>
+  </head>
+
+  <body>
+
+    <div class="header">
+      <a href="/"><img src="/static/ea.jpeg" /></a>
+      <h1>Messages :: PvZ</h1>
+    </div>
+
+    <!-- form for adding new messages -->
+
+    <h3>Add New Message</h3>
+
+    <form name="main" method="post">
+      $if not form.valid:
+        <p>Oops!  Please fix your input and retry.</p>
+      $:form.render()
+        <input type="submit" />
+    </form>
+
+    <div class="vert_spacer"></div>
+
+    <!-- list of previous stats (not strictly necessary) -->
+
+    <h3>Previously Entered Messages</h3>
+
+    <div>
+      $if not messages:
+        <span>There are none.</span>
+
+      $else:
+	<ul>
+	  $for m in messages:
+	    <li>$m['text']</li>
+	</ul>
+    </div>
+
+  </body>
+</html>

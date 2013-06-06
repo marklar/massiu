@@ -12,14 +12,17 @@ import sys
 import os
 this_dir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(this_dir)
+from bson.objectid import ObjectId
 
 import bf4.highlights
 import bf4.usp
 import ea.activity
 import ea.likes
+import ea.messages
 import nfs.leaderboard
 import pvz.photos
 import pvz.featured
+import pvz.messages
 import sports.usp
 import sports.featured
 import util.featured
@@ -27,10 +30,10 @@ from util import my_time
 import util.store
 
 from ui_util import render
-from ui_show_messages import UiShowMessages
+from ui_ea_messages import UiEaMessages
+from ui_pvz_messages import UiPvzMessages
 from ui_usp_quotes import UiUspQuotes, UiUspQuotesIndex
 from ui_stats import UiStatsOrigin, UiNfsGameStats
-from util import show_messages
 
 UI_URLS = (
     '/', 'Index',
@@ -41,8 +44,9 @@ UI_URLS = (
     '/ui/usp_quotes/([^/]*)/(.*)',     'UiUspQuotes',
     '/ui/usp_quotes/([^/]*)',          'UiUspQuotesIndex',
 
-    '/ui/show/messages',           'UiShowMessages',
-    '/ui/show/message/(.*)',       'UiDeleteShowMessage',
+    '/ui/messages/ea',         'UiEaMessages',
+    '/ui/messages/pvz',        'UiPvzMessages',
+    '/ui/message/(.*)/(.*)',       'UiDeleteMessage',
 
     '/ui/stats/nfs',           'UiNfsGameStats',
     '/ui/stats/origin',        'UiStatsOrigin',
@@ -51,10 +55,14 @@ UI_URLS = (
     '/ui/caching/clear',      'ClearCache'
 )
 
-class UiDeleteShowMessage:
-    def POST(self, id_str):
-        show_messages.delete_message(id_str)
-        raise web.seeother('/ui/show/messages')
+class UiDeleteMessage:
+    def POST(self, brand, id_str):
+        _id = ObjectId(id_str)
+        if 'brand' == 'ea':
+            ea.messages.delete_message(_id)
+        else:
+            pvz_messages.delete_message(_id)
+        raise web.seeother('/ui/messages/' + brand)
 
 def w_cache(obj, f, *args):
     cached = util.store.get_cached(obj, *args)
@@ -121,8 +129,6 @@ class static:
     return open('static/%s' % name)
 
 API_URLS = (
-    '/api/show/message.json',          'ShowMessage',
-
     # BF4
     '/api/bf4/highlights.json',         'Bf4Highlights',
     # bf4 - usp
@@ -133,6 +139,7 @@ API_URLS = (
     '/api/bf4/usp/all_out_war.json',          'Bf4UspAllOutWar',
 
     # EA
+    '/api/ea/message.json',          'EaMessage',
     '/api/ea/fb_likes.json',         'EaFbLikes',
     '/api/ea/featured.json',         'EaFeatured',
     '/api/ea/activity.json',         'EaActivity',
@@ -162,6 +169,7 @@ API_URLS = (
     # PVZ
     '/api/pvz/photos.json',          'PvzPhotos',
     '/api/pvz/featured.json',        'PvzFeatured',
+    '/api/pvz/message.json',         'PvzMessage',
 
     # Origin
     '/api/origin/highlights.json',     'Origin'
@@ -194,7 +202,7 @@ class API:
         return render.api(ENDPOINTS, TITLE_2_LINK_N_HREF)
 
 def j(x):
-    msg = show_messages.get_jsonable_active_msg()
+    msg = ea.messages.get_jsonable_active_msg()
     if msg is not None:
         res = {
             'show_message': True,
@@ -207,17 +215,6 @@ def j(x):
             'response': x
         }
     return json.dumps(res)
-
-#-- EA & PvZ --
-        
-class ShowMessage:
-    def GET(self):
-        obj = show_messages.get_jsonable_active_msg()
-        if obj is None:
-            res = {'show_message': False}
-        else:
-            res = {'show_message': True, 'message': obj}
-        return json.dumps(res)
 
 #-- BF4 --
 
@@ -246,6 +243,15 @@ class Bf4UspAllOutWar:
         return w_cache(self, bf4.usp.all_out_war)
 
 #-- EA --
+
+class EaMessage:
+    def GET(self):
+        obj = ea.messages.get_jsonable_active_msg()
+        if obj is None:
+            res = {'show_message': False}
+        else:
+            res = {'show_message': True, 'message': obj}
+        return json.dumps(res)
 
 class EaActivity:
     def GET(self):
@@ -410,6 +416,10 @@ class PvzPhotos:
 class PvzFeatured:
     def GET(self):
         return w_cache(self, pvz.featured.get)
+
+class PvzMessage:
+    def GET(self):
+        return j(pvz.messages.get_one())
 
 #-- ORIGIN --
 
