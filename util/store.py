@@ -55,7 +55,7 @@ def get_db():
 
 #-- cache --
 
-DELTA = timedelta(minutes=5)
+DELTA = timedelta(minutes=2)
 
 def cache_key(obj, *args):
     key = obj.__class__.__name__
@@ -83,6 +83,9 @@ def put_cached(val, obj, *args):
         'created_at': datetime.utcnow()
     }
     return get_cache().save(doc)
+
+def clear_cache():
+    get_cache().drop()
 
 #-- collection meta-information --
 

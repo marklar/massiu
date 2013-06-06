@@ -1,4 +1,4 @@
-$def with (is_caching_on, counter)
+$def with (is_prefetching_on, counter)
 
 <html>
   <head>
@@ -15,19 +15,23 @@ $def with (is_caching_on, counter)
 
     <h3>Caching</h3>
 
-    $if is_caching_on:
+    <form method="POST" action="/ui/caching/clear">
+      <input id="clear_btn" type="submit" value="Clear Cache" />
+    </form>
+
+    $if is_prefetching_on:
       <div id="is_on" style="display:block;">
-        <span>Caching is on.</span>
+        <span>Prefetching is on.</span>
         <div>counter: $counter</div>
       </div>
     $else:
-      <form method="POST" action="/ui/caching/start"
+      <form method="POST" action="/ui/prefetching/start"
 	    onsubmit="document.getElementById('on_btn').disabled=true;
                       document.getElementById('is_on').style.display='block';">
         <input id="on_btn" type="submit" value="Turn On" />
       </form>
       <div id="is_on" style="display:none;">
-        <span>Caching is on.</span>
+        <span>Prefetching is on.</span>
         <div>counter: $counter</div>
       </div>
     

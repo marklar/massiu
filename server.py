@@ -46,7 +46,8 @@ UI_URLS = (
     '/ui/stats/nfs',           'UiNfsGameStats',
     '/ui/stats/origin',        'UiStatsOrigin',
 
-    '/ui/caching/start',      'StartPrefetching'
+    '/ui/prefetching/start',  'StartPrefetching',
+    '/ui/caching/clear',      'ClearCache'
 )
 
 
@@ -73,8 +74,8 @@ def cache():
     for c in classes:
         c().GET()
 
-cachelet = None
-is_caching_on = False
+prefetchlet = None
+is_prefetching_on = False
 counter = 0
 PERIOD_SECS = 60
 
@@ -88,21 +89,27 @@ def turn_on_caching():
 
 class StartPrefetching:
     def POST(self):
-        global is_caching_on, cachelet
-        if is_caching_on:
+        global is_prefetching_on, prefetchlet
+        if is_prefetching_on:
             raise web.seeother('/')
         else:
-            is_caching_on = True
-            # cachelet = gevent.spawn(turn_on_caching)
+            is_prefetching_on = True
+            # prefetchlet = gevent.spawn(turn_on_caching)
             raise web.seeother('/')
 
-class StopCaching:
+class StopPrefetching:
     """ Not implemented yet. """
     def POST(self):
-        global is_caching_on, cachelet
-        if is_caching_on:
-            cachelet.kill()
+        global is_prefetching_on, prefetchlet
+        if is_prefetching_on:
+            prefetchlet.kill()
         raise web.seeother('/')
+
+class ClearCache:
+    def POST(self):
+        util.store.clear_cache()
+        raise web.seeother('/')
+
 
 class static:
   def GET(self, name):
@@ -174,8 +181,8 @@ for e in ENDPOINTS:
 
 class Index:
     def GET(self):
-        global is_caching_on, counter
-        return render.index(is_caching_on, counter)
+        global is_prefetching_on, counter
+        return render.index(is_prefetching_on, counter)
 
 class API:
     def GET(self):
@@ -273,8 +280,7 @@ def bogus_get_w_tag(stream_name):
     return [util.featured.slim(t) for t in util.store.get_all(stream_name)]
 
 def bogus_ea_featured():
-    # return [bogus_get_featured('ea', 'eae3')]
-    return bogus_get_featured('eae3')
+    return bogus_get_featured('ea', 'eae3')
 
 class EaFeatured:
     def GET(self):
