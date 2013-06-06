@@ -35,15 +35,16 @@ def get_featured(stream_name_root, hashtag):
     store.drop_coll(stream_name_root + STARRED_SUFFIX)
     store.drop_coll(stream_name_root + FEATURED_SUFFIX)
 
-    starred = get_w_tag(stream_name_root + STARRED_SUFFIX, hashtag)
+    # Return only ONE starred tweet.
+    starred = get_w_tag(stream_name_root + STARRED_SUFFIX, hashtag)[0]
     featured = get_w_tag(stream_name_root + FEATURED_SUFFIX, hashtag)
 
-    # TODO: Limit the number of starred to 5?
-    novel_featured = [f for f in featured if f not in starred]
+    # Return no more than 30 other tweets.
+    novel_featured = [f for f in featured if f != starred][:30]
 
     return {
         'hashtag': '#' + hashtag,
-        'starred_tweets': starred,
+        'starred_tweet': starred,
         'other_tweets': novel_featured
     }
 

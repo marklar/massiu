@@ -262,15 +262,16 @@ def bogus_get_featured(stream_name_root, hashtag):
     util.store.drop_coll(stream_name_root + STARRED_SUFFIX)
     util.store.drop_coll(stream_name_root + FEATURED_SUFFIX)
 
-    starred = bogus_get_w_tag(stream_name_root + STARRED_SUFFIX)
+    # Return only ONE starred tweet.
+    starred = bogus_get_w_tag(stream_name_root + STARRED_SUFFIX)[0]
     featured = bogus_get_w_tag(stream_name_root + FEATURED_SUFFIX)
 
-    # TODO: Limit the number of starred to 5?
-    novel_featured = [f for f in featured if f not in starred]
+    # Return no more than 30 other tweets.
+    novel_featured = [f for f in featured if f != starred][:30]
 
     return {
         'hashtag': '#' + hashtag,
-        'starred_tweets': starred,
+        'starred_tweet': starred,
         'other_tweets': novel_featured
     }
 

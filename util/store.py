@@ -113,8 +113,9 @@ def with_hashtag(collection_name, hashtag):
     -> cursor
     """
     hashtag_re = hashtags.make_re(hashtag)
-    query = { 'entities.hashtags.text': hashtag_re }
-    return get_db()[collection_name].find(query)
+    q = { 'entities.hashtags.text': hashtag_re }
+    # TODO: return more-recent ones first.  Not sure this is right!
+    return get_db()[collection_name].find(q).sort('id_str', pymongo.DESCENDING)
 
 #-- tweets --
 
@@ -192,7 +193,7 @@ def get_extreme_id_str(collection_name, operator):
     # Perform an aggregation to find the min/max id_str.
     # http://docs.mongodb.org/manual/reference/aggregation/min/
     agg_result = coll.aggregate([
-        { '$group': { '_id': 0, 'extreme_id': { operator: "$id_str"} } }
+        { '$group': { '_id': 0, 'extreme_id': { operator: '$id_str'} } }
     ])
     if agg_result['ok'] == 1:
         try:
