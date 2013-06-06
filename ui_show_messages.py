@@ -6,6 +6,8 @@ from dateutil import tz
 import util.show_messages as msgs
 from ui_util import render, num_box
 
+FORMAT = '%b %d %I:%M:%S %p'
+
 LA_TIME_ZONE = tz.gettz('America/Los_Angeles')
 def la_now():
     return datetime.now(LA_TIME_ZONE)
@@ -17,9 +19,9 @@ class UiShowMessages:
         form.Textarea('text',
                       form.notnull,
                       maxlength="150",
-                      description='Message (<= 150 chars)'),
-        num_box('delay_secs',    'Delay until display (in SECONDS)'),
-        num_box('duration_secs', 'Duration (in SECONDS)'))
+                      description='Message (<= 150 chars):'),
+        num_box('delay_secs',    'Display in:'),
+        num_box('duration_secs', 'Duration (in seconds):'))
 
     def get_messages(self):
         active = msgs.get_active_message()
@@ -37,7 +39,8 @@ class UiShowMessages:
         return render.messages(
             self.get_messages(),
             self.message_form(),
-            la_now())
+            la_now(),
+            FORMAT)
 
     def POST(self):
         form = self.message_form()
@@ -47,7 +50,8 @@ class UiShowMessages:
             return render.messages(
                 self.get_messages(),
                 form,
-                now)
+                now,
+                FORMAT)
         else:
             # SUCCESS
             delay_secs = int(form['delay_secs'].value)

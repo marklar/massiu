@@ -1,4 +1,4 @@
-$def with (messages, form, now_datetime)
+$def with (messages, form, now_datetime, format)
 
   $def just_messages(name, msgs):
 
@@ -34,8 +34,8 @@ $def with (messages, form, now_datetime)
 	  <div class="stats">$m['brand']</div>
 	  <div class="stats secs">$m['delay_secs']</div>
 	  <div class="stats secs">$m['duration_secs']</div>
-	  <div class="stats timestamp">$m['created_at'].strftime('%b %d %H:%M:%S')</div>
-	  <div class="stats timestamp">$m['desired_start_time'].strftime('%b %d %H:%M:%S')</div>
+	  <div class="stats timestamp">$m['created_at'].strftime(format)</div>
+	  <div class="stats timestamp">$m['desired_start_time'].strftime(format)</div>
 	  <br style="clear: left;" />
 	</div>
 
@@ -69,7 +69,9 @@ $def with (messages, form, now_datetime)
     <!-- list of previous stats (not strictly necessary) -->
 
     <div>
-      <span>LA Time (as of page load): $now_datetime.strftime('%b %d %H:%M:%S')</span>
+      <span>
+	LA Time (as of page load): $now_datetime.strftime(format)
+      </span>
     </div>
 
     <div class="vert_spacer"></div>
