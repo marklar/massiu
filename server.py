@@ -26,7 +26,7 @@ import util.featured
 from util import my_time
 import util.store
 
-from ui_util import render, num_box
+from ui_util import render
 from ui_show_messages import UiShowMessages
 from ui_usp_quotes import UiUspQuotes, UiUspQuotesIndex
 from ui_stats import UiStatsOrigin, UiNfsGameStats

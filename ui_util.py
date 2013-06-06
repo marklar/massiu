@@ -9,5 +9,11 @@ def num_box(name, desc):
         form.notnull,
         form.regexp('^\s*\d+\s*$', "Digits only, please."),
         size="10",
-        description=desc
-    )
+        description=desc)
+
+def num_str_box(name, desc):
+    return form.Textbox(
+        name,
+        form.notnull,
+        size="12",
+        description=desc)
