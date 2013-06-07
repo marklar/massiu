@@ -14,11 +14,5 @@ TITLE_2_HASHTAG = {
 def get(title):
     return get_all_featured(get_root(title))
 
-# def get_all():
-#     return [ {'title': t, 'tweets': get(t)}
-#              for t in TITLE_2_HASHTAG.keys() ]
-
-#--------------------------------
-
 def get_root(title):
     return (STREAM_PREFIX + TITLE_2_HASHTAG[title]).lower()
