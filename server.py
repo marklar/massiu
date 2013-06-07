@@ -61,7 +61,7 @@ class UiDeleteMessage:
         if 'brand' == 'ea':
             ea.messages.delete_message(_id)
         else:
-            pvz_messages.delete_message(_id)
+            pvz.messages.delete_message(_id)
         raise web.seeother('/ui/messages/' + brand)
 
 def w_cache(obj, f, *args):

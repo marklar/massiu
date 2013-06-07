@@ -1,5 +1,12 @@
 $def with (messages, form)
 
+  $code:
+    def bobo(dico, key):
+        if key in dico:
+            return dico[key]
+        else:
+            return '&nbsp;'
+
 <html>
   <head>
     <link href="/static/main.css" rel="stylesheet" type="text/css" />
@@ -35,10 +42,24 @@ $def with (messages, form)
         <span>There are none.</span>
 
       $else:
-	<ul>
-	  $for m in messages:
-	    <li>$m['text']</li>
-	</ul>
+	<div class="row">
+	  <div class="stats hd">&nbsp;</div>
+	  <div class="stats hd message">Text</div>
+	  <div class="stats hd message">CTA</div>
+	  <br style="clear: left;" />
+	</div>
+
+	$for m in messages:
+  	  <div class="row">
+	    <div class="stats delete">
+	      <form method="POST" action="/ui/message/pvz/$m['_id']">
+		<input type="submit" value="Delete" />
+	      </form>
+	    </div>
+	    <div class="stats message">$m['text']</div>
+	    <div class="stats message">$bobo(m, 'cta')</div>
+	    <br style="clear: left;" />
+	  </div>
     </div>
 
   </body>

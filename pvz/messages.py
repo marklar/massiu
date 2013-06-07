@@ -12,9 +12,18 @@ def put_message(msg):
 def get_one():
     res = list(get_all())
     try:
-        return { 'text': res[0]['text'] }
+        return {
+            'text': res[0]['text'],
+            'cta': res[0]['cta']
+        }
     except IndexError:
         return None
+
+def bobo(dico, key):
+    if key in dico:
+        return dico[key]
+    else:
+        return None;
 
 def get_all():
     return get_coll().find().sort('_id', pymongo.DESCENDING)
