@@ -1,5 +1,6 @@
 
 import string  # lstrip, replace
+import pymongo
 
 from util import store
 from util import fetch
@@ -36,12 +37,12 @@ def get_featured(stream_name_root, hashtag):
     store.drop_coll(stream_name_root + FEATURED_SUFFIX)
 
     # Return only ONE starred tweet.
-    starred = get_w_tag(stream_name_root + STARRED_SUFFIX, hashtag)
+    starred = get_slims(stream_name_root + STARRED_SUFFIX, hashtag)
     try:
         starred = starred[0]
     except IndexError:
         starred = None
-    featured = get_w_tag(stream_name_root + FEATURED_SUFFIX, hashtag)
+    featured = get_slims(stream_name_root + FEATURED_SUFFIX, hashtag)
 
     # Return no more than 30 other tweets.
     novel_featured = [f for f in featured if f != starred][:30]
@@ -52,9 +53,11 @@ def get_featured(stream_name_root, hashtag):
         'other_tweets': novel_featured
     }
 
-def get_w_tag(stream_name, hashtag):
+def get_slims(stream_name, hashtag):
     gather.only_new_tweets(stream_name)
-    return [slim(t) for t in store.with_hashtag(stream_name, hashtag)]
+    # return [slim(t) for t in store.with_hashtag(stream_name, hashtag)]
+    return [slim(t)
+            for t in store.get_all(stream_name).sort('id_str', pymongo.DESCENDING)]
     
 def slim(tweet):
     """ Extract from tweet only the info we care about. """

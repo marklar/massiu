@@ -257,54 +257,9 @@ class EaActivity:
     def GET(self):
         return w_cache(self, ea.activity.counts)
 
-#-----------------
-# begin BOGUS
-#-----------------
-
-FEATURED_SUFFIX = '_featured'
-STARRED_SUFFIX = '_starred'
-
-def bogus_get_featured(stream_name_root, hashtag):
-    """
-    Return both starred and featured.
-    Remove any from featured that already appear in starred.
-    """
-    # TODO
-    util.store.drop_coll(stream_name_root + STARRED_SUFFIX)
-    util.store.drop_coll(stream_name_root + FEATURED_SUFFIX)
-
-    # Return only ONE starred tweet.
-    starred = bogus_get_w_tag(stream_name_root + STARRED_SUFFIX)[0]
-    featured = bogus_get_w_tag(stream_name_root + FEATURED_SUFFIX)
-
-    # Return no more than 30 other tweets.
-    novel_featured = [f for f in featured if f != starred][:30]
-
-    return {
-        'hashtag': '#' + hashtag,
-        'starred_tweet': starred,
-        'other_tweets': novel_featured
-    }
-
-import util.gather
-def bogus_get_w_tag(stream_name):
-    util.gather.only_new_tweets(stream_name)
-    return [util.featured.slim(t) for t in util.store.get_all(stream_name)]
-
-def bogus_ea_featured():
-    return bogus_get_featured('ea', 'eae3')
-
 class EaFeatured:
     def GET(self):
-        # TODO - RETURN TO THIS:
-        # return j(util.featured.get_all_featured('ea'))
-        # TEMP:
-        # return j(bogus_ea_featured())
-        return w_cache(self, bogus_ea_featured)
-
-#-----------------
-# end BOGUS
-#-----------------
+        return w_cache(self, util.featured.get_all_featured, 'ea')
 
 class EaFbLikes:
     def GET(self):
