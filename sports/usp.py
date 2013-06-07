@@ -7,9 +7,6 @@ from util import usp
 FAKE_BRAND_LOGO = 'http://example.com/sports.png'
 BRAND = 'Sports'
 
-# def all_usps():
-#     return [fifa(), madden(), nba(), ufc()]
-
 def ignite_human_intelligence():
     return usp.get_quotes(BRAND, 'IGNITE: Human Intelligence')
 
@@ -26,8 +23,7 @@ def madden():
     return usp.get_quotes(BRAND, 'Madden: See It. Feel It. Live It.')
 
 def nba():
-    # TODO: Fix this USP.
-    return usp.get_quotes(BRAND, 'NBA')
+    return usp.get_quotes(BRAND, 'NBA: Control the Court')
 
 def ufc():
     return usp.get_quotes(BRAND, 'UFC: Feel the Fight')

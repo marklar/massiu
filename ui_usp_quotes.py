@@ -22,7 +22,7 @@ class UiUspQuotesIndex:
             'IGNITE: Living Worlds',
             'FIFA 14 Is Alive',
             'Madden: See It. Feel It. Live It.',
-            'NBA',
+            'NBA: Control the Court',
             'UFC: Feel the Fight'
         ]
     }
