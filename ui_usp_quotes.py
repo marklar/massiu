@@ -32,6 +32,9 @@ class UiUspQuotesIndex:
 
 class UiUspQuotes:
     quote_form = form.Form(
+        form.Checkbox('from_twitter',
+                      value='from_twitter',
+                      description='from Twitter?'),
         form.Textbox('name',
                      form.notnull,
                      size="100",
@@ -74,7 +77,8 @@ class UiUspQuotes:
             # SUCCESS
             util.usp.insert_quote(
                 brand, usp,
-                form.d.quote, form.d.name, form.d.image
+                form.d.quote, form.d.name, form.d.image,
+                bool(form.d.from_twitter)
             )
             raise web.seeother(get_url)
 

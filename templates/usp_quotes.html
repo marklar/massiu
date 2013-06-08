@@ -1,5 +1,12 @@
 $def with (brand, usp, quotes, form)
 
+  $code:
+    def bobo(dico, key):
+        if key in dico:
+             return bool(dico[key])
+        else:
+             return False
+
 <html>
   <head>
     <link href="/static/main.css" rel="stylesheet" type="text/css" />
@@ -29,18 +36,30 @@ $def with (brand, usp, quotes, form)
     $if not quotes:
       <span>You have none.</span>
     $else:
+      <!-- header -->
+      <div class="row">
+	<div class="stats hd">&nbsp;</div>
+	<div class="stats hd">Is tweet?</div>
+	<div class="stats hd">Image</div>
+	<div class="stats hd">Name</div>
+	<div class="stats hd message">Text</div>
+	<br style="clear: left;" />
+      </div>
+
       <form name="other" method="post">
 	<input type="hidden" name="delete_id" id="xx" value=""/>
-
 	$for q in quotes:
           <div class="row">
-	    <input type="submit" name="delete"
-		   onclick="document.getElementById('xx').value = '$q['_id']'"
-		   class="delete" value="Delete"
-		   />
-	    <img class="profile_pic" src="$q['image']" />
-	    <span class="profile_name">$q['name']</span>
-	    <div class="quote_text">"$q['text']"</div>
+	    <div class="stats">
+	      <input type="submit" name="delete"
+		     onclick="document.getElementById('xx').value = '$q['_id']'"
+		     class="delete" value="Delete"
+		     />
+	    </div>
+	    <div class="stats">$bobo(q, 'is_tweet')</div>
+	    <div class="stats"><img style="width:60px" src="$q['image']" /></div>
+	    <div class="stats">$q['name']</div>
+	    <div class="stats message">"$q['text']"</div>
 	    <br style="clear: left;" />
 	  </div>
     </form>

@@ -6,10 +6,10 @@ import store
 
 COLL_NAME = 'usp_quotes'
 
-def insert_quote(brand, usp, text, name, image_url):
+def insert_quote(brand, usp, text, name, image_url, is_tweet):
     """ For quotes entered through the UI. """
     doc = {
-        'is_tweet': False,
+        'is_tweet': is_tweet,
         'brand': brand,
         'usp': usp,
         'text': text,

@@ -57,11 +57,19 @@ input.delete {
     margin-right: 20px;
 }
 
+span.is_tweet {
+    float: left;
+    width: 60px;
+    margin-right: 20px;
+}
+
+/*
 img.profile_pic {
     float: left;
     width: 60px;
     margin-right: 20px;
 }
+*/
 
 span.profile_name {
     float: left;
