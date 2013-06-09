@@ -11,19 +11,26 @@ import string
 STREAM_NAME = 'ea_activity'
 
 HASHTAGS = [
-    'bf4', 'eae3', 'NeedForSpeed', 'pvzgw',
-    'respawn', 'fifa14', 'MaddenNext25',
-    'WeAreLive', 'FeelTheFight',
-    'EASportsIgnite', 'CommandAndConquer'
+    'BF4',
+    'EAE3',
+    'NeedForSpeed',
+    'PvZGW',
+    'TitanFall',
+    'FIFA14',
+    'MaddenNext25',
+    'WeAreAlive',
+    'FeelTheFight',
+    'EASPORTSIGNITE',
+    'CommandAndConquer'
 ]
 
 MAP_FN = """
 function() {
     var tags = [
-        'bf4', 'eae3', 'needforspeed', 'pvzgw', 'respawn',
+        'bf4', 'eae3', 'needforspeed', 'pvzgw', 'titanfall',
         'fifa14', 'maddennext25', 'wearelive', 'feelthefight',
         'easportsignite', 'commandandconquer'
-    ]
+    ];
     var t;
     this.entities.hashtags.forEach(function(tag) {
         t = tag.text.toLowerCase();

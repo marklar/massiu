@@ -366,7 +366,7 @@ class NfsGameStats:
 class PvzPhotos:
     def GET(self):
         # return j(pvz.photos.get_photos(4))
-        return w_cache(self, pvz.photos.get_photos, 4)
+        return w_cache(self, pvz.photos.get_photos, 15)
 
 class PvzFeatured:
     def GET(self):
