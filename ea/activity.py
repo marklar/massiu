@@ -15,7 +15,7 @@ HASHTAGS = [
     'EAE3',
     'NeedForSpeed',
     'PvZGW',
-    'TitanFall',
+    'Titanfall',
     'FIFA14',
     'MaddenNext25',
     'WeAreAlive',

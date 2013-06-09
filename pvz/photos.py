@@ -7,8 +7,7 @@
 from util import store
 from util import gather
 
-# TODO: This is the WRONG STREAM.  Just for fake data.
-PHOTO_STREAM = 'pvz_featured'
+PHOTO_STREAM = 'pvz_photos'
 
 def get_photos(num):
     return get_imgs_from_tweets(PHOTO_STREAM)[:num]
