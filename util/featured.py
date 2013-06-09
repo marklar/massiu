@@ -1,6 +1,7 @@
 
 import string  # lstrip, replace
 import pymongo
+import re
 
 from util import store
 from util import fetch
@@ -63,9 +64,12 @@ def slim(tweet):
     """ Extract from tweet only the info we care about. """
     u = tweet['user']
     return {
-        'text':        tweet['text'],
+        'text':        rm_urls(tweet['text']),
         'name':        u['name'],
         'image':       u['profile_image_url'].replace('_normal.', '.'),
-        'screen_name': u['screen_name']
+        'screen_name': '@' + u['screen_name']
     }
     
+PATTERN = 'http://[^\s]*(\s+|$)'
+def rm_urls(text):
+    return re.sub(PATTERN, '', text)
