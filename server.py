@@ -44,7 +44,10 @@ UI_URLS = (
     '/ui/usp_quotes/([^/]*)/(.*)',     'UiUspQuotes',
     '/ui/usp_quotes/([^/]*)',          'UiUspQuotesIndex',
 
-    '/ui/messages/ea',         'UiEaMessages',
+    '/ui/messages/EA',         'UiSorryDude',
+    '/ui/messages/ea',         'UiSorryDude',
+    '/top_secret/messages/ea',   'UiEaMessages',
+
     '/ui/messages/pvz',        'UiPvzMessages',
     '/ui/message/(.*)/(.*)',       'UiDeleteMessage',
 
@@ -54,6 +57,20 @@ UI_URLS = (
     '/ui/prefetching/start',  'StartPrefetching',
     '/ui/caching/clear',      'ClearCache'
 )
+
+class UiSorryDude:
+    def GET(self):
+        return """
+<html>
+<head></head>
+<body style="font-family:arial">
+<h2>Sorry, dude.</h2>
+<p>
+  This URL is now a
+  <a href="http://www.youtube.com/watch?v=cPQcnjlwtE4">Road to Nowhere</a>.
+</p>
+</body>
+</html>"""
 
 class UiDeleteMessage:
     def POST(self, brand, id_str):
