@@ -1,3 +1,4 @@
+import re
 import string
 import pymongo
 from bson.objectid import ObjectId
@@ -23,14 +24,17 @@ def get_quotes(brand, usp):
 
     # ObjectIds aren't JSON serializable.
     for q in quotes:
-        q['_id'] = str(q['_id'])
-        # del q['_id']
+        q['_id'] = str(q['_id'])  # need _id in order to delete
+        q['usp'] = fix_usp_for_display(q['usp'])
 
     return {
         'brand': brand,
-        'usp': usp,
+        'usp': fix_usp_for_display(usp),
         'quotes': quotes
     }
+
+def fix_usp_for_display(usp):
+    return re.sub('^.*: ', '', usp)
 
 def delete_quote(doc_id):
     oid = ObjectId(doc_id)
