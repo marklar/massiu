@@ -18,7 +18,6 @@ import re
 from util import facebook
 
 USERNAMES = [
-    # 'respawn',               # None - placeholder
     # 'Battlefield',           # None
     'commandandconquer',
     'needforspeed',

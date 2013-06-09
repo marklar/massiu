@@ -21,22 +21,3 @@ def get_or_none(dico, key):
         return dico[key]
     else:
         return None
-
-if __name__ == '__main__':
-    """ don't work: ['respawn', 'battlefield'] """
-    usernames = [
-        'respawn',               # None - placeholder
-        'battlefield',           # None
-        'OfficialBattlefield4',
-        'commandandconquer',
-        'needforspeed',
-        'ea',
-        'EASportsMaddenNFL',
-        'easportsfifa',
-        'EASPORTSUFC',
-        'EASPORTSNBA',
-        'plantsversuszombies'
-    ]
-    for u in usernames:
-        print u
-        print get_likes(u)
