@@ -81,18 +81,7 @@ class UiDeleteMessage:
             pvz.messages.delete_message(_id)
         raise web.seeother('/ui/messages/' + brand)
 
-def w_cache(obj, f, *args):
-    cached = util.store.get_cached(obj, *args)
-    if cached is not None:
-        # print 'Cached!'
-        return j(cached)
-    else:
-        # print 'NOT cached.'
-        res = f(*args)
-        util.store.put_cached(res, obj, *args)
-        return j(res)
-
-def cache():
+def pre_fetch():
     classes = [
         Bf4Highlights, EaActivity, EaFbLikes, EaFeatured,
         SportsFeaturedEASports, SportsFeaturedFIFA,
@@ -113,7 +102,7 @@ def turn_on_caching():
     """ Cache slow queries every PERIOD_SECS seconds. """
     global counter
     while True:
-        cache()
+        pre_fetch()
         counter += 1
         time.sleep(PERIOD_SECS)
 
@@ -218,6 +207,15 @@ class API:
     def GET(self):
         return render.api(ENDPOINTS, TITLE_2_LINK_N_HREF)
 
+def w_cache(obj, f, *args):
+    cached = util.store.get_cached(obj, *args)
+    if cached is not None:
+        return j(cached)
+    else:
+        res = f(*args)
+        util.store.put_cached(res, obj, *args)
+        return j(res)
+
 def j(x):
     msg = ea.messages.get_jsonable_active_msg()
     if msg is not None:
@@ -231,6 +229,7 @@ def j(x):
             'show_message': False,
             'response': x
         }
+    web.header('Content-Type','application/json; charset=utf-8')
     return json.dumps(res)
 
 #-- BF4 --
