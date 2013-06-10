@@ -359,15 +359,16 @@ class NfsFeatured:
     def GET(self):
         return w_cache(self, util.featured.get_all_featured, 'nfs')
 
-def get_nfs_game_stats():
+def get_nfs_game_stats(prot_n_host):
     return {
         'stats': util.store.get_most_recent_nfs_game_stats(),
-        'images': nfs.photos.get_photos()
+        'images': nfs.photos.get_photos(prot_n_host)
     }
 
 class NfsGameStats:
     def GET(self):
-        return w_msg(get_nfs_game_stats())
+        prot_n_host = web.ctx.homedomain
+        return w_msg(get_nfs_game_stats(prot_n_host))
 
 #-- PVZ --
 
