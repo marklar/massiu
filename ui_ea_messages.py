@@ -63,7 +63,7 @@ class UiEaMessages:
                 'created_at': now
             }
             msgs.put_message(msg)
-            raise web.seeother('/ui/messages/ea')
+            raise web.seeother('/top_secret/messages/ea')
 
 
     def make_start_time(self, delay_secs):
