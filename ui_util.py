@@ -11,9 +11,10 @@ def num_box(name, desc):
         size="10",
         description=desc)
 
-def num_str_box(name, desc):
+def num_str_box(name, desc, max_len=4):
     return form.Textbox(
         name,
         form.notnull,
-        size="12",
+        size=str(max_len),
+        maxlength=str(max_len),
         description=desc)
