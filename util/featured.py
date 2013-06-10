@@ -33,9 +33,9 @@ def get_featured(stream_name_root, hashtag):
     Return both starred and featured.
     Remove any from featured that already appear in starred.
     """
-    # TODO
-    store.drop_coll(stream_name_root + STARRED_SUFFIX)
-    store.drop_coll(stream_name_root + FEATURED_SUFFIX)
+    # -- no longer necessary --
+    # store.drop_coll(stream_name_root + STARRED_SUFFIX)
+    # store.drop_coll(stream_name_root + FEATURED_SUFFIX)
 
     # Return only ONE starred tweet.
     starred = get_slims(stream_name_root + STARRED_SUFFIX, hashtag)
@@ -54,12 +54,6 @@ def get_featured(stream_name_root, hashtag):
         'other_tweets': novel_featured
     }
 
-def old_get_slims(stream_name, hashtag):
-    gather.only_new_tweets(stream_name)
-    # return [slim(t) for t in store.with_hashtag(stream_name, hashtag)]
-    return [slim(t)
-            for t in store.get_all(stream_name).sort('id_str', pymongo.DESCENDING)]
-
 def get_slims(stream_name, hashtag):
     tweet_lists = []
     old_id = None
@@ -72,10 +66,14 @@ def get_slims(stream_name, hashtag):
             break
         old_id = tweets[0]['id_str']
         tweet_lists.append(tweets)
-        
-    # [slim(t) for sublist in tweet_lists for t in sublist]
     return [slim(t) for t in itertools.chain.from_iterable(tweet_lists)]
     
+def old_get_slims(stream_name, hashtag):
+    gather.only_new_tweets(stream_name)
+    # return [slim(t) for t in store.with_hashtag(stream_name, hashtag)]
+    return [slim(t)
+            for t in store.get_all(stream_name).sort('id_str', pymongo.DESCENDING)]
+
 def slim(tweet):
     """ Extract from tweet only the info we care about. """
     user = tweet['user']
