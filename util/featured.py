@@ -1,4 +1,4 @@
-
+import itertools
 import string  # lstrip, replace
 import pymongo
 import re
@@ -54,22 +54,42 @@ def get_featured(stream_name_root, hashtag):
         'other_tweets': novel_featured
     }
 
-def get_slims(stream_name, hashtag):
+def old_get_slims(stream_name, hashtag):
     gather.only_new_tweets(stream_name)
     # return [slim(t) for t in store.with_hashtag(stream_name, hashtag)]
     return [slim(t)
             for t in store.get_all(stream_name).sort('id_str', pymongo.DESCENDING)]
+
+def get_slims(stream_name, hashtag):
+    tweet_lists = []
+    old_id = None
+    while True:
+        tweets = fetch.stream(
+            stream_name,
+            account_name='MR_breel',
+            start_id=old_id)
+        if not tweets:
+            break
+        old_id = tweets[0]['id_str']
+        tweet_lists.append(tweets)
+        
+    # [slim(t) for sublist in tweet_lists for t in sublist]
+    return [slim(t) for t in itertools.chain.from_iterable(tweet_lists)]
     
 def slim(tweet):
     """ Extract from tweet only the info we care about. """
-    u = tweet['user']
+    user = tweet['user']
     return {
-        'text':        rm_urls(tweet['text']),
-        'name':        u['name'],
-        'image':       u['profile_image_url'].replace('_normal.', '.'),
-        'screen_name': '@' + u['screen_name']
+        'text':        u8(rm_urls(tweet['text'])),
+        'name':        u8(user['name']),
+        'image':       user['profile_image_url'].replace('_normal.', '.'),
+        'screen_name': u8('@' + user['screen_name'])
     }
     
+def u8(s):
+    return s
+    # return s.encode('utf-8')
+
 PATTERN = 'http://[^\s]*(\s+|$)'
 def rm_urls(text):
     return re.sub(PATTERN, '', text)

@@ -133,13 +133,23 @@ def add_created_at_datetime(tweet):
     tweet['created_at_datetime'] = make_utc_datetime(tweet['created_at'])
     return tweet
 
+def uc(tweet):
+    """ unicode-ify the strings """
+    # tweet['text'] = unicode(tweet['text'])
+    tweet['text'] = tweet['text'].encode('utf-8')
+    for attr in ['name', 'screen_name']:
+        u = tweet['user']
+        # u[attr] = unicode(u[attr])
+        u[attr] = u[attr].encode('utf-8')
+    return tweet
+
 def put_tweets(collection_name, tweets):
     """ :: String, [Tweet] -> None
     Insert all tweets into collection.
     If any are repeats, just ignore and continue.
     """
     coll = get_db()[collection_name]
-    dt_tweets = [add_created_at_datetime(t) for t in tweets]
+    dt_tweets = [uc(add_created_at_datetime(t)) for t in tweets]
     coll.insert(
         with_db_ids(dt_tweets),
         w=0,                    # disable write acknowledgement

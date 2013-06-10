@@ -1,7 +1,11 @@
 import requests
 import json
 
-DEF_HEADERS = {'Accept-Encoding': 'gzip'}
+DEF_HEADERS = {
+    # 'Accept-Encoding': 'gzip',
+    'Accept-Charset': 'utf-8'
+}
+
 def get_data(url, payload):
     """
     :: String, Dict -> Response data

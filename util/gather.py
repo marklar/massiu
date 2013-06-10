@@ -51,8 +51,6 @@ def gather_tweets(stream_name, account,
             break
 
         # If we got any tweets, store them.
-        # print ''
-        # print 'Num tweets:', len(tweets)
         store.put_tweets(stream_name, tweets)
 
         # Determine where to start next batch.
