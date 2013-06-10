@@ -20,7 +20,8 @@ import bf4.usp
 import ea.activity
 import ea.likes
 import ea.messages
-import nfs.leaderboard
+# import nfs.leaderboard
+import nfs.photos
 import pvz.photos
 import pvz.featured
 import pvz.messages
@@ -350,39 +351,18 @@ class SportsFeaturedNBA:
 
 #-- NFS --
 
-class NfsLeaderboard:
-    def GET(self):
-        return w_msg(nfs.leaderboard.top_times(5))
+# class NfsLeaderboard:
+#     def GET(self):
+#         return w_msg(nfs.leaderboard.top_times(5))
 
 class NfsFeatured:
     def GET(self):
         return w_cache(self, util.featured.get_all_featured, 'nfs')
 
-# NFS stats - they've requested to change the use of the photos to display the top winners from the tournaments - there will be two top cops and two top racers.  to do this, I suggested it could work like this:
-# 1) images will be tweeted from @needforspeed account with the hashtags #topcop #topracer. 
-# 2) we will setup mass relevance to pull all photos with those hashtags
-# 3) cms will push content to visualization 
-# 4) visualization will show most recent two images from each group
-
-# 'https://si0.twimg.com/profile_images/2281988491/8oz02frum9e7hm8l6eq7.jpeg',
-
-# NEW NEW NEW
-# the visualization needs to pull in the latest two photos tweeted by the @needforspeed account with the hashtags: #NFSRivalsTopCops and #NFSRivalsTopRacers
-
 def get_nfs_game_stats():
-    stats = util.store.get_most_recent_nfs_game_stats()
     return {
-        'stats': stats,
-        # TODO: Include *real* images data.
-        'images': {
-            'topcop': [
-                'http://si0.twimg.com/profile_images/1129466536/fcb.png',
-                'http://si0.twimg.com/profile_images/1048074687/cara_messi.jpg'],
-            'topracer': [
-                'http://si0.twimg.com/profile_images/3222338434/bbdc41334f3db7b1349fc9d97362b284.jpeg',
-                'http://si0.twimg.com/profile_images/1719423111/perfil_twitter2.jpg'
-            ]
-        }
+        'stats': util.store.get_most_recent_nfs_game_stats(),
+        'images': nfs.photos.get_photos()
     }
 
 class NfsGameStats:
