@@ -4,8 +4,9 @@
 import time
 import web
 from web import form
-import json
 import re
+
+import simplejson as json
 
 # Add src to py path.
 import sys
@@ -208,15 +209,22 @@ class API:
         return render.api(ENDPOINTS, TITLE_2_LINK_N_HREF)
 
 def w_cache(obj, f, *args):
+    """
+    Attempt to pull from cache.
+    If not there, gather response, add to cache, and return it.
+    """
     cached = util.store.get_cached(obj, *args)
     if cached is not None:
-        return j(cached)
+        return w_msg(cached)
     else:
         res = f(*args)
         util.store.put_cached(res, obj, *args)
-        return j(res)
+        return w_msg(res)
 
-def j(x):
+def w_msg(x):
+    """
+    Wrap response in object including info about possible show message.
+    """
     msg = ea.messages.get_jsonable_active_msg()
     if msg is not None:
         res = {
@@ -229,8 +237,12 @@ def j(x):
             'show_message': False,
             'response': x
         }
+    return j_out(res)
+
+def j_out(x):
+    """ Output proper utf-8 json. """
     web.header('Content-Type','application/json; charset=utf-8')
-    return json.dumps(res)
+    return json.dumps(x, ensure_ascii=False, encoding='utf-8', indent=4)
 
 #-- BF4 --
 
@@ -240,23 +252,23 @@ class Bf4Highlights:
 
 class Bf4UspFrostbite3:
     def GET(self):
-        return w_cache(self, bf4.usp.frostbite3)
+        return w_msg(bf4.usp.frostbite3())
 
 class Bf4UspCommanderMode:
     def GET(self):
-        return w_cache(self, bf4.usp.commander_mode)
+        return w_msg(bf4.usp.commander_mode())
 
 class Bf4UspAmphibiousAssault:
     def GET(self):
-        return w_cache(self, bf4.usp.amphibious_assault)
+        return w_msg(bf4.usp.amphibious_assault())
 
 class Bf4UspLevolution:
     def GET(self):
-        return w_cache(self, bf4.usp.levolution)
+        return w_msg(bf4.usp.levolution())
 
 class Bf4UspAllOutWar:
     def GET(self):
-        return w_cache(self, bf4.usp.all_out_war)
+        return w_msg(bf4.usp.all_out_war())
 
 #-- EA --
 
@@ -267,7 +279,7 @@ class EaMessage:
             res = {'show_message': False}
         else:
             res = {'show_message': True, 'message': obj}
-        return json.dumps(res)
+        return j_out(res)
 
 class EaActivity:
     def GET(self):
@@ -285,31 +297,31 @@ class EaFbLikes:
 
 class SportsUspIgniteHI:
     def GET(self):
-        return w_cache(self, sports.usp.ignite_human_intelligence)
+        return w_msg(sports.usp.ignite_human_intelligence())
 
 class SportsUspIgniteTPM:
     def GET(self):
-        return w_cache(self, sports.usp.ignite_true_player_motion)
+        return w_msg(sports.usp.ignite_true_player_motion())
 
 class SportsUspIgniteLW:
     def GET(self):
-        return w_cache(self, sports.usp.ignite_living_worlds)
+        return w_msg(sports.usp.ignite_living_worlds())
 
 class SportsUspFIFA:
     def GET(self):
-        return w_cache(self, sports.usp.fifa)
+        return w_msg(sports.usp.fifa())
 
 class SportsUspMadden:
     def GET(self):
-        return w_cache(self, sports.usp.madden)
+        return w_msg(sports.usp.madden())
 
 class SportsUspNBA:
     def GET(self):
-        return w_cache(self, sports.usp.nba)
+        return w_msg(sports.usp.nba())
 
 class SportsUspUFC:
     def GET(self):
-        return w_cache(self, sports.usp.ufc)
+        return w_msg(sports.usp.ufc())
 
 # ---
 # It may seem silly to have all these doing the same thing,
@@ -340,7 +352,7 @@ class SportsFeaturedNBA:
 
 class NfsLeaderboard:
     def GET(self):
-        return j(nfs.leaderboard.top_times(5))
+        return w_msg(nfs.leaderboard.top_times(5))
 
 class NfsFeatured:
     def GET(self):
@@ -375,13 +387,12 @@ def get_nfs_game_stats():
 
 class NfsGameStats:
     def GET(self):
-        return w_cache(self, get_nfs_game_stats)
+        return w_msg(get_nfs_game_stats())
 
 #-- PVZ --
 
 class PvzPhotos:
     def GET(self):
-        # return j(pvz.photos.get_photos(4))
         return w_cache(self, pvz.photos.get_photos, 15)
 
 class PvzFeatured:
@@ -390,7 +401,7 @@ class PvzFeatured:
 
 class PvzMessage:
     def GET(self):
-        return j(pvz.messages.get_one())
+        return w_msg(pvz.messages.get_one())
 
 #-- ORIGIN --
 
@@ -398,7 +409,7 @@ class Origin:
     def GET(self):
         st = util.store.get_origin_data()[0]
         del st['_id']
-        return j(st)
+        return w_msg(st)
 
 
 if __name__ == '__main__':

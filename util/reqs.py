@@ -1,8 +1,8 @@
 import requests
-import json
+import simplejson as json
 
 DEF_HEADERS = {
-    # 'Accept-Encoding': 'gzip',
+    'Accept-Encoding': 'gzip',
     'Accept-Charset': 'utf-8'
 }
 

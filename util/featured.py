@@ -80,16 +80,12 @@ def slim(tweet):
     """ Extract from tweet only the info we care about. """
     user = tweet['user']
     return {
-        'text':        u8(rm_urls(tweet['text'])),
-        'name':        u8(user['name']),
+        'text':        rm_urls(tweet['text']),
+        'name':        user['name'],
         'image':       user['profile_image_url'].replace('_normal.', '.'),
-        'screen_name': u8('@' + user['screen_name'])
+        'screen_name': '@' + user['screen_name']
     }
     
-def u8(s):
-    return s
-    # return s.encode('utf-8')
-
 PATTERN = 'http://[^\s]*(\s+|$)'
 def rm_urls(text):
     return re.sub(PATTERN, '', text)
