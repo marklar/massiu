@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import re
 import string
 import pymongo
@@ -13,11 +14,14 @@ def insert_quote(brand, usp, text, name, image_url, is_tweet):
         'is_tweet': is_tweet,
         'brand': brand,
         'usp': usp,
-        'text': text,
+        'text': replace_apostrophe(text),
         'name': name,
         'image': image_url.replace('_normal.', '.')
     }
     return get_coll().insert(doc)
+
+def replace_apostrophe(text):
+    return re.sub(u'’', "'", text)
 
 def get_quotes(brand, usp):
     quotes = list(get(brand, usp))
@@ -26,6 +30,7 @@ def get_quotes(brand, usp):
     for q in quotes:
         q['_id'] = str(q['_id'])  # need _id in order to delete
         q['usp'] = fix_usp_for_display(q['usp'])
+        q['text'] = replace_apostrophe(q['text'])
 
     return {
         'brand': brand,

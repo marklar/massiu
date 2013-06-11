@@ -2,11 +2,10 @@
 # import gevent
 # from gevent.pywsgi import WSGIServer
 import time
-import web
-from web import form
 import re
-
 import simplejson as json
+import web
+
 
 # Add src to py path.
 import sys
@@ -20,7 +19,6 @@ import bf4.usp
 import ea.activity
 import ea.likes
 import ea.messages
-# import nfs.leaderboard
 import nfs.photos
 import pvz.photos
 import pvz.featured
@@ -36,6 +34,7 @@ from ui_ea_messages import UiEaMessages
 from ui_pvz_messages import UiPvzMessages
 from ui_usp_quotes import UiUspQuotes, UiUspQuotesIndex
 from ui_stats import UiStatsOrigin, UiNfsGameStats
+
 
 UI_URLS = (
     '/', 'Index',
@@ -184,6 +183,20 @@ API_URLS = (
 )
 
 URLS = UI_URLS + API_URLS
+
+# from web.session import MongoStore
+# from pymongo import MongoClient
+# import users
+
+# web.config.debug = False
+app = web.application(URLS, globals())
+
+# db = util.store.get_db()
+# session = web.session.Session(app, MongoStore(db, 'sessions'))
+# users.session = session
+# users.collection = db.users
+# users.SALTY_GOODNESS = u'RANDOM_SALT'
+
 
 ODD_INDICES = range(0, len(API_URLS)-1, 2)
 ENDPOINTS = [API_URLS[i] for i in ODD_INDICES]
@@ -394,7 +407,6 @@ class Origin:
 
 
 if __name__ == '__main__':
-    app = web.application(URLS, globals())
     app.run()
     # app = web.application(URLS, globals()).wsgifunc()
     # print 'Serving on 5000...'
