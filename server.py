@@ -1,11 +1,8 @@
-# from gevent import monkey; monkey.patch_all()
-# import gevent
-# from gevent.pywsgi import WSGIServer
 import time
 import re
 import simplejson as json
 import web
-
+from web import form
 
 # Add src to py path.
 import sys
@@ -54,46 +51,19 @@ UI_URLS = (
     '/ui/usp_quotes/([^/]*)/(.*)',     'UiUspQuotes',
     '/ui/usp_quotes/([^/]*)',          'UiUspQuotesIndex',
 
-    '/ui/messages/EA',         'UiSorryDude',
-    '/ui/messages/ea',         'UiSorryDude',
+    '/ui/messages/EA',           'UiSorryDude',
+    '/ui/messages/ea',           'UiSorryDude',
     '/top_secret/messages/ea',   'UiEaMessages',
 
     '/ui/messages/pvz',        'UiPvzMessages',
-    '/ui/message/(.*)/(.*)',       'UiDeleteMessage',
+    '/ui/message/(.*)/(.*)',   'UiDeleteMessage',
 
     '/ui/stats/nfs',           'UiNfsGameStats',
     '/ui/stats/origin',        'UiStatsOrigin',
 
-    '/ui/prefetching/start',  'StartPrefetching',
-    '/ui/caching/clear',      'ClearCache'
+    '/ui/caching/clear',      'ClearCache',
+    '/ui/caching/prefetch',   'Prefetch'
 )
-
-from web import form
-class UiLogin:
-    login_form = form.Form(
-        form.Textbox('username', form.notnull),
-        form.Password('password', form.notnull),
-        form.Button('Login'))
-    def GET(self):
-        f = self.login_form()
-        return render.login(f, None)
-    def POST(self):
-        f = self.login_form()
-        if not f.validates():
-            return render.login(f, 'Please fill in both fields.')
-        else:
-            user = users.authenticate(f.d.username, f.d.password)
-            if user:
-                users.login(user)
-                i = web.input()
-                raise web.seeother(i.next)
-            else:
-                return render.login(f, 'Does not authenticate.')
-
-class UiLogout:
-    def POST(self):
-        users.logout()
-        raise web.seeother('/')
 
 API_URLS = (
     # BF4
@@ -144,14 +114,13 @@ API_URLS = (
 
 URLS = UI_URLS + API_URLS
 
+
 web.config.debug = False
 app = web.application(URLS, globals())
-
 db = util.store.get_db()
 session = web.session.Session(app, MongoStore(db, 'sessions'))
 users.session = session
 users.collection = db.users
-users.SALTY_GOODNESS = u'RANDOM_SALT'
 
 #----------
 
@@ -162,6 +131,32 @@ class CreateUser:
         users.collection.remove({'username': USER})
         users.register(username=USER, password=users.pswd(PSWD))
         return 'user %s created' % USER
+
+class UiLogin:
+    login_form = form.Form(
+        form.Textbox('username', form.notnull),
+        form.Password('password', form.notnull),
+        form.Button('Login'))
+    def GET(self):
+        f = self.login_form()
+        return render.login(f, None)
+    def POST(self):
+        f = self.login_form()
+        if not f.validates():
+            return render.login(f, 'Please fill in both fields.')
+        else:
+            user = users.authenticate(f.d.username, f.d.password)
+            if user:
+                users.login(user)
+                i = web.input()
+                raise web.seeother(i.next)
+            else:
+                return render.login(f, 'Does not authenticate.')
+
+class UiLogout:
+    def POST(self):
+        users.logout()
+        raise web.seeother('/')
 
 #----------
 
@@ -179,6 +174,8 @@ class UiSorryDude:
 </body>
 </html>"""
 
+#----------
+
 class UiDeleteMessage:
     def POST(self, brand, id_str):
         _id = ObjectId(id_str)
@@ -188,48 +185,29 @@ class UiDeleteMessage:
             pvz.messages.delete_message(_id)
         raise web.seeother('/ui/messages/' + brand)
 
-def pre_fetch():
-    classes = [
-        Bf4Highlights, EaActivity, EaFbLikes, EaFeatured,
-        SportsFeaturedEASports, SportsFeaturedFIFA,
-        SportsFeaturedMadden, SportsFeaturedNBA,
-        SportsFeaturedUFC,
-        NfsFeatured,
-        PvzPhotos, PvzFeatured
-    ]
-    for c in classes:
-        c().GET()
+#----------
 
-prefetchlet = None
-is_prefetching_on = False
-counter = 0
-PERIOD_SECS = 3 * 60
-
-def turn_on_caching():
-    """ Cache slow queries every PERIOD_SECS seconds. """
-    global counter
-    while True:
-        pre_fetch()
-        counter += 1
-        time.sleep(PERIOD_SECS)
-
-class StartPrefetching:
-    def POST(self):
-        global is_prefetching_on, prefetchlet
-        if is_prefetching_on:
-            raise web.seeother('/')
-        else:
-            is_prefetching_on = True
-            # prefetchlet = gevent.spawn(turn_on_caching)
-            raise web.seeother('/')
-
-class StopPrefetching:
-    """ Not implemented yet. """
-    def POST(self):
-        global is_prefetching_on, prefetchlet
-        if is_prefetching_on:
-            prefetchlet.kill()
+class Prefetch:
+    def GET(self):
+        self.pre_fetch()
         raise web.seeother('/')
+
+    def POST(self):
+        self.pre_fetch()
+        raise web.seeother('/')
+
+    def pre_fetch(self):
+        classes = [
+            Bf4Highlights,
+            EaActivity, EaFbLikes, EaFeatured,
+            SportsFeaturedEASports, SportsFeaturedFIFA,
+            SportsFeaturedMadden, SportsFeaturedNBA,
+            SportsFeaturedUFC,
+            NfsFeatured,
+            PvzPhotos, PvzFeatured
+        ]
+        for c in classes:
+            c().POST()
 
 class ClearCache:
     def POST(self):
@@ -261,13 +239,19 @@ for e in ENDPOINTS:
 class Index:
     @users.login_required
     def GET(self):
-        global is_prefetching_on, counter
-        return render.index(is_prefetching_on, counter)
+        return render.index()
 
 class API:
     @users.login_required
     def GET(self):
         return render.api(ENDPOINTS, TITLE_2_LINK_N_HREF)
+
+#----------
+
+def re_cache(obj, f, *args):
+    util.store.rm_cached(obj, *args)
+    res = f(*args)
+    util.store.put_cached(res, obj, *args)
 
 def w_cache(obj, f, *args):
     """
@@ -309,7 +293,13 @@ def j_out(x):
 
 class Bf4Highlights:
     def GET(self):
+        # return w_cache(*self.f())
         return w_cache(self, bf4.highlights.highlights)
+    def POST(self):
+        # return re_cache(*self.f())
+        return re_cache(self, bf4.highlights.highlights)
+    def f(self):
+        return (self, bf4.highlights.highlights)
 
 class Bf4UspFrostbite3:
     def GET(self):
@@ -345,14 +335,20 @@ class EaMessage:
 class EaActivity:
     def GET(self):
         return w_cache(self, ea.activity.counts)
+    def POST(self):
+        return re_cache(self, ea.activity.counts)
 
 class EaFeatured:
     def GET(self):
         return w_cache(self, util.featured.get_all_featured, 'ea')
+    def POST(self):
+        return re_cache(self, util.featured.get_all_featured, 'ea')
 
 class EaFbLikes:
     def GET(self):
         return w_cache(self, ea.likes.get)
+    def POST(self):
+        return re_cache(self, ea.likes.get)
 
 #-- SPORTS --
 
@@ -392,22 +388,32 @@ class SportsUspUFC:
 class SportsFeaturedUFC:
     def GET(self):
         return w_cache(self, sports.featured.get, 'ufc')
+    def POST(self):
+        return re_cache(self, sports.featured.get, 'ufc')
 
 class SportsFeaturedFIFA:
     def GET(self):
         return w_cache(self, sports.featured.get, 'fifa')
+    def POST(self):
+        return re_cache(self, sports.featured.get, 'fifa')
 
 class SportsFeaturedEASports:
     def GET(self):
         return w_cache(self, sports.featured.get, 'ea_sports')
+    def POST(self):
+        return re_cache(self, sports.featured.get, 'ea_sports')
     
 class SportsFeaturedMadden:
     def GET(self):
         return w_cache(self, sports.featured.get, 'madden')
+    def POST(self):
+        return re_cache(self, sports.featured.get, 'madden')
 
 class SportsFeaturedNBA:
     def GET(self):
         return w_cache(self, sports.featured.get, 'nba')
+    def POST(self):
+        return re_cache(self, sports.featured.get, 'nba')
 
 #-- NFS --
 
@@ -418,6 +424,8 @@ class SportsFeaturedNBA:
 class NfsFeatured:
     def GET(self):
         return w_cache(self, util.featured.get_all_featured, 'nfs')
+    def POST(self):
+        return re_cache(self, util.featured.get_all_featured, 'nfs')
 
 def get_nfs_game_stats(prot_n_host):
     return {
@@ -427,18 +435,23 @@ def get_nfs_game_stats(prot_n_host):
 
 class NfsGameStats:
     def GET(self):
-        prot_n_host = web.ctx.homedomain
-        return w_msg(get_nfs_game_stats(prot_n_host))
+        return w_cache(self, get_nfs_game_stats, web.ctx.homedomain)
+    def POST(self):
+        return re_cache(self, get_nfs_game_stats, web.ctx.homedomain)
 
 #-- PVZ --
 
 class PvzPhotos:
     def GET(self):
         return w_cache(self, pvz.photos.get_photos, 15)
+    def POST(self):
+        return re_cache(self, pvz.photos.get_photos, 15)
 
 class PvzFeatured:
     def GET(self):
         return w_cache(self, pvz.featured.get)
+    def POST(self):
+        return re_cache(self, pvz.featured.get)
 
 class PvzMessage:
     def GET(self):
@@ -455,8 +468,3 @@ class Origin:
 
 if __name__ == '__main__':
     app.run()
-    # app = web.application(URLS, globals()).wsgifunc()
-    # print 'Serving on 5000...'
-    # port = int(sys.argv[1])
-    # WSGIServer(('', port), app).serve_forever()
-

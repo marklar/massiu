@@ -9,13 +9,15 @@ session = None
 
 def get_user():
     try:
-        u = collection.find_one({'_id':session._user_id}) 
-        return u
+        return collection.find_one({'_id': session._user_id})
     except AttributeError:
         return None
 
 def authenticate(username, password):
-    user = collection.find_one({'username':username, 'password':pswd(password)})
+    user = collection.find_one({
+        'username': username,
+        'password': pswd(password)
+    })
     return user if user else None
 
 def login(user):
@@ -39,6 +41,7 @@ def login_required(function, login_page='/login'):
         if get_user():
             return function(*args, **kwargs)
         else:
-            return web.seeother(login_page+'?next=%s' % web.ctx.get('path','/'))
+            other = login_page+'?next=%s' % web.ctx.get('path', '/')
+            return web.seeother(other)
     return inner
 
