@@ -45,8 +45,8 @@ def get_featured(stream_name_root, hashtag):
         starred = None
     featured = get_slims(stream_name_root + FEATURED_SUFFIX, hashtag)
 
-    # Return no more than 30 other tweets.
-    novel_featured = [f for f in featured if f != starred][:30]
+    # Return no more than 20 other tweets.
+    novel_featured = [f for f in featured if f != starred][:20]
 
     return {
         'hashtag': '#' + hashtag,
