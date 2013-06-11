@@ -128,9 +128,10 @@ USER = 'Gozer'
 PSWD = 'GiantSlor'
 class CreateUser:
     def GET(self):
-        users.collection.remove({'username': USER})
-        users.register(username=USER, password=users.pswd(PSWD))
-        return 'user %s created' % USER
+        i = web.input(u=USER, p=PSWD)
+        users.collection.remove({'username': i.u})
+        users.register(username=i.u, password=users.pswd(i.p))
+        return 'user %s created' % i.u
 
 class UiLogin:
     login_form = form.Form(
