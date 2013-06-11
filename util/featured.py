@@ -6,6 +6,7 @@ import re
 from util import store
 from util import fetch
 from util import gather
+from util import text
 
 FEATURED_SUFFIX = '_featured'
 STARRED_SUFFIX = '_starred'
@@ -59,7 +60,7 @@ def slim(tweet):
     """ Extract from tweet only the info we care about. """
     user = tweet['user']
     return {
-        'text':        rm_urls(tweet['text']),
+        'text':        text.fix_text(rm_urls(tweet['text'])),
         'name':        user['name'],
         'image':       user['profile_image_url'].replace('_normal.', '.'),
         'screen_name': '@' + user['screen_name']
