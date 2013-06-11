@@ -53,6 +53,10 @@ def meta(stream_name, account_name=ACCOUNT_NAME):
     """
     url = meta_url(account_name, stream_name)
     payload = {
+        'activity': 1,   # activity & count properties
+        'num_hours': 1,
+        'num_minutes': 1,
+        'num_days': 1,
         'sources': 1,  # shows keywords!
         'networks': True,
         'num_contributors': 5  # not enabled
