@@ -98,7 +98,7 @@ def pre_fetch():
 prefetchlet = None
 is_prefetching_on = False
 counter = 0
-PERIOD_SECS = 60
+PERIOD_SECS = 3 * 60
 
 def turn_on_caching():
     """ Cache slow queries every PERIOD_SECS seconds. """
