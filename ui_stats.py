@@ -3,7 +3,7 @@ from web import form
 from ui_util import num_str_box, render
 
 import util.store
-from webpy_mongodb_sessions import users
+import mdb_users as users
 
 class UiStatsOrigin:
     data_form = form.Form(

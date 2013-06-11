@@ -2,7 +2,7 @@ import web
 from web import form
 import util.usp
 from ui_util import render
-from webpy_mongodb_sessions import users
+import mdb_users as users
 
 APP = "http://polar-caverns-8587.herokuapp.com"
 DEF_PROFILE_IMAGE = APP + "/static/default_profile.jpeg"

@@ -36,16 +36,16 @@ from ui_usp_quotes import UiUspQuotes, UiUspQuotesIndex
 from ui_stats import UiStatsOrigin, UiNfsGameStats
 
 
-from webpy_mongodb_sessions.session import MongoStore
+from mdb_session import MongoStore
 from pymongo import MongoClient
-from webpy_mongodb_sessions import users
+import mdb_users as users
 
 
 UI_URLS = (
     '/', 'Index',
     '/api', 'API',
 
-    '/login/',  'UiLogin',
+    '/login',   'UiLogin',
     '/logout',  'UiLogout',
     '/user/create', 'CreateUser',
 

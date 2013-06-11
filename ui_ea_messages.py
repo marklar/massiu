@@ -5,7 +5,7 @@ from dateutil import tz
 
 import ea.messages as msgs
 from ui_util import render, num_box
-from webpy_mongodb_sessions import users
+import mdb_users as users
 
 FORMAT = '%b %d %I:%M:%S %p'
 

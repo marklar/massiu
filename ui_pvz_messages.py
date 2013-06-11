@@ -3,7 +3,7 @@ from web import form
 
 import pvz.messages
 from ui_util import render
-from webpy_mongodb_sessions import users
+import mdb_users as users
 
 class UiPvzMessages:
     message_form = form.Form(
