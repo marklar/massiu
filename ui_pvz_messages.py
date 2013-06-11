@@ -3,6 +3,7 @@ from web import form
 
 import pvz.messages
 from ui_util import render
+from webpy_mongodb_sessions import users
 
 class UiPvzMessages:
     message_form = form.Form(
@@ -15,11 +16,13 @@ class UiPvzMessages:
                      size="40",
                      description='Code'))
 
+    @users.login_required
     def GET(self):
         return render.pvz_messages(
             list(pvz.messages.get_all()),
             self.message_form())
 
+    @users.login_required
     def POST(self):
         form = self.message_form()
         if not form.validates():

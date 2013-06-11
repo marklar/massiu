@@ -36,9 +36,18 @@ from ui_usp_quotes import UiUspQuotes, UiUspQuotesIndex
 from ui_stats import UiStatsOrigin, UiNfsGameStats
 
 
+from webpy_mongodb_sessions.session import MongoStore
+from pymongo import MongoClient
+from webpy_mongodb_sessions import users
+
+
 UI_URLS = (
     '/', 'Index',
     '/api', 'API',
+
+    '/login/',  'UiLogin',
+    '/logout',  'UiLogout',
+    '/user/create', 'CreateUser',
 
     '/static/(.*)', 'static',
 
@@ -58,6 +67,103 @@ UI_URLS = (
     '/ui/prefetching/start',  'StartPrefetching',
     '/ui/caching/clear',      'ClearCache'
 )
+
+from web import form
+class UiLogin:
+    login_form = form.Form(
+        form.Textbox('username', form.notnull),
+        form.Password('password', form.notnull),
+        form.Button('Login'))
+    def GET(self):
+        f = self.login_form()
+        return render.login(f, None)
+    def POST(self):
+        f = self.login_form()
+        if not f.validates():
+            return render.login(f, 'Please fill in both fields.')
+        else:
+            user = users.authenticate(f.d.username, f.d.password)
+            if user:
+                users.login(user)
+                i = web.input()
+                raise web.seeother(i.next)
+            else:
+                return render.login(f, 'Does not authenticate.')
+
+class UiLogout:
+    def POST(self):
+        users.logout()
+        raise web.seeother('/')
+
+API_URLS = (
+    # BF4
+    '/api/bf4/highlights.json',         'Bf4Highlights',
+    # bf4 - usp
+    '/api/bf4/usp/frostbite3.json',           'Bf4UspFrostbite3',
+    '/api/bf4/usp/commander_mode.json',       'Bf4UspCommanderMode',
+    '/api/bf4/usp/amphibious_assault.json',   'Bf4UspAmphibiousAssault',
+    '/api/bf4/usp/levolution.json',           'Bf4UspLevolution',
+    '/api/bf4/usp/all_out_war.json',          'Bf4UspAllOutWar',
+
+    # EA
+    '/api/ea/message.json',          'EaMessage',
+    '/api/ea/fb_likes.json',         'EaFbLikes',
+    '/api/ea/featured.json',         'EaFeatured',
+    '/api/ea/activity.json',         'EaActivity',
+
+    # Sports - usp
+    '/api/sports/usp/ignite_human_intelligence.json', 'SportsUspIgniteHI',
+    '/api/sports/usp/ignite_true_player_motion.json', 'SportsUspIgniteTPM',
+    '/api/sports/usp/ignite_living_worlds.json',      'SportsUspIgniteLW',
+
+    '/api/sports/usp/fifa.json',            'SportsUspFIFA',
+    '/api/sports/usp/madden.json',          'SportsUspMadden',
+    '/api/sports/usp/nba.json',             'SportsUspNBA',
+    '/api/sports/usp/ufc.json',             'SportsUspUFC',
+
+    # Sports - featured
+    '/api/sports/featured/ea_sports.json',  'SportsFeaturedEASports',
+    '/api/sports/featured/fifa.json',       'SportsFeaturedFIFA',
+    '/api/sports/featured/madden.json',     'SportsFeaturedMadden',
+    '/api/sports/featured/nba.json',        'SportsFeaturedNBA',
+    '/api/sports/featured/ufc.json',        'SportsFeaturedUFC',
+
+    # NFS
+    # '/api/nfs/leaderboard',     'NfsLeaderboard',
+    '/api/nfs/featured.json',        'NfsFeatured',
+    '/api/nfs/game_stats.json',      'NfsGameStats',
+
+    # PVZ
+    '/api/pvz/photos.json',          'PvzPhotos',
+    '/api/pvz/featured.json',        'PvzFeatured',
+    '/api/pvz/message.json',         'PvzMessage',
+
+    # Origin
+    '/api/origin/highlights.json',     'Origin'
+)
+
+URLS = UI_URLS + API_URLS
+
+web.config.debug = False
+app = web.application(URLS, globals())
+
+db = util.store.get_db()
+session = web.session.Session(app, MongoStore(db, 'sessions'))
+users.session = session
+users.collection = db.users
+users.SALTY_GOODNESS = u'RANDOM_SALT'
+
+#----------
+
+USER = 'Gozer'
+PSWD = 'GiantSlor'
+class CreateUser:
+    def GET(self):
+        users.collection.remove({'username': USER})
+        users.register(username=USER, password=users.pswd(PSWD))
+        return 'user %s created' % USER
+
+#----------
 
 class UiSorryDude:
     def GET(self):
@@ -130,72 +236,11 @@ class ClearCache:
         util.store.clear_cache()
         raise web.seeother('/')
 
+#-----------------------------
 
 class static:
   def GET(self, name):
     return open('static/%s' % name)
-
-API_URLS = (
-    # BF4
-    '/api/bf4/highlights.json',         'Bf4Highlights',
-    # bf4 - usp
-    '/api/bf4/usp/frostbite3.json',           'Bf4UspFrostbite3',
-    '/api/bf4/usp/commander_mode.json',       'Bf4UspCommanderMode',
-    '/api/bf4/usp/amphibious_assault.json',   'Bf4UspAmphibiousAssault',
-    '/api/bf4/usp/levolution.json',           'Bf4UspLevolution',
-    '/api/bf4/usp/all_out_war.json',          'Bf4UspAllOutWar',
-
-    # EA
-    '/api/ea/message.json',          'EaMessage',
-    '/api/ea/fb_likes.json',         'EaFbLikes',
-    '/api/ea/featured.json',         'EaFeatured',
-    '/api/ea/activity.json',         'EaActivity',
-
-    # Sports - usp
-    '/api/sports/usp/ignite_human_intelligence.json', 'SportsUspIgniteHI',
-    '/api/sports/usp/ignite_true_player_motion.json', 'SportsUspIgniteTPM',
-    '/api/sports/usp/ignite_living_worlds.json',      'SportsUspIgniteLW',
-
-    '/api/sports/usp/fifa.json',            'SportsUspFIFA',
-    '/api/sports/usp/madden.json',          'SportsUspMadden',
-    '/api/sports/usp/nba.json',             'SportsUspNBA',
-    '/api/sports/usp/ufc.json',             'SportsUspUFC',
-
-    # Sports - featured
-    '/api/sports/featured/ea_sports.json',  'SportsFeaturedEASports',
-    '/api/sports/featured/fifa.json',       'SportsFeaturedFIFA',
-    '/api/sports/featured/madden.json',     'SportsFeaturedMadden',
-    '/api/sports/featured/nba.json',        'SportsFeaturedNBA',
-    '/api/sports/featured/ufc.json',        'SportsFeaturedUFC',
-
-    # NFS
-    # '/api/nfs/leaderboard',     'NfsLeaderboard',
-    '/api/nfs/featured.json',        'NfsFeatured',
-    '/api/nfs/game_stats.json',      'NfsGameStats',
-
-    # PVZ
-    '/api/pvz/photos.json',          'PvzPhotos',
-    '/api/pvz/featured.json',        'PvzFeatured',
-    '/api/pvz/message.json',         'PvzMessage',
-
-    # Origin
-    '/api/origin/highlights.json',     'Origin'
-)
-
-URLS = UI_URLS + API_URLS
-
-# from web.session import MongoStore
-# from pymongo import MongoClient
-# import users
-
-# web.config.debug = False
-app = web.application(URLS, globals())
-
-# db = util.store.get_db()
-# session = web.session.Session(app, MongoStore(db, 'sessions'))
-# users.session = session
-# users.collection = db.users
-# users.SALTY_GOODNESS = u'RANDOM_SALT'
 
 
 ODD_INDICES = range(0, len(API_URLS)-1, 2)
@@ -214,11 +259,13 @@ for e in ENDPOINTS:
 
 
 class Index:
+    @users.login_required
     def GET(self):
         global is_prefetching_on, counter
         return render.index(is_prefetching_on, counter)
 
 class API:
+    @users.login_required
     def GET(self):
         return render.api(ENDPOINTS, TITLE_2_LINK_N_HREF)
 

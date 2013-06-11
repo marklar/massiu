@@ -1,0 +1,23 @@
+$def with (form, msg)
+
+<html>
+  <head>
+    <link href="/static/main.css" rel="stylesheet" type="text/css" />
+    <title>CMS :: Login</title>
+  </head>
+
+  <body>
+
+    <div class="header">
+      <h1>Login</h1>
+    </div>
+
+    $if msg is not None:
+      <h4>$msg</h4>
+
+    <form name="main" method="post">
+      $:form.render()
+    </form>
+
+  </body>
+</html>

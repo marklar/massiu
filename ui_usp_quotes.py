@@ -2,6 +2,7 @@ import web
 from web import form
 import util.usp
 from ui_util import render
+from webpy_mongodb_sessions import users
 
 APP = "http://polar-caverns-8587.herokuapp.com"
 DEF_PROFILE_IMAGE = APP + "/static/default_profile.jpeg"
@@ -26,6 +27,8 @@ class UiUspQuotesIndex:
             'UFC: Feel the Fight'
         ]
     }
+
+    @users.login_required
     def GET(self, brand):
         return render.usp_quotes_index(brand, self.BRAND_2_USPS)
 
@@ -50,11 +53,13 @@ class UiUspQuotes:
                       maxlength="140",
                       description='Quote (<= 140 chars)'))
 
+    @users.login_required
     def GET(self, brand, usp):
         form = self.quote_form()
         quotes = list(util.usp.get_quotes(brand, usp)['quotes'])
         return render.usp_quotes(brand, usp, quotes, form)
 
+    @users.login_required
     def POST(self, brand, usp):
         get_url = '/'.join(['/ui/usp_quotes', brand, usp])
 

@@ -5,6 +5,7 @@ from dateutil import tz
 
 import ea.messages as msgs
 from ui_util import render, num_box
+from webpy_mongodb_sessions import users
 
 FORMAT = '%b %d %I:%M:%S %p'
 
@@ -21,18 +22,7 @@ class UiEaMessages:
         num_box('delay_secs',    'Display in:'),
         num_box('duration_secs', 'Duration (in seconds):'))
 
-    def get_messages(self):
-        active = msgs.get_active_message()
-        if active is None:
-            actives = []
-        else:
-            actives = [active]
-        return {
-            'active':  actives,
-            'future':  list(msgs.get_future_messages()),
-            'expired': list(msgs.get_expired_messages())
-        }
-
+    @users.login_required
     def GET(self):
         return render.ea_messages(
             self.get_messages(),
@@ -40,6 +30,7 @@ class UiEaMessages:
             la_now(),
             FORMAT)
 
+    @users.login_required
     def POST(self):
         form = self.message_form()
         now = la_now()
@@ -65,6 +56,18 @@ class UiEaMessages:
             msgs.put_message(msg)
             raise web.seeother('/top_secret/messages/ea')
 
+
+    def get_messages(self):
+        active = msgs.get_active_message()
+        if active is None:
+            actives = []
+        else:
+            actives = [active]
+        return {
+            'active':  actives,
+            'future':  list(msgs.get_future_messages()),
+            'expired': list(msgs.get_expired_messages())
+        }
 
     def make_start_time(self, delay_secs):
         return self.add_secs(la_now(), delay_secs)
