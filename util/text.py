@@ -7,14 +7,11 @@ MAPPING = [
     (u'“', '"'),
     (u'”', '"'),
     (u'…', '.'),
+    (u'–', '-'),
     ('\.\.\.', '.')
 ]
 
 def fix_text(text):
-    t = re.sub(u'‘', "'", text)
-    t = re.sub(u'’', "'", t)
-    t = re.sub(u'“', '"', t)
-    t = re.sub(u'”', '"', t)
-    t = re.sub(u'…', '.', t)
-    t = re.sub('\.\.\.', '.', t)
-    return t
+    for k,v in MAPPING:
+        text = re.sub(k, v, text)
+    return text
