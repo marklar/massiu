@@ -21,13 +21,13 @@ ACCOUNT_NAME = 'MR_breel'
 # Supply the 'id' of the last viewed entity to request
 # the set of entities that came before it in the stream.
 #
-def stream(stream_name, account_name=ACCOUNT_NAME, start_id=None):
+def stream(stream_name, account_name=ACCOUNT_NAME, start_id=None, limit=200):
     url = stream_url(account_name, stream_name)
     payload = {
         'start_id': start_id,
         'reverse': False,  # False: oldest come first.
         'replies': True,   # If reply, include orig Tweet in 'in_reply_to'?
-        'limit': 200       # Default: 50.  Max: 200.
+        'limit': limit     # Default: 50.  Max: 200.
     }
     return reqs.get_data(url, payload)
 

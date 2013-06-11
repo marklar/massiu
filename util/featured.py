@@ -38,12 +38,12 @@ def get_featured(stream_name_root, hashtag):
     # store.drop_coll(stream_name_root + FEATURED_SUFFIX)
 
     # Return only ONE starred tweet.
-    starred = get_slims(stream_name_root + STARRED_SUFFIX, hashtag)
+    starred = get_slims(stream_name_root + STARRED_SUFFIX, 1)
     try:
         starred = starred[0]
     except IndexError:
         starred = None
-    featured = get_slims(stream_name_root + FEATURED_SUFFIX, hashtag)
+    featured = get_slims(stream_name_root + FEATURED_SUFFIX, 20)
 
     # Return no more than 20 other tweets.
     novel_featured = [f for f in featured if f != starred][:20]
@@ -54,26 +54,10 @@ def get_featured(stream_name_root, hashtag):
         'other_tweets': novel_featured
     }
 
-def get_slims(stream_name, hashtag):
-    tweet_lists = []
-    old_id = None
-    while True:
-        tweets = fetch.stream(
-            stream_name,
-            account_name='MR_breel',
-            start_id=old_id)
-        if not tweets:
-            break
-        old_id = tweets[0]['id_str']
-        tweet_lists.append(tweets)
-    return [slim(t) for t in itertools.chain.from_iterable(tweet_lists)]
+def get_slims(stream_name, limit):
+    tweets = fetch.stream(stream_name, account_name='MR_breel', limit=limit)
+    return [slim(t) for t in tweets]
     
-def old_get_slims(stream_name, hashtag):
-    gather.only_new_tweets(stream_name)
-    # return [slim(t) for t in store.with_hashtag(stream_name, hashtag)]
-    return [slim(t)
-            for t in store.get_all(stream_name).sort('id_str', pymongo.DESCENDING)]
-
 def slim(tweet):
     """ Extract from tweet only the info we care about. """
     user = tweet['user']
