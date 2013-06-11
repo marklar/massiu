@@ -21,11 +21,14 @@ def counts():
     return dict([('#' + k, get_daily_count(v))
                  for k,v in TAG_2_STREAM.iteritems()])
 
+MINS_IN_DAY = 60 * 24
 def get_daily_count(stream):
-    metadata = fetch.meta(stream)
-    # hourly = metadata['activity']['hourly']['total'][0]
-    daily = metadata['activity']['daily']['total'][0]
-    return daily
+    minutes = fetch.get_minutes(stream, MINS_IN_DAY)
+    return sum(minutes[:MINS_IN_DAY])
+
+#-------------------------------------
+#  THE OLD WAY  
+#-------------------------------------
 
 #
 # Uses a single MR stream ('ea_activity')

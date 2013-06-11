@@ -12,12 +12,14 @@ from util import fetch
 HASHTAG = 'bf4'
 NEW_STREAM = 'bf4_highlights'
 
+MINS_IN_HOUR = 60
+MINS_IN_DAY = 60 * 24
+
 def num_tweets():
-    metadata = fetch.meta(NEW_STREAM)
-    hourly = metadata['activity']['hourly']['total'][0]
-    daily = metadata['activity']['daily']['total'][0]
+    minutes = fetch.get_minutes(NEW_STREAM, MINS_IN_HOUR)
+    one_hour = sum(minutes)
     return {
-        'hour': hourly,
-        'day':  daily,
-        'week': daily * 7   # bogus!
+        'hour': one_hour,
+        'day':  one_hour * 24,      # bogus!
+        'week': one_hour * 24 * 7   # bogus!
     }

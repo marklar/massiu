@@ -40,7 +40,17 @@ def account(account_name=ACCOUNT_NAME):
     payload = {}
     return reqs.get_data(url, payload)
 
-def meta(stream_name, account_name=ACCOUNT_NAME):
+MINS_IN_DAY = 24 * 60
+
+def get_minutes(stream, num_minutes=MINS_IN_DAY):
+    metadata = meta(stream, num_minutes=num_minutes)
+    # The END of the list of numbers is the most recent data.
+    # So we turn it around to work with the FRONT of the list.
+    minutes = metadata['activity']['minute']['total']
+    minutes.reverse()
+    return minutes
+
+def meta(stream_name, account_name=ACCOUNT_NAME, num_minutes=MINS_IN_DAY):
     """
     :: String, String -> Response data
     activity:
@@ -55,7 +65,7 @@ def meta(stream_name, account_name=ACCOUNT_NAME):
     payload = {
         'activity': 1,   # activity & count properties
         'num_hours': 1,
-        'num_minutes': 1,
+        'num_minutes': num_minutes,
         'num_days': 1,
         'sources': 1,  # shows keywords!
         'networks': True,
