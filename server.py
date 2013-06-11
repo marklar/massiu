@@ -444,13 +444,9 @@ class NfsGameStats:
 
 class PvzPhotos:
     def GET(self):
-        # return w_cache(self, pvz.photos.get_photos, 15)
-        # return w_cache(self, pvz.photos.from_via_me, 15)
-        return w_cache(self, pvz.photos.get_pix_of_both_kinds, 15)
+        return w_cache(self, pvz.photos.get_pix_of_both_kinds, 6)
     def POST(self):
-        # return re_cache(self, pvz.photos.get_photos, 15)
-        # return re_cache(self, pvz.photos.from_via_me, 15)
-        return re_cache(self, pvz.photos.get_pix_of_both_kinds, 15)
+        return re_cache(self, pvz.photos.get_pix_of_both_kinds, 6)
 
 class PvzFeatured:
     def GET(self):
