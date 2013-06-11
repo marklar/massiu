@@ -1,7 +1,6 @@
 #
-# Photos of fans with zombies on show floor.
-#
-# Twitter account: @Bolthouse2400
+# Get photos from stream --
+# optionally only those with a particular hashtag.
 #
 import pymongo
 
