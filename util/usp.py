@@ -1,7 +1,7 @@
 import re
 import string
 import pymongo
-from util import text
+import util.text
 from bson.objectid import ObjectId
 
 import store
@@ -14,7 +14,7 @@ def insert_quote(brand, usp, text, name, image_url, is_tweet):
         'is_tweet': is_tweet,
         'brand': brand,
         'usp': usp,
-        'text': text.fix_text(text),
+        'text': util.text.fix_text(text),
         'name': name,
         'image': image_url.replace('_normal.', '.')
     }
@@ -27,7 +27,7 @@ def get_quotes(brand, usp):
     for q in quotes:
         q['_id'] = str(q['_id'])  # need _id in order to delete
         q['usp'] = fix_usp_for_display(q['usp'])
-        q['text'] = text.fix_text(q['text'])
+        q['text'] = util.text.fix_text(q['text'])
 
     return {
         'brand': brand,
