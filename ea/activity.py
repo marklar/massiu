@@ -18,7 +18,7 @@ TAG_2_STREAM = {
 }
 
 def counts():
-    return dict([(k, get_daily_count(v))
+    return dict([('#' + k, get_daily_count(v))
                  for k,v in TAG_2_STREAM.iteritems()])
 
 def get_daily_count(stream):
