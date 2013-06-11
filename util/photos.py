@@ -9,6 +9,7 @@ from util import gather
 from util import hashtags
 
 def get_imgs_from_tweets(stream_name, hashtag=None):
+    store.drop_coll(stream_name)
     gather.only_new_tweets(stream_name)
     query = {'entities.media.media_url': {'$exists': True}}
     if hashtag is not None:

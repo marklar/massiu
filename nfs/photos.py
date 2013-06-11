@@ -6,7 +6,6 @@
 #
 
 from web import ctx
-
 import util.photos as pix
 
 COLL       = 'nfs_photos'    # @needforspeed
