@@ -11,6 +11,11 @@ import pvz.via_me
 
 PHOTO_STREAM = 'pvz_photos'
 
+def get_pix_of_both_kinds(num):
+    regulars = get_photos(num)
+    via_mes = from_via_me(num)
+    return (via_mes + regulars)[:num]
+
 def get_photos(num):
     return pix.get_imgs_from_tweets(PHOTO_STREAM)[:num]
 
