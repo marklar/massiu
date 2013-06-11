@@ -98,6 +98,10 @@ div.secs {
     width: 80px;
 }
 
+div.name {
+    width: 160px;
+}
+
 div.message {
     width: 450px;
 }
