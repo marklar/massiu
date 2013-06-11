@@ -23,7 +23,9 @@ def insert_quote(brand, usp, text, name, image_url, is_tweet):
 def replace_apostrophes(text):
     t = re.sub(u'’', "'", text)
     t = re.sub(u'”', '"', t)
-    return re.sub(u'“', '"', t)
+    t = re.sub(u'“', '"', t)
+    t = re.sub('\.\.\.', '.', t)
+    return t
 
 def get_quotes(brand, usp):
     quotes = list(get(brand, usp))
