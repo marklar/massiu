@@ -28,25 +28,22 @@ def get_keywords(stream_root):
 def rm_hash(keyword):
     return keyword.lstrip('#')
 
+MAX_TWEETS = 20
+
 def get_featured(stream_name_root, hashtag):
     """
     Return both starred and featured.
     Remove any from featured that already appear in starred.
     """
-    # -- no longer necessary --
-    # store.drop_coll(stream_name_root + STARRED_SUFFIX)
-    # store.drop_coll(stream_name_root + FEATURED_SUFFIX)
-
     # Return only ONE starred tweet.
     starred = get_slims(stream_name_root + STARRED_SUFFIX, 1)
     try:
         starred = starred[0]
     except IndexError:
         starred = None
-    featured = get_slims(stream_name_root + FEATURED_SUFFIX, 20)
 
-    # Return no more than 20 other tweets.
-    novel_featured = [f for f in featured if f != starred][:20]
+    featured = get_slims(stream_name_root + FEATURED_SUFFIX, MAX_TWEETS)
+    novel_featured = [f for f in featured if f != starred][:MAX_TWEETS]
 
     return {
         'hashtag': '#' + hashtag,
