@@ -249,8 +249,8 @@ class API:
 #----------
 
 def re_cache(obj, f, *args):
-    util.store.rm_cached(obj, *args)
     res = f(*args)
+    util.store.rm_cached(obj, *args)
     util.store.put_cached(res, obj, *args)
 
 def w_cache(obj, f, *args):

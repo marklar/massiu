@@ -1,7 +1,7 @@
 import requests
 import time
 
-NUM_MINUTES = 3
+NUM_MINUTES = 2
 HOST = 'http://polar-caverns-8587.herokuapp.com'
 # HOST = 'http://localhost:5000'
 
