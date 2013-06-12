@@ -1,0 +1,54 @@
+
+* bf4
+** franchise highlights
+*** data points - under review by BF4
+**** # of FB-likes for franchise
+***** source: FB API
+***** https://www.facebook.com/OfficialBattlefield4
+***** currently: 138
+**** # of @battlefied followers
+***** currently: 584,484
+***** source: Twitter API
+***** https://dev.twitter.com/docs/api/1.1/get/users/show
+****** screen_name: @battlefield
+****** include_entities: false
+****** {'followers_count': 12345}
+**** # of #BF4 tweets (today)
+***** Using MR stream (bf4)
+*** time periods
+**** all time
+**** this month
+**** this week
+**** today
+**** this hour
+*** ToDo
+**** start collecting this info, with timestamps
+**** timestamps allow showing diff time periods
+
+* endpoints
+** /bf4
+*** /highlights.json
+**** bf4_highlights.franchise_highlights()
+*** /usp.json       (now: canned data)
+**** bf4_usp.usp()
+** /ea
+*** /activity.json
+**** ea_activity.counts()
+*** /featured.json
+**** ea_featured.featured()  !!
+*** /facebook_likes.json?name=<name>
+** /ea_sports
+*** /usp.json?num=<int | 'all'>     (to specify *which* USP)
+*** /featured.json
+** /nfs
+*** /leaderboard.json
+**** nfs_leaderboard.top_times()
+*** /featured.json
+**** nfs_featured.featured()   ????
+** /pvz
+*** /photos.json   (now: canned data)
+**** pvz_photos.photos()      !!
+*** /featured.json
+**** pvz_featured.featured()  !!
+
+
