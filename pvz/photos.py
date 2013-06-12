@@ -16,7 +16,7 @@ PHOTO_STREAM = 'pvz_photos'
 def get_pix_of_both_kinds(num):
     regulars = get_photos()
     via_mes = from_via_me()
-    all_pix = list(set((via_mes + regulars)))
+    all_pix = list(set(via_mes + regulars))
     return n_rand(num, all_pix)
 
 def n_rand(num, lst):
