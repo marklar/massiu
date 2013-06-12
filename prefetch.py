@@ -18,8 +18,13 @@ def tick(i):
 
 if __name__ == '__main__':
     while True:
-        pre_fetch()
-        for i in range(0, NUM_MINUTES * 12):
-            time.sleep(5)
-            tick(i)
-        print ''
+        try:
+            pre_fetch()
+            for i in range(0, NUM_MINUTES * 12):
+                time.sleep(5)
+                tick(i)
+            print ''
+        except requests.exceptions.ConnectionError(e):
+            print str(e)
+            print 'retrying in 15 secs...'
+            time.sleep(15)
