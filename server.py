@@ -189,10 +189,6 @@ class UiDeleteMessage:
 #----------
 
 class Prefetch:
-    def GET(self):
-        self.pre_fetch()
-        raise web.seeother('/')
-
     def POST(self):
         self.pre_fetch()
         raise web.seeother('/')
@@ -204,7 +200,7 @@ class Prefetch:
             SportsFeaturedEASports, SportsFeaturedFIFA,
             SportsFeaturedMadden, SportsFeaturedNBA,
             SportsFeaturedUFC,
-            NfsFeatured,
+            NfsFeatured, NfsGameStats,
             PvzPhotos, PvzFeatured
         ]
         for c in classes:
