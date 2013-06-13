@@ -24,7 +24,7 @@ if __name__ == '__main__':
                 time.sleep(5)
                 tick(i)
             print ''
-        except requests.exceptions.ConnectionError(e):
+        except requests.exceptions.ConnectionError as e:
             print str(e)
             print 'retrying in 15 secs...'
             time.sleep(15)
